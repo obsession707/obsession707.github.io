@@ -6,10 +6,33 @@
     <description>Recent content in Java on Rehoni | 罗皓</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 08 Apr 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 20 Jun 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/categories/java/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>java数据库（1）基本概念和try-with-resources</title>
+      <link>/cn/2020-06-20-java%E6%95%B0%E6%8D%AE%E5%BA%93-1/</link>
+      <pubDate>Sat, 20 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2020-06-20-java%E6%95%B0%E6%8D%AE%E5%BA%93-1/</guid>
+      <description>1. 连接池 连接池创建好固定数量的连接，数据库操作通过借用连接池的连接来进行操作，并且不关闭而是返还给连接池。
+2. try-with-resources 实现autoClosable接口的类，均可以进行try-with-resources的操作。
+close的顺序是，先进后出，类似堆栈。
+try (Connection c = DriverManager.getConnection(&amp;#34;jdbc:mysql://127.0.0.1:3306/how2java?characterEncoding=UTF-8&amp;#34;,&amp;#34;root&amp;#34;, &amp;#34;admin&amp;#34;); Statement s = c.createStatement();) { String sql = &amp;#34;select * from hero where id = &amp;#34; + id; ResultSet rs = s.executeQuery(sql); // 因为id是唯一的，ResultSet最多只能有一条记录  // 所以使用if代替while  if (rs.next()) { hero = new Hero(); String name = rs.getString(2); float hp = rs.getFloat(&amp;#34;hp&amp;#34;); int damage = rs.getInt(4); hero.name = name; hero.hp = hp; hero.damage = damage; hero.id = id; } } catch (SQLException e) { // TODO Auto-generated catch block  e.</description>
+    </item>
+    
+    <item>
+      <title>java数据库（2）改造jdbc工具类</title>
+      <link>/cn/2020-06-20-java%E6%95%B0%E6%8D%AE%E5%BA%93-2/</link>
+      <pubDate>Sat, 20 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2020-06-20-java%E6%95%B0%E6%8D%AE%E5%BA%93-2/</guid>
+      <description>增删改 可以设置一个Object数组，用来占位Preparement的sql里的那些?，数组的长度就是预插入的值的数量，数组里的值就是可以录入到Preparestatement的值。
+//我们发现，增删改只有SQL语句和传入的参数是不知道的而已，所以让调用该方法的人传递进来  //由于传递进来的参数是各种类型的，而且数目是不确定的，所以使用Object[]  public static void update(String sql, Object[] objects) { Connection connection = null; PreparedStatement preparedStatement = null; ResultSet resultSet = null; try { connection = getConnection(); preparedStatement = connection.prepareStatement(sql); //根据传递进来的参数，设置SQL占位符的值  for (int i = 0; i &amp;lt; objects.length; i++) { preparedStatement.setObject(i + 1, objects[i]); } //执行SQL语句  preparedStatement.executeUpdate(); } catch (Exception e) { e.printStackTrace(); } } 查询 注意这里可以定义一个接口，对select的结果集进行操作，但是不知道需要具体进行操作，调用接口的实现类，接口就可以调用实现的方法。
+/* 1:对于查询语句来说，我们不知道对结果集进行什么操作【常用的就是把数据封装成一个Bean对象，封装成一个List集合】 2:我们可以定义一个接口，让调用者把接口的实现类传递进来 3:这样接口调用的方法就是调用者传递进来实现类的方法。【策略模式】 */ //这个方法的返回值是任意类型的，所以定义为Object。  public static Object query(String sql, Object[] objects, ResultSetHandler rsh) { Connection connection = null; PreparedStatement preparedStatement = null; ResultSet resultSet = null; try { connection = getConnection(); preparedStatement = connection.</description>
+    </item>
     
     <item>
       <title>Java核心技术卷(4)</title>

@@ -12,6 +12,15 @@
     
     
     <item>
+      <title>Java</title>
+      <link>/categories/java/</link>
+      <pubDate>Sat, 20 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/java/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>指南</title>
       <link>/categories/%E6%8C%87%E5%8D%97/</link>
       <pubDate>Sat, 20 Jun 2020 00:00:00 +0000</pubDate>
@@ -21,11 +30,20 @@
     </item>
     
     <item>
-      <title>技术</title>
-      <link>/categories/%E6%8A%80%E6%9C%AF/</link>
+      <title>效率</title>
+      <link>/categories/%E6%95%88%E7%8E%87/</link>
       <pubDate>Wed, 15 Apr 2020 00:00:00 +0000</pubDate>
       
-      <guid>/categories/%E6%8A%80%E6%9C%AF/</guid>
+      <guid>/categories/%E6%95%88%E7%8E%87/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Oracle</title>
+      <link>/categories/oracle/</link>
+      <pubDate>Wed, 08 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/oracle/</guid>
       <description></description>
     </item>
     
@@ -71,15 +89,6 @@
       <pubDate>Sat, 21 Apr 2018 00:00:00 +0000</pubDate>
       
       <guid>/categories/%E8%AF%BE%E7%A8%8B/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Java</title>
-      <link>/categories/java/</link>
-      <pubDate>Sun, 08 Apr 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/java/</guid>
       <description></description>
     </item>
     

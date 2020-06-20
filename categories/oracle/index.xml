@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Oracle on Rehoni | 罗皓</title>
+    <link>/categories/oracle/</link>
+    <description>Recent content in Oracle on Rehoni | 罗皓</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 08 Apr 2020 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/categories/oracle/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>数据库表结构查询（Oracle版本）</title>
+      <link>/cn/2020-06-20-oracle%E8%A1%A8%E7%BB%93%E6%9E%84%E6%9F%A5%E8%AF%A2/</link>
+      <pubDate>Wed, 08 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2020-06-20-oracle%E8%A1%A8%E7%BB%93%E6%9E%84%E6%9F%A5%E8%AF%A2/</guid>
+      <description>直接贴代码
+SELECT -- t1.Table_Name AS 表名称, -- t3.comments AS 表说明, t2.COMMENTS as 名称, t1.Column_Name AS 代码, concat(concat(t1.DATA_TYPE, &amp;#39;(&amp;#39;), concat(t1.DATA_LENGTH, &amp;#39;)&amp;#39;)) as 数据类型, case when (select count(*) from user_cons_columns c where c.table_name = t1.TABLE_NAME and c.column_name = t1.COLUMN_NAME and c.constraint_name = (select d.constraint_name from user_constraints d where d.table_name = c.table_name and d.constraint_type = &amp;#39;P&amp;#39;) ) &amp;gt; 0 then &amp;#39;1&amp;#39; else &amp;#39;0&amp;#39; end as 是键, t2.Comments AS 注释 FROM cols t1 left join user_col_comments t2 on t1.</description>
+    </item>
+    
+  </channel>
+</rss>

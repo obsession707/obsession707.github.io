@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Oracle实践数据库笔记 on Rehoni | 罗皓</title>
+    <link>/tags/oracle%E5%AE%9E%E8%B7%B5%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AC%94%E8%AE%B0/</link>
+    <description>Recent content in Oracle实践数据库笔记 on Rehoni | 罗皓</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 12 Apr 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/oracle%E5%AE%9E%E8%B7%B5%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AC%94%E8%AE%B0/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Oracle实践数据库笔记-13</title>
+      <link>/cn/2018-04-17-oracle-13/</link>
+      <pubDate>Thu, 12 Apr 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2018-04-17-oracle-13/</guid>
+      <description>考试信息  时间: 4/20 2:00-3:30 地点: J1-311教室 开卷: 课堂笔记+教材(D33996+D32645)  考试内容  题型  单选题 30% 多选题 30% 简答题 40%   SQL语句  select where /order by/目录匹配%和_/escape 函数 substr/round/truncate/nvl/case decode(不考) 连接查询和子查询 主函数 AVG/MAX/MIN&amp;hellip;   Oracle架构 D32645 P8  服务器, 连接器, instance(内存+进程), SGA, PGA等等,名称解析, 监听器     logmnr 4/10的内容 awr  备份恢复  RMAN恢复管理器  认识RMAN RMAN常用命令 report schema;---查看数据库结构 db_unique_name  -------------------------------  list backup backup spfile; backup current controlfile; rman datafile 3; backup database; 日志文件不需要备份 list copy crosscheck copy; delete backup; backup archive all; --------------------------------  copy datafile 3 to &amp;#39;path&amp;#39;; restore recover list show configure  RMAN整库备份  spfile, controlfile 指定spfile和controlfile的备份目的地 指定datafile的备份目的地 归档( 联机日志文件的备份 ) 备份归档日志(plus archivelog) 执行备份 插入数据进入cold表 复制日志文件 摧毁数据库 恢复数据库  #文件夹中建立一个目录 list backup; delete backup; show all;##查看配置 #CONFIGURE CONTROLFILE AUTOBACKUP OFF; #CONFIGURE CONTROLFILE AUTOBACKUP FORMAT FOR DEVICE TYPE DISK TO &amp;#39;%F&amp;#39;; configure channel device type disk format &amp;#39;D:\salesback\%d_%u_%T&amp;#39;; sql&amp;gt;alter system archive log current; sql&amp;gt;select * from scott.</description>
+    </item>
+    
+    <item>
+      <title>Oracle实践数据库笔记-11</title>
+      <link>/cn/2018-04-08-oracle-11/</link>
+      <pubDate>Sun, 08 Apr 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2018-04-08-oracle-11/</guid>
+      <description>审核  强制审核 标准数据库审核 基于值的审核 细粒度审核(FGA)  desc dbms_fga;---STATEMENT_TYPES审核语句类型  execute dbms_fga.add_policy(&amp;#39;SCOTT&amp;#39;,&amp;#39;EMP&amp;#39;,&amp;#39;FGA_DEMO&amp;#39;,STATEMENT_TYPES=&amp;gt;&amp;#39;SELECT,INSERT,DELETE&amp;#39;); ---执行select,insert,delete操作  desc dba_fga_audit_trail alter session set nls_date_format=&amp;#39;yyyy-mm-dd hh24:mi:ss&amp;#39;; ---中间进行scott用户下的select,insert和delete操作  select TIMESTAMP,DB_USER,SQL_TEXT from dba_fga_audit_trail  审核DBA  show parameter audit 触发器(头部,触发条件,被触发代码)   DML触发器
+添加for each row进行逐行操作显示
+添加referencing old as o new as n for each row when(n.sal&amp;gt;5000)进行条件
+  create table demo1(a varchar(20)); create or replace trigger scott.tr1 after update on scott.emp for each row begin insert into scott.</description>
+    </item>
+    
+    <item>
+      <title>Oracle实践数据库笔记-12</title>
+      <link>/cn/2018-04-10-oracle-12/</link>
+      <pubDate>Sun, 08 Apr 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2018-04-10-oracle-12/</guid>
+      <description>数据库备份和恢复   需要数据库备份恢复的情况 PDF D17090
+  logmnr的使用
+ 启动数据库补充日志 desc v$database 🆗 select supplementallog from v$database ---不太确定supplementallog  alter database add supplemental log data;🆗  产生数据字典文件  设置数据字典文件的目的地(初始化参数) 产生数据字典文件 产生一个事务 添加需要分析的日志文件 启动分析 查询内容  ---老师教程  ---自己跑一遍🆗  ---设置一下目录,得先在文件系统中创建好文件夹  show parameter utl_file_dir 🆗 ---重启生效shutdown immediate&amp;amp;startup , path1为之前在文件系统中创建好的文件夹路径 🆗  alter system set utl_file_dir =&amp;#39;path1&amp;#39; scope=spfile;🆗 ---再show一遍是没有的,重启才生效  execute dbms_logmnr_d.build(dictionary_filename=&amp;gt;&amp;#39;名字.ora&amp;#39;,dictionary_location=&amp;gt;&amp;#39;path&amp;#39;)🆗 ---产生数据文件 提交事务  select empno,ename,sal from emp;🆗 update emp set sal=5000 where empno=7934;🆗 commit;🆗 execute dbms_logmnr.</description>
+    </item>
+    
+    <item>
+      <title>Oracle实践数据库笔记-10</title>
+      <link>/cn/2018-04-03-oracle-10/</link>
+      <pubDate>Tue, 03 Apr 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2018-04-03-oracle-10/</guid>
+      <description>Oracle安全 1、验证 用户 sys 1、操作系统验证
+2、口令文件验证
+show parameter remote_login_passwordfile 1、None
+2、Exclusive（单例程，多用户）
+3、Shared（多例程，单用户）
+ 修改口令文件  &amp;lt;-cmd管理员-&amp;gt; orapwd file=D:\Oracle\product\11.2.0\dbhome_1\database\PWDdyi.ora password=admin entries=1 force=y #除系统外最多允许四个用户  禁用操作系统验证  D:\Oracle\product\11.2.0\dbhome_1\NETWORK\ADMIN\sqlnet.ora 中
+SQLNET.AUTHENTICATION_SERVICES= (NTS) NTS改为NONE
+desc v$pwfile_users; grant sysdba to a1 identified by a1 #授权 ... select username,sysdba from v$pwfile_users; revoke sysdba from scott , a1... #撤销 nosys 1、数据库验证
+create user u1 identified by u1; conn u1/u1#报错无权限 grant creat session to u1;#给权限 2、操作系统验证
+ 编辑注册表   找到Oracle    增加OSAUTH_PREFIX_DOMAIN字串,值为false</description>
+    </item>
+    
+    <item>
+      <title>Oracle实践数据库笔记-9</title>
+      <link>/cn/2018-03-30-oracle-9/</link>
+      <pubDate>Fri, 30 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2018-03-30-oracle-9/</guid>
+      <description>管理表空间和数据文件  数据库的存储层次结构 PPT153  数据库, 表空间, 段(存储结构) 区(最小的空间分配单位)___空间管理  数据字典管理[占用系统表空间,增加系统负担,现已被废弃] 本地管理 bitmap位图 extend_id bitmap 1 1 2 0 //可用   块(最小的IO单位) 根据访问数据量来控制块的单位大小 碎片,本地管理 依据管理和性能分配表空间 索引和数据不要放在一个表空间里   空间管理  系统空间 非系统空间   创建表空间 desc dba_segments show parameter db_block_size create tablespace tbs1 datafile &amp;#39;D:\app\hwj\oradata\sales\tbs1.dbf&amp;#39; size 10m blocksize 2048;---报错  alter session set nls_language=america;---解决报错为?????的办法  show parameter cache; alter system set db_2k_cache_size= 10m; create tablespace userdata datafile &amp;#39;E:\app\Res0liya\oradata\orcl\userdata01.dbf&amp;#39; size 100m autoextend on next 5m maxsize 200m;---创建表空间  create tablespace userdata datafile &amp;#39;E:\app\Res0liya\oradata\orcl\userdata01.</description>
+    </item>
+    
+    <item>
+      <title>Oracle实践数据库笔记-8</title>
+      <link>/cn/2018-03-27-oracle-8/</link>
+      <pubDate>Tue, 27 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2018-03-27-oracle-8/</guid>
+      <description>管理控制文件  控制文件的作用❓ 控制文件的内容❓二进制  oradebug dump controlf 3 oradebug setmypid oradebug tracefile_name
+alter session set nls_language=american
+控制文件的复用🆗 内容一模一样，做多个同样的控制文件放在不同的地方  见ppt 126/383 alter system set control_files = &amp;#39;path1&amp;#39;,&amp;#39;path2&amp;#39;,&amp;#39;path3&amp;#39; scope=spfile; shutdown cp &amp;#39;path1&amp;#39;/&amp;#39;path2&amp;#39; &amp;#39;path3&amp;#39;; startup show parameter control_files; 创建控制文件  alter database backup controlfile to trace as &amp;#39;e:\trace_controlf.txt&amp;#39; alter database mount 删除控制文件之后启动报错再启动一下脚本 语句在trace_controlf.txt里边跑一下 实验：
+ 查看控制文件的名称和内容🆗 select name &amp;hellip; show parameter control_files; oradebug &amp;hellip;见上 控制文件的复用🆗 创建控制文件  不是很清楚，再看大佬演示一下跑一下脚本
+管理日志文件   日志文件的作用</description>
+    </item>
+    
+    <item>
+      <title>Oracle实践数据库笔记-7</title>
+      <link>/cn/2018-03-23-oracle-7/</link>
+      <pubDate>Fri, 23 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2018-03-23-oracle-7/</guid>
+      <description>手工创建数据库（sales） 没操作起来，得等大佬带着操作一下
+注意要用cmd别用windows powershell
+ 创建windows服务（instance） &amp;ndash;oradim  oradim -new -sid sales 将sales设为当前例程，  set oracle_sid = sales  创建/编辑初始化参数文件 pfile
+ 连接数据库 sqlplus————sys as sysdba——————123456    create pfile from spfile;  根据初始化参数创建相应的目录结构
+ 在admin和flash_recovery_area和oradata中创建sales文件夹， 对应的INITorcl.ora改成INITsales.ora并且改变其中的内容 创建口令文件  这个密码用于set Oracle_sid之后，登陆sysdba的密码 orapwd file=E:\app\Res0liya\product\11.2.0\dbhome_1\database\PWDsales.ora password=123 entries=2   执行创建数据库的语句
+ 启动例程以及验证数据库  startup nomount showdown immediate show parameter db_name  三个文件必须要，数据文件和日志文件system,sysaux,undo    创建数据字典视图
+  创建Oracle内部包
+  创建spfile</description>
+    </item>
+    
+    <item>
+      <title>Oracle实践数据库笔记-6</title>
+      <link>/cn/2018-03-20-oracle-6/</link>
+      <pubDate>Tue, 20 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2018-03-20-oracle-6/</guid>
+      <description>回顾 删除操作delete和drop的区别 回收站的机制 删除表的时候其实不删除文件而是改动文件名，实现加入回收站的操作
+flashback ***** 数据完整性  代码 触发器 约束（开销小）  数据+规则&amp;mdash;&amp;ndash;&amp;gt;合理，有效 建立表的时候:关键字+起名字+约束类型（+字段）;
+一些关键字: CHECK 检查条件 FOREIGN KEY, REFERENCES ON DELETE CASECADE, 删除部门，员工回家 ON DELETE SET NULL, 删除部门，员工待分配
+添加约束和删除约束: ALTER ADD/DROP/ENABLE/DISABLE
+---一点例子 ALTER TABLE table ADD [CONSTRAINT constraint] type (column) ; ALTER TABLE employee s ADD CONSTRAINT emp_manager_f k FOREIGN KEY (manager_id) REFERENCES employees (empoyee_id) ; ALTER TABLE employees DROP CONSTRAINT emp_manager_fk; desc user_constraints; desc user_cons_columns; ---添加约束的时候注意处理异常数据的操作 desc exceptions;异常表不存在 @?</description>
+    </item>
+    
+    <item>
+      <title>Oracle实践数据库笔记-5</title>
+      <link>/cn/2018-03-16-oracle-5/</link>
+      <pubDate>Fri, 16 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2018-03-16-oracle-5/</guid>
+      <description>锁 lock  自动，手动，力度权限 共享锁，独占锁 行锁，表锁  死锁 deadlock  Oracle能自动查到产生死锁的语句，并且回滚掉这句  两个事物冲突，然后产生死锁，使用v$lock和v$session来解决死锁
+ http://www.cnblogs.com/rootq/articles/1147450.html
+ SQL PLUS命令  help index
+ SQL 讲完了   QL(select)
+  DML(insert,update,delete,merge)
+  DCL(grant,invoke)
+  TCL(commit,rollback,savepoint)
+  DDL(create,alter,drop,truncate,rename,comment)
+  序列，索引
+  建表table原则 (PPT313)
+  名称空间，表的名称不能和同名称空间下的对象同名
+  同义词
+  创建用户和给予权限（grant）
+  pserdocolumn 伪列（不在列编制里边的列，desc不可见）
+  rowid 物理地址，BASE64_CODE文件号，列号，行号
+ 主流编制 dbms_rowid  select dbms_rowid.ROWID_RELATIVE_FNO(rowid) File#, dbms_rowid.</description>
+    </item>
+    
+    <item>
+      <title>Oracle实践数据库笔记-4</title>
+      <link>/cn/2018-03-13-oracle-4/</link>
+      <pubDate>Tue, 13 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2018-03-13-oracle-4/</guid>
+      <description>PL/SQL QL(select) 循环 (sql中用斜杠/执行命令)
+ 绝对循环 while循环 for循环  begin for i in 1..10 loop insert into t1 values(i); end loop; commit; end;（功能结束就加分号，块结束） 块结构  声明部分（可选） 可执行部分（必须） 异常处理部分（可选）   匿名块：4个部分   declare begin exception end  命名块：  create or replace procedure p1 as begin for i in 1..10 loop insert into t1 values(i); end loop; commit; end; select a.id,b.id from t1 a,t1 b where a.id+5=b.id; 或者where a.id+(select count(*) from t1)/2=b.</description>
+    </item>
+    
+    <item>
+      <title>Oracle实践数据库笔记-2</title>
+      <link>/cn/2018-03-02-oracle-2/</link>
+      <pubDate>Fri, 02 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2018-03-02-oracle-2/</guid>
+      <description>用户   sys（用户）
+  sysdba（权限）
+  sysoper（权限）
+  空闲例程是已经关的，要先startup
+  shutdown immediate 立即关闭例程
+  oracle内 代码+数据（系统/用户数据）
+日志  log 日志 作用：恢复 redo log 重做日志  数据文件+日志文件
+记录事务 ACID
+ A 原子性 C 一致性 I 隔离性（锁lock（锁外存）/闩latch（锁内存）） D 持久性/永久性  restore 还原 对应backup recover 恢复 （数据文件+日志文件）
+create tablespace ts datafile &amp;#39;&amp;#39; create table scott.t(id int) insert... commit.. alter tablespace ts offline alter database create datafile 7 online recover 进程结构   服务器进程（专用服务器进程 客户连接数&amp;lt;200/共享服务器进程）</description>
+    </item>
+    
+    <item>
+      <title>Oracle实践数据库笔记-3</title>
+      <link>/cn/2018-03-06-oracle-3/</link>
+      <pubDate>Fri, 02 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2018-03-06-oracle-3/</guid>
+      <description>demo.sql 调用的时候不用写sql其他的要写@d:/demo
+select d from scott.dept;
+help index edit run
+null 不参与统计 三值
+  层次查询
+  lock 共享锁 独享锁
+  死锁 解决死锁 ：sysdba kill session ：desc v$lock;
+  修改表 表名 : 增加字段 :alter table t_name add c_name type(size); 字段类型 :alter table t_name modify c_name &amp;ndash;; 字段宽度 :alter table t_name modify c_name type(size);
+  代理用户
+  delete DML 删之前，放至回滚段，效率较低，可回滚，不释放存储空间
+  truncate DDL 效率高，不可回滚释放存储空间
+  HWM high water mark</description>
+    </item>
+    
+    <item>
+      <title>Oracle实践数据库笔记-1</title>
+      <link>/cn/2018-02-27-oracle-1/</link>
+      <pubDate>Tue, 27 Feb 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2018-02-27-oracle-1/</guid>
+      <description>oracle服务器 1.instance
+ SGA（system global area 系统） PGA（程序用的 局部）  2.database（文件的集合）
+ table 表 全称 heap table 堆表 代码 数据（系统数据+用户数据） 共享池shared pool  库缓存 放代码   数据字典缓存    数据字典 dictionary sys@db&amp;gt;desc dictionary select table_name from dict where table_name like &amp;#39;%SGA%&amp;#39; 1.数据字典视图（数据文件 不改就不变）
+ USER_ 当前用户是所有者 属于他自己的对象 ALL_ 当前用户有select权限 能访问 DBA_  scott@DESC user_tables select table_name from user_tables /all_tables可以看到用户的表 /能访问的表 desc user_indexes select index_name from user_indexes 2.动态性能视图（内存和控制文件）
+ v$ 注意了解一下  cache 提高读性能 buffer 提高写性能 推荐书籍《oracle concepts》</description>
+    </item>
+    
+  </channel>
+</rss>

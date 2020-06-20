@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>效率 on Rehoni | 罗皓</title>
+    <link>/categories/%E6%95%88%E7%8E%87/</link>
+    <description>Recent content in 效率 on Rehoni | 罗皓</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 15 Apr 2020 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/categories/%E6%95%88%E7%8E%87/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>word转sql表结构</title>
+      <link>/cn/2020-04-15-word%E8%A1%A8%E7%BB%93%E6%9E%84%E8%BD%ACsql/</link>
+      <pubDate>Wed, 15 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2020-04-15-word%E8%A1%A8%E7%BB%93%E6%9E%84%E8%BD%ACsql/</guid>
+      <description>word转sql表结构： 工作流如下：
+  已经在office word编辑好的数据库说明文档
+  通过按照特定的表结构，录入到excel中，前两行为中文表名和英文表名，下边为字段，下方的sheet名也为中文表名，并且注意”名称“列，是不可以有重名的，否则执行脚本的时候会报错，并且一直占用该excel导致此excel只读，无法编辑（如果修改完excel没有退出则继续修改就行）只能创建excel副本。
+  打开power designer-&amp;gt;create model-&amp;gt;physical data，创建物理模型，DBMS选择对应的数据库，版本低一点没有关系，商用库为12a，选择最高的Oracle version 11g，创建之后按ctrl+shift+x打开脚本执行界面，执行以下VB脚本，生成表的物理模型。可以根据数据库文档中每一列的含义，在脚本中进行调整。执行完之后可以保存到power designer的脚本库中，方便之后重用。
+&#39;&#39; @Author: 罗皓&#39; @Date: 2020-03-25 14:41:57&#39; @LastEditTime: 2020-03-26 10:11:31&#39; @Description:&#39; @LastEditors: 罗皓&#39;Option ExplicitDim mdl &#39; the current modelSet mdl = ActiveModelIf (mdl Is Nothing) ThenMsgBox &amp;quot;There is no Active Model&amp;quot;End IfDim HaveExcelDim RQRQ = vbYes &#39;MsgBox(&amp;quot;Is Excel Installed on your machine ?</description>
+    </item>
+    
+  </channel>
+</rss>

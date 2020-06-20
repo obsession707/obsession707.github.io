@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>数据库命名规则 - Rehoni | 罗皓</title>
+    <meta property="og:title" content="数据库命名规则 - Rehoni | 罗皓">
+    
+    <meta name="twitter:card" content="summary">
+
+    
+      
+    
+
+    
+      
+      <meta property="description" content="注意：
+​	在数据库表字段（列名）命名时不建议使用数据库关键字，如：name，time，datetime，password等。
+[&amp;hellip;] 存储过程的命名请遵循以下命名规范：PRO_&#43;系统模块（与表前缀类似）&#43;_&#43;功能标识英文单词或英文单词缩写。
+如果一个存储过程只对一个表进行操作，建议存储过程的名称就用存储过程的表的表名（不带前缀）。这样有利于根据表名找到相应的存储过程。例如，用于清洗 &amp;hellip;">
+      <meta property="og:description" content="注意：
+​	在数据库表字段（列名）命名时不建议使用数据库关键字，如：name，time，datetime，password等。
+[&amp;hellip;] 存储过程的命名请遵循以下命名规范：PRO_&#43;系统模块（与表前缀类似）&#43;_&#43;功能标识英文单词或英文单词缩写。
+如果一个存储过程只对一个表进行操作，建议存储过程的名称就用存储过程的表的表名（不带前缀）。这样有利于根据表名找到相应的存储过程。例如，用于清洗 &amp;hellip;">
+      
+    
+
+    
+    
+    
+    <meta name="twitter:image" content="/images/logo.png">
+    
+    
+
+    
+
+    
+    
+
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+<script async src="/js/load-typekit.js"></script>
+
+
+<link rel="stylesheet" href="/css/custom.css" />
+
+  </head>
+
+  
+  <body class="cn">
+    <header class="masthead">
+      
+
+<h1><a href="/"><img src="/images/logo.png" alt="Luo Hao" /></a></h1>
+
+
+
+      <nav class="menu">
+  <ul>
+  
+  
+  <li><a href="/">首页</a></li>
+  
+  <li><a href="/cn/about/">关于</a></li>
+  
+  <li><a href="/cn/">日志</a></li>
+  
+  <li><a href="/categories/">分类</a></li>
+  
+  <li><a href="/tags/">标签</a></li>
+  
+  <li><a href="/cn/vitae/">简历</a></li>
+  
+  <li><a href="/en/">English</a></li>
+  
+  
+
+<li class="menu-extra"></li>
+
+
+
+<li><a href="https://github.com/rehonicn%5c2020-06-20-%e6%95%b0%e6%8d%ae%e5%ba%93%e8%a7%84%e8%8c%83.md" target="_blank">编辑</a></li>
+
+
+<li><a href="/cn/index.xml" type="application/rss+xml" title="RSS feed">订阅</a></li>
+
+<li><a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="Attribution-NonCommercial-ShareAlike 4.0 International">版权</a></li>
+
+
+  </ul>
+</nav>
+
+    </header>
+
+    <article class="main">
+      <header class="title">
+      
+<h1>数据库命名规则</h1>
+
+
+<h3>rehoni / 
+2020-06-20</h3>
+
+<hr>
+
+
+      </header>
+
+
+
+<h5 id="基本原则">基本原则</h5>
+<ol>
+<li>表名与字段的命名统一采用大写英文全称或简称，严禁用拼音或缩写；</li>
+<li>数据库的所有表名、视图名、字段名、存储过程一律采用大写；</li>
+<li>名称中间词的间隔采用下划线“_”拼接。</li>
+</ol>
+<h5 id="表名命名规定">表名命名规定</h5>
+<ol>
+<li>表名命名统一采用大写英文全称或简称，严禁用拼音或缩写；</li>
+<li>数据库的所有表明、视图名、字段名、存储过程一律采用大写；</li>
+<li>名词中间词的间隔采用下划线“_”拼接；</li>
+<li>表名不可以太长，最好不要超过3个英文单词长度（30个字母）；</li>
+<li>在表创建完成前，应该为表添加表的注释。</li>
+</ol>
+<h5 id="表设计规范">表设计规范</h5>
+<ol>
+<li>所有字段在设计时，除以下数据类型timestamp、image、datetime、smalldatetime、uniqueidentifier、binary、sql_variant、binary、varbinary外，最好有默认值；</li>
+<li>字符型的默认值为一个空字符值串‘’；</li>
+<li>数值型的默认值为数值0；</li>
+<li>逻辑型的默认值为数值0（其中：系统中所有逻辑型中数值0表示为“假”，数值1表示为“真”）；</li>
+<li>datetime、smalldatetime类型的字段没有默认值，必须为NULL；</li>
+<li>当字段定义为字符串型时，建议使用varchar2（<a href="https://www.cnblogs.com/anningkang/p/oracle.html">varchar和varchar2的区别</a>）而不是用nvarchar；</li>
+<li>字段的描述：
+<ol>
+<li>字段必须填写描述信息（注释）</li>
+<li>尽量遵守第三范式的标准（3NF）
+<ol>
+<li>表内的每一个值都只能被表达一次（列名不重复）</li>
+<li>表内的每一行都应当被唯一的标示（标识唯一性，如自动增长主键）</li>
+<li>表内不应该存储依赖于其他键的非键信息</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<h5 id="字段名命名约定">字段名命名约定</h5>
+<ol>
+<li>数据库字段应该是有意义且易于理解的，最好是能够表达字段含义的英文字母；</li>
+<li>系统中所有属于内码，即仅用于标识唯一性和程序内部用到的标识性字段，字段名称建议取为ID，采用类型为整型或长整型，也可以使用字符类型；</li>
+<li>系统中属于是业务内的编号字段，代表一定业务信息，建议字段命名为CODE，如线路编号LINE_CODE；</li>
+<li>不要在数据库表字段（列名）中包含数据类型，如：datetime；</li>
+<li>不要在数据库表字段（列名）命名时重复表名，可以使用表名首字母（不包含数据库表名前缀）。</li>
+</ol>
+<p>注意：</p>
+<p>​		在数据库表字段（列名）命名时不建议使用数据库关键字，如：name，time，datetime，password等。</p>
+<h5 id="存储过程命名规定">存储过程命名规定</h5>
+<p>存储过程的命名请遵循以下命名规范：<code>PRO_</code>+系统模块（与表前缀类似）+<code>_</code>+功能标识英文单词或英文单词缩写。</p>
+<p>如果一个存储过程只对一个表进行操作，建议存储过程的名称就用存储过程的表的表名（不带前缀）。这样有利于根据表名找到相应的存储过程。例如，用于清洗缺陷信息的过程PRO_DEFECT_CLEANING。</p>
+<h5 id="存储过程设计规范">存储过程设计规范</h5>
+<ol>
+<li>在存储过程中必须说明一下内容：
+<ol>
+<li>目的：说明此存储过程的作用。</li>
+<li>作者：首次创建此存储过程的人的姓名。在此请使用中文全名，不允许使用英文简称。</li>
+<li>创建日期：创建存储过程的日期。</li>
+<li>修改记录：修改记录需包含修改顺序号、修改者、修改日期、修改原因，修改时不能直接在原来的代码上修改，也不能删除原来的代码，只能先将原来的代码注释掉，再重新增加正确的代码。修改顺序号的形式为：log1，log2，log3。。。根据修改次数顺序增加，同时在注释掉的原来的代码块和新增的正确代码块前后注明修改顺序号。</li>
+</ol>
+</li>
+<li>对存储过程各参数及变量加中文注解。</li>
+<li>建议在数据库中创建一个文本文件保存创建脚本。</li>
+</ol>
+<h5 id="触发器命名规范">触发器命名规范</h5>
+<p>Insert触发器加'<code>_i</code>&rsquo;，Delete触发器加'<code>_d'</code>，Update触发器加'<code>_u</code>&rsquo;。</p>
+<h5 id="触发器设计规范">触发器设计规范</h5>
+<p>在触发器中必须说明以下内容：</p>
+<ol>
+<li>目的：说明此触发器的作用。</li>
+<li>创建者：首次创建此触发器的人的姓名。在此请使用中文全名，不允许使用英文简称。</li>
+<li>修改者、修改日期、修改原因：如果有人对此触发器进行了修改，则必须在此触发器的前面加注修改者姓名、修改日期及修改原因。</li>
+<li>对触发器各参数及变量加中文注解。</li>
+<li>建议在数据库中创建一个文本文件保存创建脚本。</li>
+</ol>
+
+
+  <footer>
+  
+<nav class="post-nav">
+  <span class="nav-prev">&larr; <a href="/cn/2020-06-20-%E7%AE%80%E5%8D%95python%E8%BD%AE%E5%BB%93/">简单python轮廓</a></span>
+  <span class="nav-next"><a href="/cn/2020-06-20-%E5%9F%BA%E6%9C%AC%E5%BC%80%E5%8F%91%E5%AE%88%E5%88%99/">基本开发守则</a> &rarr;</span>
+</nav>
+<script type="text/javascript">
+document.addEventListener('keyup', function(e) {
+  if (e.target.nodeName.toUpperCase() != 'BODY') return;
+  var url = false;
+  if (e.which == 37) {  
+    
+    url = '\/cn\/2020-06-20-%E7%AE%80%E5%8D%95python%E8%BD%AE%E5%BB%93\/';
+    
+  } else if (e.which == 39) {  
+    
+    url = '\/cn\/2020-06-20-%E5%9F%BA%E6%9C%AC%E5%BC%80%E5%8F%91%E5%AE%88%E5%88%99\/';
+    
+  }
+  if (url) window.location = url;
+});
+</script>
+
+
+
+
+
+
+<script async src="/js/fix-toc.js"></script>
+
+<script async src="/js/center-img.js"></script>
+
+<script async src="/js/right-quote.js"></script>
+
+<script async src="/js/no-highlight.js"></script>
+
+<script async src="/js/fix-footnote.js"></script>
+
+<script async src="/js/math-code.js"></script>
+
+<script async src="/js/external-link.js"></script>
+
+<script async src="/js/alt-title.js"></script>
+
+<script async src="/js/header-link.js"></script>
+
+
+
+
+  
+
+  
+  <hr>
+  <div class="copyright">© <a href="/">Luo Hao</a> 2016 - 2019</div>
+  
+  </footer>
+  </article>
+  
+  </body>
+</html>
+

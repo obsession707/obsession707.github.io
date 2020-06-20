@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>基本开发守则 - Rehoni | 罗皓</title>
+    <meta property="og:title" content="基本开发守则 - Rehoni | 罗皓">
+    
+    <meta name="twitter:card" content="summary">
+
+    
+      
+    
+
+    
+      
+      <meta property="description" content="由于 Windows 和 OSX下对文件大小写不敏感，因此我们采用kebab-case命名法。
+[&amp;hellip;] 例如：项目文件夹 my-project-name
+[&amp;hellip;] 项目内的子文件夹按照作用，采用常规单词命名。不使用缩写，除非已经约定俗成的惯用法。
+例如：脚本文件 scripts、模块modules、 组件components
+[&amp;hellip;] 和目录一致，采 &amp;hellip;">
+      <meta property="og:description" content="由于 Windows 和 OSX下对文件大小写不敏感，因此我们采用kebab-case命名法。
+[&amp;hellip;] 例如：项目文件夹 my-project-name
+[&amp;hellip;] 项目内的子文件夹按照作用，采用常规单词命名。不使用缩写，除非已经约定俗成的惯用法。
+例如：脚本文件 scripts、模块modules、 组件components
+[&amp;hellip;] 和目录一致，采 &amp;hellip;">
+      
+    
+
+    
+    
+    
+    <meta name="twitter:image" content="/images/logo.png">
+    
+    
+
+    
+
+    
+    
+
+
+<link href='//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+<script async src="/js/load-typekit.js"></script>
+
+
+<link rel="stylesheet" href="/css/custom.css" />
+
+  </head>
+
+  
+  <body class="cn">
+    <header class="masthead">
+      
+
+<h1><a href="/"><img src="/images/logo.png" alt="Luo Hao" /></a></h1>
+
+
+
+      <nav class="menu">
+  <ul>
+  
+  
+  <li><a href="/">首页</a></li>
+  
+  <li><a href="/cn/about/">关于</a></li>
+  
+  <li><a href="/cn/">日志</a></li>
+  
+  <li><a href="/categories/">分类</a></li>
+  
+  <li><a href="/tags/">标签</a></li>
+  
+  <li><a href="/cn/vitae/">简历</a></li>
+  
+  <li><a href="/en/">English</a></li>
+  
+  
+
+<li class="menu-extra"></li>
+
+
+
+<li><a href="https://github.com/rehonicn%5c2020-06-20-%e5%9f%ba%e6%9c%ac%e5%bc%80%e5%8f%91%e5%ae%88%e5%88%99.md" target="_blank">编辑</a></li>
+
+
+<li><a href="/cn/index.xml" type="application/rss+xml" title="RSS feed">订阅</a></li>
+
+<li><a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="Attribution-NonCommercial-ShareAlike 4.0 International">版权</a></li>
+
+
+  </ul>
+</nav>
+
+    </header>
+
+    <article class="main">
+      <header class="title">
+      
+<h1>基本开发守则</h1>
+
+
+<h3>rehoni / 
+2020-06-20</h3>
+
+<hr>
+
+
+      </header>
+
+
+
+<h3 id="命名规范">命名规范</h3>
+<h4 id="目录">目录</h4>
+<p>由于 Windows 和 OSX下对文件大小写不敏感，因此我们采用kebab-case命名法。</p>
+<h4 id="基础用法">基础用法</h4>
+<p>例如：项目文件夹 my-project-name</p>
+<h4 id="复数">复数</h4>
+<p>项目内的子文件夹按照作用，采用常规单词命名。不使用缩写，除非已经约定俗成的惯用法。</p>
+<p>例如：脚本文件 scripts、模块modules、 组件components</p>
+<h4 id="文件">文件</h4>
+<p>和目录一致，采用kebab-case</p>
+<h4 id="变量">变量</h4>
+<p>采用camelCase，且使用英文名词</p>
+<p>✔️ 正确示例：userCount 、listItems</p>
+<p>❌ 错误用法：setCount set 是动词</p>
+<h4 id="常量">常量</h4>
+<p>采用UPPER_CASE，即全部使用大写字母，多音节用 _ 分割例如：MAX_COUNT、URI</p>
+<h4 id="函数">函数</h4>
+<p>采用camelCase，前缀为动词</p>
+<table>
+<thead>
+<tr>
+<th>动词</th>
+<th>含义</th>
+<th>返回值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>can</td>
+<td>判断是否可执行某个动作(权限)</td>
+<td>函数返回一个布尔值。true:可执行;false:不可执行</td>
+</tr>
+<tr>
+<td>has</td>
+<td>判断是否含有某个值</td>
+<td>函数返回一个布尔值。true:含有此值;false:不含有此值</td>
+</tr>
+<tr>
+<td>is</td>
+<td>判断是否为某个值</td>
+<td>函数返回一个布尔值。true:为某个值;false:不为某个值</td>
+</tr>
+<tr>
+<td>get</td>
+<td>获取某个值</td>
+<td>函数返回一个非布尔值</td>
+</tr>
+<tr>
+<td>set</td>
+<td>设置某个值</td>
+<td>无返回值、返回是否设置成功或者返回链式对象</td>
+</tr>
+<tr>
+<td>load</td>
+<td>加载某些数据</td>
+<td>无返回值或者返回是否加载完成的结果</td>
+</tr>
+</tbody>
+</table>
+<p>例如：getName 建议的动词约定</p>
+<h4 id="类构造函数">类**&amp;**构造函数</h4>
+<p>采用PascalCase</p>
+<p>类的成员包含 2 部分</p>
+<ol>
+<li>公共属性和方法：跟变量和函数的命名一样。</li>
+<li>私有属性和方法：前缀为_(下划线)，后面跟公共属性和方法一样的命名方式。</li>
+</ol>
+<h4 id="url及路由"><strong>URL</strong>及路由</h4>
+<p>大小写不敏感，因此采用kebab-case</p>
+<p>例如：mobile/design-tools</p>
+<h3 id="编码风格及样式规范">编码风格及样式规范</h3>
+<ul>
+<li>
+<p>文件编码:      使用utf-8</p>
+</li>
+<li>
+<p>缩进符: 使用空格代替 Tab</p>
+</li>
+<li>
+<p>缩进位: 使用2个空格</p>
+</li>
+<li>
+<p>换行符: LF</p>
+</li>
+<li>
+<p>文件尾: 新增一个空白行</p>
+</li>
+</ul>
+<p>· 尾部空格: 行尾无空格安装 <strong>VS code</strong> 的 <strong>editor</strong> 插件</p>
+<ul>
+<li>进入 VS code 左侧第五个菜单(最后一个)，顶部搜索中输入editorconfig</li>
+<li>在列表中选择 EditorConfig for VS Code进行安装</li>
+<li>重启 vs code 在使用      VS code 时，VS code 会自动读取项目下的 .editorconfig      文件，并应用到你的编码里</li>
+</ul>
+<p>配置好之后，按一下，如果自动缩进了 2 个空格，说明配置成功</p>
+<p>标准 .editorconfig 内容为</p>
+<p>root = true     [*] charset = utf-8   indent_style = space indent_size = 2 end_of_line = lf    insert_final_newline = true trim_trailing_whitespace = true</p>
+<p>其余风格使用 <a href="https://standardjs.com/">ESlint Standard </a></p>
+<h3 id="项目workflow">项目workflow</h3>
+<h4 id="git分支"><strong>Git分支</strong></h4>
+<p><img src="C:%5CUsers%5CRes0l%5COneDrive%5C%E7%AC%94%E8%AE%B0%5C%E6%97%A5%E5%B8%B8%E7%AC%94%E8%AE%B0%5Cclip_image001.gif" alt="img"></p>
+<h4 id="合并原则"><strong>合并原则</strong></h4>
+<p>所有的$Feature只允许单向合并到develop，不允许$Feature互相合并，只允许develop单向合并到master分支。</p>
+<h4 id="基础流程"><strong>基础流程</strong></h4>
+<p><strong>1.</strong> <strong>建立</strong> <strong>issue</strong></p>
+<p>当我们想要实现一个功能时，不要急于立即开始写代码。先想清楚大概要实现什么目标?评估一下会怎么去实现?最基础的设计是什么?把这些都写到一个 issue 里。issue 标题可遵循动词+名词的形式，如实现页面无限滚动</p>
+<p><strong>2.</strong> <strong>创建分支和</strong> <strong>Merge Request</strong></p>
+<p>手动新建一个自己的分支，并将该分支 checkout 到本地。</p>
+<p>在 issue 建立之后，当你的权限是develop时，你会发现gitlab提供一个便捷选项——在 issue的右下方，叫做Create a merge request，点击之后(不要点下拉菜单)，会同时帮你创建一个以issue名称命名的分支，也同时创建了一个Merge request，此时这个Merge</p>
+<p>request尚未被执行，处于WIP(working in progress)的状态。这个时候把新创建的分支</p>
+<p>Check Out到本地，开始你的开发之旅。</p>
+<p><strong>3.</strong> <strong>合并入</strong> <strong>Develop</strong></p>
+<p>经过一段时间的开发，你的开发完成了，并且也已经通过了自测。这个时候就需要把你的开发工作合并到Develop分支上去了。完成提交和推送后，回到你原来的 issue，你会发现可以直接进入之前创建好的Merge request,进入之后先解除WIP状态，然后进行Merge。如果顺利的话，你的代码将会被合并入Develop分支</p>
+<p><strong>4.</strong> <strong>合并入</strong> <strong>Master</strong></p>
+<p>在 develop 分支已经积累了一部分功能，需要对外发布时，则创建一个新的Merge request，将develop分支合并入master,这一步是不需要任何其他代码提交的。</p>
+<h4 id="变基而非反向合并"><strong>变基而非反向合并</strong></h4>
+<p>在实际工作中，我们有时会遇到在自己开发分支上开发的时候，发现develop比自己的分支要新，为了保持自己的分支也是在最新的基础上开发，我们想当然的会想把develop合并入自己的分支。但这样的结果就会出现交叉合并，对于日后分析项目和理解项目是非常不利的。</p>
+<p>因此我们采用变基Rebase操作，将我自己的分支Rebase到develop最新的节点上即可。</p>
+<h3 id="git-commit-message-规范">Git Commit Message 规范</h3>
+<p><strong>1.</strong> <strong>目的</strong></p>
+<ul>
+<li>统一团队的 Git      commit 日志标准，便于后续代码 review，以及自动化生成 Changlog 等</li>
+<li>养成良好的写作习惯和对自己作品负责的态度</li>
+</ul>
+<pre><code>${type}(${scope}): ${subject}
+//blank line
+${body}
+//blank line
+${footer}
+</code></pre><table>
+<thead>
+<tr>
+<th><strong>内容字段</strong></th>
+<th></th>
+<th><strong>必须</strong>**?**</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>type</td>
+<td></td>
+<td>✔</td>
+</tr>
+<tr>
+<td>scope</td>
+<td></td>
+<td>可选</td>
+</tr>
+<tr>
+<td>subject</td>
+<td></td>
+<td>✔</td>
+</tr>
+<tr>
+<td>body</td>
+<td></td>
+<td>可选</td>
+</tr>
+<tr>
+<td>footer</td>
+<td></td>
+<td>可选</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th><strong>type</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>feat</td>
+<td>新增 feature</td>
+</tr>
+<tr>
+<td>fix</td>
+<td>修复 bug</td>
+</tr>
+<tr>
+<td>docs</td>
+<td>仅仅修改了文档，比如 README, CHANGELOG, CONTRIBUTE 等等</td>
+</tr>
+</tbody>
+</table>
+<p><strong>2.</strong> <strong>基本规范</strong></p>
+<p><strong>type****类型</strong></p>
+<p>type 代表某次提交的类型，比如是修复一个 bug 还是增加一个新的 feature。</p>
+<p><strong>格式要求</strong></p>
+<p>标题行：50个字符以内，描述主要变更内容</p>
+<p>主体内容：更详细的说明文本，建议72个字符以内。需要描述的信息包括：</p>
+<ul>
+<li>
+<p>为什么这个变更是必须的? 它可能是用来修复一个bug，增加一个feature，提升性能、可靠性、稳定性等等</p>
+</li>
+<li>
+<p>他如何解决这个问题? 具体描述解决问题的步骤</p>
+</li>
+<li>
+<p>是否存在副作用、风险?</p>
+</li>
+</ul>
+<p>尾部：如果需要的化可以添加一个链接到issue地址或者其它文档，或者关闭某个issue。</p>
+<table>
+<thead>
+<tr>
+<th><strong>type</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>style</td>
+<td>仅仅修改了空格、格式缩进、逗号等等，不改变代码逻辑</td>
+</tr>
+<tr>
+<td>refactor</td>
+<td>代码重构，没有加新功能或者修复 bug</td>
+</tr>
+<tr>
+<td>perf</td>
+<td>优化相关，比如提升性能、体验</td>
+</tr>
+<tr>
+<td>test</td>
+<td>测试用例，包括单元测试、集成测试等</td>
+</tr>
+<tr>
+<td>chore</td>
+<td>改变构建流程、或者增加依赖库、工具等</td>
+</tr>
+<tr>
+<td>revert</td>
+<td>回滚到上一个版本</td>
+</tr>
+</tbody>
+</table>
+<p><strong>3.</strong> <strong>例子</strong></p>
+<p>新增了一个组件时：</p>
+<pre><code>feat(component): created LocaleProvider component for locales inject //blank line
+- add inject methods to pagination, calendar
+- add provider methods to locale-provider
+//blank line close #23
+</code></pre><p><strong>参考资料</strong></p>
+<p><a href="https://github.com/angular/angular/blob/master/CONTRIBUTING.md#commit">angular</a></p>
+<p><a href="https://ivweb.io/topic/58ba702bdb35a9135d42f83d">ivweb</a></p>
+<p><a href="http://www.ruanyifeng.com/blog/2016/01/commit_message_change_log.html">Commit message 和</a> <a href="http://www.ruanyifeng.com/blog/2016/01/commit_message_change_log.html">Change log 编写指南</a></p>
+
+
+  <footer>
+  
+<nav class="post-nav">
+  <span class="nav-prev">&larr; <a href="/cn/2020-06-20-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%A7%84%E8%8C%83/">数据库命名规则</a></span>
+  <span class="nav-next"><a href="/cn/2920-06-20-manual/">写给自己的说明书</a> &rarr;</span>
+</nav>
+<script type="text/javascript">
+document.addEventListener('keyup', function(e) {
+  if (e.target.nodeName.toUpperCase() != 'BODY') return;
+  var url = false;
+  if (e.which == 37) {  
+    
+    url = '\/cn\/2020-06-20-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%A7%84%E8%8C%83\/';
+    
+  } else if (e.which == 39) {  
+    
+    url = '\/cn\/2920-06-20-manual\/';
+    
+  }
+  if (url) window.location = url;
+});
+</script>
+
+
+
+
+
+
+<script async src="/js/fix-toc.js"></script>
+
+<script async src="/js/center-img.js"></script>
+
+<script async src="/js/right-quote.js"></script>
+
+<script async src="/js/no-highlight.js"></script>
+
+<script async src="/js/fix-footnote.js"></script>
+
+<script async src="/js/math-code.js"></script>
+
+<script async src="/js/external-link.js"></script>
+
+<script async src="/js/alt-title.js"></script>
+
+<script async src="/js/header-link.js"></script>
+
+
+
+<script async src="//mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+  
+
+
+
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/java.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/SQL.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/CSS.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/C#.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+  
+  <hr>
+  <div class="copyright">© <a href="/">Luo Hao</a> 2016 - 2019</div>
+  
+  </footer>
+  </article>
+  
+  </body>
+</html>
+
