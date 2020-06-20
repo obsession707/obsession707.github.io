@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>Oracle实践数据库笔记-8 - Rehoni | 罗皓</title>
+    <meta property="og:title" content="Oracle实践数据库笔记-8 - Rehoni | 罗皓">
+    
+    <meta name="twitter:card" content="summary">
+
+    
+      
+    
+
+    
+      
+      <meta property="description" content="oradebug dump controlf 3 oradebug setmypid oradebug tracefile_name
+alter session set nls_language=american
+[&amp;hellip;] 见ppt 126/383 alter system set control_files = &amp;hellip;">
+      <meta property="og:description" content="oradebug dump controlf 3 oradebug setmypid oradebug tracefile_name
+alter session set nls_language=american
+[&amp;hellip;] 见ppt 126/383 alter system set control_files = &amp;hellip;">
+      
+    
+
+    
+    
+    
+    <meta name="twitter:image" content="/images/logo.png">
+    
+    
+
+    
+
+    
+    
+
+
+<link href='//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+<script async src="/js/load-typekit.js"></script>
+
+
+<link rel="stylesheet" href="/css/custom.css" />
+
+  </head>
+
+  
+  <body class="cn">
+    <header class="masthead">
+      
+
+<h1><a href="/"><img src="/images/logo.png" alt="Luo Hao" /></a></h1>
+
+
+
+      <nav class="menu">
+  <ul>
+  
+  
+  <li><a href="/">首页</a></li>
+  
+  <li><a href="/cn/about/">关于</a></li>
+  
+  <li><a href="/cn/">日志</a></li>
+  
+  <li><a href="/categories/">分类</a></li>
+  
+  <li><a href="/tags/">标签</a></li>
+  
+  <li><a href="/cn/vitae/">简历</a></li>
+  
+  <li><a href="/en/">English</a></li>
+  
+  
+
+<li class="menu-extra"></li>
+
+
+
+<li><a href="https://github.com/rehonicn%5c2018-03-27-Oracle-8.md" target="_blank">编辑</a></li>
+
+
+<li><a href="/cn/index.xml" type="application/rss+xml" title="RSS feed">订阅</a></li>
+
+<li><a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="Attribution-NonCommercial-ShareAlike 4.0 International">版权</a></li>
+
+
+  </ul>
+</nav>
+
+    </header>
+
+    <article class="main">
+      <header class="title">
+      
+<h1>Oracle实践数据库笔记-8</h1>
+
+
+<h3>Rehoni / 
+2018-03-27</h3>
+
+<hr>
+
+
+      </header>
+
+
+
+<h3 id="管理控制文件">管理控制文件</h3>
+<ol>
+<li>控制文件的作用❓</li>
+<li>控制文件的内容❓二进制</li>
+</ol>
+<p>oradebug dump controlf 3
+oradebug setmypid
+oradebug tracefile_name</p>
+<p>alter session set nls_language=american</p>
+<ol start="3">
+<li>控制文件的复用🆗
+内容一模一样，做多个同样的控制文件放在不同的地方</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">    <span style="color:#960050;background-color:#1e0010">见</span>ppt <span style="color:#ae81ff">126</span><span style="color:#f92672">/</span><span style="color:#ae81ff">383</span>
+    <span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">system</span> <span style="color:#66d9ef">set</span> control_files <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;path1&#39;</span>,<span style="color:#e6db74">&#39;path2&#39;</span>,<span style="color:#e6db74">&#39;path3&#39;</span> <span style="color:#66d9ef">scope</span><span style="color:#f92672">=</span>spfile;
+    shutdown
+    cp <span style="color:#e6db74">&#39;path1&#39;</span><span style="color:#f92672">/</span><span style="color:#e6db74">&#39;path2&#39;</span> <span style="color:#e6db74">&#39;path3&#39;</span>;
+    startup
+    <span style="color:#66d9ef">show</span> <span style="color:#66d9ef">parameter</span> control_files;
+</code></pre></div><ol start="4">
+<li>创建控制文件</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">database</span> backup controlfile <span style="color:#66d9ef">to</span> trace <span style="color:#66d9ef">as</span> <span style="color:#e6db74">&#39;e:\trace_controlf.txt&#39;</span>
+<span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">database</span> mount
+<span style="color:#960050;background-color:#1e0010">删除控制文件之后启动报错再启动一下脚本</span>
+<span style="color:#960050;background-color:#1e0010">语句在</span>trace_controlf.txt里边跑一下
+</code></pre></div><p>实验：</p>
+<ol>
+<li>查看控制文件的名称和内容🆗
+select name &hellip;
+show parameter control_files;
+oradebug &hellip;见上</li>
+<li>控制文件的复用🆗</li>
+<li>创建控制文件</li>
+</ol>
+<p><strong>不是很清楚，再看大佬演示一下跑一下脚本</strong></p>
+<h3 id="管理日志文件">管理日志文件</h3>
+<ol>
+<li>
+<p>日志文件的作用</p>
+</li>
+<li>
+<p>日志工作体系</p>
+</li>
+<li>
+<p>日志管理</p>
+<p><strong>务必搞清楚一下switch和checkpoint两条命令</strong> 😋</p>
+<ul>
+<li>查询日志文件组，日志文件成员，归档日志🆗
+desc一下就知道了v$log v$logfile v$archived_log</li>
+<li>添加日志文件组🆗</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">    <span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">database</span> <span style="color:#66d9ef">add</span> logfile <span style="color:#66d9ef">group</span> <span style="color:#ae81ff">4</span>;
+</code></pre></div><ul>
+<li>向日志文件组添加成员🆗</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">    <span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">database</span> <span style="color:#66d9ef">add</span> logfile member <span style="color:#e6db74">&#39;path&#39;</span> <span style="color:#66d9ef">to</span> <span style="color:#66d9ef">group</span> <span style="color:#ae81ff">4</span>;
+</code></pre></div><ul>
+<li>删除日志文件成员🆗</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">    <span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">database</span> <span style="color:#66d9ef">drop</span> logfile member <span style="color:#e6db74">&#39;path&#39;</span> <span style="color:#66d9ef">to</span> <span style="color:#66d9ef">group</span> <span style="color:#ae81ff">4</span>;
+    <span style="color:#66d9ef">select</span> <span style="color:#66d9ef">group</span><span style="color:#f92672">#</span><span style="color:#960050;background-color:#1e0010">，</span>status <span style="color:#66d9ef">from</span> v$log;
+</code></pre></div><ul>
+<li>删除日志文件组🆗
+日志组删除时日志文件还在不在：
+如果是OMF日志文件则不在，默认情况下是在的</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">    <span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">database</span> <span style="color:#66d9ef">drop</span> logfile <span style="color:#66d9ef">group</span> <span style="color:#ae81ff">4</span>;
+</code></pre></div><ul>
+<li>清除日志文件🆗</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">    <span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">database</span> clear logfile <span style="color:#e6db74">&#39;path&#39;</span>;
+</code></pre></div><ul>
+<li>OMF 没听
+创建一个路径放入日志文件，OMF形式</li>
+<li>设置归档模式</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">    <span style="color:#75715e">---要在 mount模式下
+</span><span style="color:#75715e"></span>    startup mount
+    <span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">database</span> archivelog;
+    archive log list;
+    <span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">database</span> noarchivelog;
+</code></pre></div><ul>
+<li>设置归档目的地</li>
+<li>手动归档</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">    <span style="color:#66d9ef">show</span> <span style="color:#66d9ef">parameter</span> log_archive
+    <span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">system</span> <span style="color:#66d9ef">set</span> log_archive_dest_1<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;location=path1&#39;</span>
+    <span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">system</span> archieve log <span style="color:#66d9ef">current</span>
+</code></pre></div><ul>
+<li>移动或者重命名日志文件</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">    <span style="color:#66d9ef">select</span> <span style="color:#66d9ef">group</span><span style="color:#f92672">#</span>, <span style="color:#66d9ef">from</span> v$logfile
+    shutdown immediate之后剪切<span style="color:#960050;background-color:#1e0010">（从原路径）一个</span>log文件到别的目录<span style="color:#960050;background-color:#1e0010">（现在路径）</span>
+    startup mount不报错<span style="color:#960050;background-color:#1e0010">，不检测日志文件</span>
+    <span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">database</span> open报错<span style="color:#960050;background-color:#1e0010">，看报错信息，找</span>E:<span style="color:#960050;background-color:#1e0010">\</span>app<span style="color:#960050;background-color:#1e0010">\</span>Res0liya<span style="color:#960050;background-color:#1e0010">\</span>diag<span style="color:#960050;background-color:#1e0010">\</span>rdbms<span style="color:#960050;background-color:#1e0010">\</span>orcl<span style="color:#960050;background-color:#1e0010">\</span>orcl<span style="color:#960050;background-color:#1e0010">\</span>trace目录下的alert_orcl.log看报错信息<span style="color:#960050;background-color:#1e0010">，从后到前</span>
+    <span style="color:#66d9ef">select</span> menber <span style="color:#66d9ef">from</span> v$logfile
+    <span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">database</span> <span style="color:#66d9ef">rename</span> file <span style="color:#e6db74">&#39;原路径&#39;</span> <span style="color:#66d9ef">to</span> <span style="color:#e6db74">&#39;现在路径&#39;</span>
+    <span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">database</span> open就不报错了
+</code></pre></div><ul>
+<li>修复日志文件
+<ul>
+<li>非当前的文件出问题</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">    <span style="color:#66d9ef">select</span> <span style="color:#66d9ef">group</span><span style="color:#f92672">#</span>,status <span style="color:#66d9ef">from</span> v$log;
+    <span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">database</span> clear logfile <span style="color:#66d9ef">group</span> <span style="color:#ae81ff">1</span>;
+    <span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">database</span> <span style="color:#66d9ef">open</span>
+</code></pre></div><ul>
+<li>当前的文件出问题</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">    recover <span style="color:#66d9ef">database</span> <span style="color:#66d9ef">until</span> cancel;
+    <span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">database</span> <span style="color:#66d9ef">open</span>;<span style="color:#960050;background-color:#1e0010">报错</span>
+    <span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">database</span> <span style="color:#66d9ef">open</span> resetlogs;<span style="color:#960050;background-color:#1e0010">重新创建新日志文件</span>
+</code></pre></div></li>
+</ul>
+</li>
+</ol>
+<h3 id="其他代码">其他代码</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">    ORA<span style="color:#f92672">-</span><span style="color:#ae81ff">24324</span>: <span style="color:#960050;background-color:#1e0010">未初始化服务句柄</span>
+    ORA<span style="color:#f92672">-</span><span style="color:#ae81ff">01041</span>: <span style="color:#960050;background-color:#1e0010">内部错误</span>, hostdef <span style="color:#960050;background-color:#1e0010">扩展名不存在</span>
+    <span style="color:#960050;background-color:#1e0010">出现</span>shutdown问题采用
+    shutdown <span style="color:#66d9ef">abort</span>
+</code></pre></div>
+
+  <footer>
+  
+<nav class="post-nav">
+  <span class="nav-prev">&larr; <a href="/cn/2018-03-23-oracle-7/">Oracle实践数据库笔记-7</a></span>
+  <span class="nav-next"><a href="/cn/2018-03-30-oracle-9/">Oracle实践数据库笔记-9</a> &rarr;</span>
+</nav>
+<script type="text/javascript">
+document.addEventListener('keyup', function(e) {
+  if (e.target.nodeName.toUpperCase() != 'BODY') return;
+  var url = false;
+  if (e.which == 37) {  
+    
+    url = '\/cn\/2018-03-23-oracle-7\/';
+    
+  } else if (e.which == 39) {  
+    
+    url = '\/cn\/2018-03-30-oracle-9\/';
+    
+  }
+  if (url) window.location = url;
+});
+</script>
+
+
+
+
+
+
+<script async src="/js/fix-toc.js"></script>
+
+<script async src="/js/center-img.js"></script>
+
+<script async src="/js/right-quote.js"></script>
+
+<script async src="/js/no-highlight.js"></script>
+
+<script async src="/js/fix-footnote.js"></script>
+
+<script async src="/js/math-code.js"></script>
+
+<script async src="/js/external-link.js"></script>
+
+<script async src="/js/alt-title.js"></script>
+
+<script async src="/js/header-link.js"></script>
+
+
+
+<script async src="//mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+  
+
+
+
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/java.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/SQL.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/CSS.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+  
+  <hr>
+  <div class="copyright">© <a href="/">Luo Hao</a> 2016 - 2019</div>
+  
+  </footer>
+  </article>
+  
+  </body>
+</html>
+

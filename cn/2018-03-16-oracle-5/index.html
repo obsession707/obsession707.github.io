@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>Oracle实践数据库笔记-5 - Rehoni | 罗皓</title>
+    <meta property="og:title" content="Oracle实践数据库笔记-5 - Rehoni | 罗皓">
+    
+    <meta name="twitter:card" content="summary">
+
+    
+      
+    
+
+    
+      
+      <meta property="description" content="两个事物冲突，然后产生死锁，使用v$lock和v$session来解决死锁
+[&amp;hellip;] http://www.cnblogs.com/rootq/articles/1147450.html
+[&amp;hellip;] help index
+[&amp;hellip;] QL(select)
+[&amp;hellip;] DML(insert,update,delete,merge)
+[&amp;hellip;] &amp;hellip;">
+      <meta property="og:description" content="两个事物冲突，然后产生死锁，使用v$lock和v$session来解决死锁
+[&amp;hellip;] http://www.cnblogs.com/rootq/articles/1147450.html
+[&amp;hellip;] help index
+[&amp;hellip;] QL(select)
+[&amp;hellip;] DML(insert,update,delete,merge)
+[&amp;hellip;] &amp;hellip;">
+      
+    
+
+    
+    
+    
+    <meta name="twitter:image" content="/images/logo.png">
+    
+    
+
+    
+
+    
+    
+
+
+<link href='//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+<script async src="/js/load-typekit.js"></script>
+
+
+<link rel="stylesheet" href="/css/custom.css" />
+
+  </head>
+
+  
+  <body class="cn">
+    <header class="masthead">
+      
+
+<h1><a href="/"><img src="/images/logo.png" alt="Luo Hao" /></a></h1>
+
+
+
+      <nav class="menu">
+  <ul>
+  
+  
+  <li><a href="/">首页</a></li>
+  
+  <li><a href="/cn/about/">关于</a></li>
+  
+  <li><a href="/cn/">日志</a></li>
+  
+  <li><a href="/categories/">分类</a></li>
+  
+  <li><a href="/tags/">标签</a></li>
+  
+  <li><a href="/cn/vitae/">简历</a></li>
+  
+  <li><a href="/en/">English</a></li>
+  
+  
+
+<li class="menu-extra"></li>
+
+
+
+<li><a href="https://github.com/rehonicn%5c2018-03-16-Oracle-5.md" target="_blank">编辑</a></li>
+
+
+<li><a href="/cn/index.xml" type="application/rss+xml" title="RSS feed">订阅</a></li>
+
+<li><a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="Attribution-NonCommercial-ShareAlike 4.0 International">版权</a></li>
+
+
+  </ul>
+</nav>
+
+    </header>
+
+    <article class="main">
+      <header class="title">
+      
+<h1>Oracle实践数据库笔记-5</h1>
+
+
+<h3>Rehoni / 
+2018-03-16</h3>
+
+<hr>
+
+
+      </header>
+
+
+
+<h3 id="锁-lock">锁 lock</h3>
+<ul>
+<li>自动，手动，力度权限</li>
+<li>共享锁，独占锁</li>
+<li>行锁，表锁</li>
+</ul>
+<h3 id="死锁-deadlock">死锁 deadlock</h3>
+<ul>
+<li>Oracle能自动查到产生死锁的语句，并且回滚掉这句</li>
+</ul>
+<p>两个事物冲突，然后产生死锁，使用v$lock和v$session来解决死锁</p>
+<blockquote>
+<p><a href="http://www.cnblogs.com/rootq/articles/1147450.html">http://www.cnblogs.com/rootq/articles/1147450.html</a></p>
+</blockquote>
+<h3 id="sql-plus命令">SQL PLUS命令</h3>
+<blockquote>
+<p>help index</p>
+</blockquote>
+<h3 id="sql-讲完了">SQL 讲完了</h3>
+<ul>
+<li>
+<p>QL(select)</p>
+</li>
+<li>
+<p>DML(insert,update,delete,merge)</p>
+</li>
+<li>
+<p>DCL(grant,invoke)</p>
+</li>
+<li>
+<p>TCL(commit,rollback,savepoint)</p>
+</li>
+<li>
+<p>DDL(create,alter,drop,truncate,rename,comment)</p>
+</li>
+<li>
+<p>序列，索引</p>
+</li>
+<li>
+<p><strong>建表table原则</strong> (PPT313)</p>
+</li>
+</ul>
+<p>名称空间，表的名称不能和同<strong>名称空间</strong>下的对象同名</p>
+<ul>
+<li>
+<p>同义词</p>
+</li>
+<li>
+<p>创建用户和给予权限（grant）</p>
+</li>
+<li>
+<p>pserdocolumn 伪列（不在列编制里边的列，desc不可见）</p>
+</li>
+</ul>
+<p>rowid 物理地址，BASE64_CODE文件号，列号，行号</p>
+<ul>
+<li>主流编制 dbms_rowid</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">select</span> dbms_rowid.ROWID_RELATIVE_FNO(rowid) File<span style="color:#f92672">#</span>,
+dbms_rowid.ROWID_BLOCK_NUMBER(rowid) Block<span style="color:#f92672">#</span>,
+dbms_rowid.ROWID_ROW_NUMBER(rowid) <span style="color:#66d9ef">Row</span><span style="color:#f92672">#</span>,
+frmo emp;
+</code></pre></div><ul>
+<li>一些语句</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">view_name <span style="color:#66d9ef">from</span> user_views
+<span style="color:#960050;background-color:#1e0010">名称空间</span><span style="color:#66d9ef">desc</span> user_objects
+col object_name <span style="color:#66d9ef">for</span> a30;
+<span style="color:#66d9ef">create</span> <span style="color:#66d9ef">user</span> cr identified aaa
+grant给予用户基本权限
+<span style="color:#66d9ef">desc</span> dba_users,<span style="color:#960050;background-color:#1e0010">查询用户默认表空间，存储权限没有，能建表但是在使用的时候才需要</span>
+<span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">user</span> zhang quota <span style="color:#ae81ff">5</span>m<span style="color:#f92672">/</span>unlimited <span style="color:#66d9ef">on</span> users;
+<span style="color:#66d9ef">grant</span> <span style="color:#66d9ef">create</span> <span style="color:#66d9ef">any</span> <span style="color:#66d9ef">table</span> <span style="color:#66d9ef">to</span> zhang;
+<span style="color:#66d9ef">grant</span> <span style="color:#66d9ef">select</span> <span style="color:#66d9ef">on</span> scott.emp <span style="color:#66d9ef">to</span> zhang;
+<span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">user</span> scott <span style="color:#66d9ef">grant</span> through dl;<span style="color:#960050;background-color:#1e0010">用</span>dl代理scott用户
+<span style="color:#66d9ef">comment</span> <span style="color:#66d9ef">on</span> <span style="color:#66d9ef">column</span> emp.EMPNO <span style="color:#66d9ef">is</span> <span style="color:#e6db74">&#39;employee number&#39;</span>;
+<span style="color:#66d9ef">desc</span> user_tab<span style="color:#f92672">/</span>col_comments;
+<span style="color:#66d9ef">select</span> comments <span style="color:#66d9ef">from</span> user_tab<span style="color:#f92672">/</span>col_comments <span style="color:#66d9ef">where</span> <span style="color:#66d9ef">column_name</span><span style="color:#f92672">/</span><span style="color:#66d9ef">table_name</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;emp&#39;</span>;
+</code></pre></div><ul>
+<li>数据类型</li>
+</ul>
+<p>字符集，编码方案
+表的数据类型</p>
+<ul>
+<li>修改表 alter</li>
+</ul>
+<ol>
+<li>修改表名 rename</li>
+<li>增加字段 add</li>
+<li>修改字段
+（1）字段改名
+（2）字段类型 alter modified（要修改的列必须为空）
+（3）修改字段宽度</li>
+<li>删除字段</li>
+<li>删除表 drop table对象会放入回收站</li>
+<li>截断表
+delete：DML 有回滚rollback，先复制一份再删除，不释放存储空间
+truncate：DDL 没有回滚，释放存储空间
+引入hwm，high water marker 高端水印，扫描到高端水印为止</li>
+</ol>
+
+
+  <footer>
+  
+<nav class="post-nav">
+  <span class="nav-prev">&larr; <a href="/cn/2018-03-13-oracle-4/">Oracle实践数据库笔记-4</a></span>
+  <span class="nav-next"><a href="/cn/2018-03-20-oracle-6/">Oracle实践数据库笔记-6</a> &rarr;</span>
+</nav>
+<script type="text/javascript">
+document.addEventListener('keyup', function(e) {
+  if (e.target.nodeName.toUpperCase() != 'BODY') return;
+  var url = false;
+  if (e.which == 37) {  
+    
+    url = '\/cn\/2018-03-13-oracle-4\/';
+    
+  } else if (e.which == 39) {  
+    
+    url = '\/cn\/2018-03-20-oracle-6\/';
+    
+  }
+  if (url) window.location = url;
+});
+</script>
+
+
+
+
+
+
+<script async src="/js/fix-toc.js"></script>
+
+<script async src="/js/center-img.js"></script>
+
+<script async src="/js/right-quote.js"></script>
+
+<script async src="/js/no-highlight.js"></script>
+
+<script async src="/js/fix-footnote.js"></script>
+
+<script async src="/js/math-code.js"></script>
+
+<script async src="/js/external-link.js"></script>
+
+<script async src="/js/alt-title.js"></script>
+
+<script async src="/js/header-link.js"></script>
+
+
+
+<script async src="//mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+  
+
+
+
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/java.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/SQL.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/CSS.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+  
+  <hr>
+  <div class="copyright">© <a href="/">Luo Hao</a> 2016 - 2019</div>
+  
+  </footer>
+  </article>
+  
+  </body>
+</html>
+

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>Github Issue Guide - Rehoni | 罗皓</title>
+    <meta property="og:title" content="Github Issue Guide - Rehoni | 罗皓">
+    
+    <meta name="twitter:card" content="summary">
+
+    
+      
+    
+
+    
+      
+      <meta property="description" content="This is a guide expected to be read before anyone files an issue to a repository that I maintain on Github. Please help me help you.
+[&amp;hellip;] For general questions, please post them on Stack &amp;hellip;">
+      <meta property="og:description" content="This is a guide expected to be read before anyone files an issue to a repository that I maintain on Github. Please help me help you.
+[&amp;hellip;] For general questions, please post them on Stack &amp;hellip;">
+      
+    
+
+    
+    
+    
+    <meta name="twitter:image" content="/images/logo.png">
+    
+    
+
+    
+
+    
+    
+
+
+<link href='//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+<link rel="stylesheet" href="/css/custom.css" />
+
+  </head>
+
+  
+  <body class="issue">
+    <header class="masthead">
+      
+
+<h1><a href="/"><img src="/images/logo.png" alt="Luo Hao" /></a></h1>
+
+
+
+      <nav class="menu">
+  <ul>
+  
+  
+  <li><a href="/en/about/">About</a></li>
+  
+  <li><a href="/en/">Blog</a></li>
+  
+  <li><a href="/cn/about/">关于</a></li>
+  
+  <li><a href="/cn/">日志</a></li>
+  
+  
+
+<li class="menu-extra"></li>
+
+
+
+<li><a href="https://github.com/rehoniissue.md" target="_blank">Edit this page</a></li>
+
+
+<li><a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="Attribution-NonCommercial-ShareAlike 4.0 International">License</a></li>
+
+
+  </ul>
+</nav>
+
+    </header>
+
+    <article class="main">
+      <header class="title">
+      
+<h1>Github Issue Guide</h1>
+
+
+<h3>Yihui Xie / 
+2019-03-04</h3>
+
+<hr>
+
+
+      </header>
+
+
+
+<p>This is a guide expected to be read before anyone files an issue to a repository that I maintain on Github. Please help me help you.</p>
+<h2 id="got-a-question">Got a question?</h2>
+<p>For general questions, please post them on Stack Overflow first: <a href="http://stackoverflow.com/questions/ask">http://stackoverflow.com/questions/ask</a> (typically you want to use at least the tags <code>r</code> and relevant R package names such as <code>knitr</code>, <code>rmarkdown</code>, <code>blogdown</code>, and so on). You can also ask in the RStudio Community: <a href="https://community.rstudio.com">https://community.rstudio.com</a>. Please come back to Github only if nobody answers your question there in at least 24 hours, and <a href="/en/2017/10/cross-posting/">let us know the URL</a> of your post. There are several benefits of asking questions on popular public forums than asking a single developer (<a href="/en/2017/08/so-gh-email/">see this post</a>).</p>
+<p>If you have asked the question elsewhere, <a href="/en/2017/10/cross-posting/">please mention your cross-posting</a> in all places where you asked the question. After your question has been answered in one place, please notify people in other places so they won&rsquo;t waste their time.</p>
+<p>If an issue has been closed, please refrain from continuing to reply to it. An issue that can never be &ldquo;truly&rdquo; closed makes me feel stressful. Instead, please feel free to open a new issue and you can reference the closed issue if you think it is relevant.</p>
+<h2 id="bug-reports">Bug reports</h2>
+<p>For bug reports, please provide <a href="/en/2017/09/the-minimal-reprex-paradox/">a minimal, self-contained, and reproducible example</a> by reducing your example as much as possible right before the problem goes away. By doing this, you may be able to figure out what the problem really is before reporting to us.</p>
+<p>If your example is a single plain-text file, post the content in the issue (be sure to format it as a verbatim block). If your example contains multiple files, please upload them as a zip file to the Github issue.</p>
+<p>Please always provide <code>xfun::session_info()</code>. If the relevant package is not in the session info, you may pass the package name to this function, e.g.,</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">xfun<span style="color:#f92672">::</span><span style="color:#a6e22e">session_info</span>(<span style="color:#e6db74">&#39;rmarkdown&#39;</span>)
+</code></pre></div><p>Screenshots are often very helpful to illustrate your issues, but <a href="/en/2018/01/screenshots-vs-text/">please don&rsquo;t post code as screenshots</a>.</p>
+<p>It will be helpful if you make sure <a href="/en/2017/05/when-in-doubt-upgrade/">all your packages are up-to-date</a> before reporting issues. You should at least run:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">update.packages</span>(ask <span style="color:#f92672">=</span> <span style="color:#66d9ef">FALSE</span>, checkBuilt <span style="color:#f92672">=</span> <span style="color:#66d9ef">TRUE</span>)
+<span style="color:#75715e"># please remember to restart R after updating packages</span>
+</code></pre></div><p>Even better if you could test the development version of the package, e.g. (taking <strong>knitr</strong> for example below),</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">remotes<span style="color:#f92672">::</span><span style="color:#a6e22e">install_github</span>(<span style="color:#e6db74">&#39;yihui/knitr&#39;</span>, upgrade <span style="color:#f92672">=</span> <span style="color:#66d9ef">TRUE</span>)
+</code></pre></div><h2 id="proposing-a-feature-implementation-or-bug-fix">Proposing a feature implementation or bug fix</h2>
+<p>If you are able to fix the bug by yourself, you are welcome to submit a pull request. When you feel the fix would require some substantial effort, please talk to us before doing all the hard work, because we want to make sure you would work on something that we would be willing to accept later. This also applies to feature requests.</p>
+<p>Two common problems in pull requests are:</p>
+<ol>
+<li>
+<p><a href="/en/2018/11/cosmetic-changes/">Making cosmetic changes</a> in the original codebase. Please refrain from doing this, so the reviewer won&rsquo;t be distracted by trivial changes or argue with you. If you have strong opinions on cosmetic changes, please send a separate pull request.</p>
+</li>
+<li>
+<p>Including multiple features or bug fixes in a single pull request. This often makes it hard for us to make the decision. Please try to bring <a href="/en/2018/02/bite-sized-pull-requests/">bite-sized pull requests</a>.</p>
+</li>
+</ol>
+<h2 id="please-format-your-issue-correctly">Please format your issue correctly</h2>
+<p>To include a verbatim chunk of arbitrary text, wrap it in a pair of three backticks. When any line of your text contains N backticks (N &gt;= 3), use N + 1 backticks to wrap the text, e.g. use four backticks to wrap three:</p>
+<pre><code>````
+A sample document.
+
+```{r}
+1 + 1  # a line of code
+```
+
+Another paragraph.
+````
+</code></pre><p>If it is just a chunk of R code (or other languages) and you want syntax highlighting, you may use three backticks to format it, e.g.</p>
+<pre><code>```r
+rnorm(10)
+```
+</code></pre><p>That is often enough to know about the formatting problems. To know more about other common formatting issues, you may <a href="/en/2018/05/github-issue-format/">read this post</a>.</p>
+<p>Usually your issue will be closed after it is fixed, but sometimes it is closed only because we are unable to offer any help. It does not mean your issue is not real or bad. You can propose a fix by yourself through a pull request. Your constructive feedback is always appreciated.</p>
+
+
+  <footer>
+  
+
+
+
+
+
+<script async src="/js/fix-toc.js"></script>
+
+<script async src="/js/center-img.js"></script>
+
+<script async src="/js/right-quote.js"></script>
+
+<script async src="/js/no-highlight.js"></script>
+
+<script async src="/js/fix-footnote.js"></script>
+
+<script async src="/js/math-code.js"></script>
+
+<script async src="/js/external-link.js"></script>
+
+<script async src="/js/alt-title.js"></script>
+
+<script async src="/js/header-link.js"></script>
+
+
+
+
+  
+
+
+
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/java.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/SQL.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/CSS.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+  
+  <hr>
+  <div class="copyright">© <a href="/">Luo Hao</a> 2016 - 2019</div>
+  
+  </footer>
+  </article>
+  
+  </body>
+</html>
+

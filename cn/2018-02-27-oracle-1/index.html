@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>Oracle实践数据库笔记-1 - Rehoni | 罗皓</title>
+    <meta property="og:title" content="Oracle实践数据库笔记-1 - Rehoni | 罗皓">
+    
+    <meta name="twitter:card" content="summary">
+
+    
+      
+    
+
+    
+      
+      <meta property="description" content="1.instance
+[&amp;hellip;] 2.database（文件的集合）
+[&amp;hellip;] sys@db&amp;gt;desc dictionary select table_name from dict where table_name like &amp;#39;%SGA%&amp;#39; 1.数据字典视图（数据文件 不改就不变）
+[&amp;hellip;] scott@DESC user_tables &amp;hellip;">
+      <meta property="og:description" content="1.instance
+[&amp;hellip;] 2.database（文件的集合）
+[&amp;hellip;] sys@db&amp;gt;desc dictionary select table_name from dict where table_name like &amp;#39;%SGA%&amp;#39; 1.数据字典视图（数据文件 不改就不变）
+[&amp;hellip;] scott@DESC user_tables &amp;hellip;">
+      
+    
+
+    
+    
+    
+    <meta name="twitter:image" content="/images/logo.png">
+    
+    
+
+    
+
+    
+    
+
+
+<link href='//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+<script async src="/js/load-typekit.js"></script>
+
+
+<link rel="stylesheet" href="/css/custom.css" />
+
+  </head>
+
+  
+  <body class="cn">
+    <header class="masthead">
+      
+
+<h1><a href="/"><img src="/images/logo.png" alt="Luo Hao" /></a></h1>
+
+
+
+      <nav class="menu">
+  <ul>
+  
+  
+  <li><a href="/">首页</a></li>
+  
+  <li><a href="/cn/about/">关于</a></li>
+  
+  <li><a href="/cn/">日志</a></li>
+  
+  <li><a href="/categories/">分类</a></li>
+  
+  <li><a href="/tags/">标签</a></li>
+  
+  <li><a href="/cn/vitae/">简历</a></li>
+  
+  <li><a href="/en/">English</a></li>
+  
+  
+
+<li class="menu-extra"></li>
+
+
+
+<li><a href="https://github.com/rehonicn%5c2018-02-27-Oracle-1.md" target="_blank">编辑</a></li>
+
+
+<li><a href="/cn/index.xml" type="application/rss+xml" title="RSS feed">订阅</a></li>
+
+<li><a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="Attribution-NonCommercial-ShareAlike 4.0 International">版权</a></li>
+
+
+  </ul>
+</nav>
+
+    </header>
+
+    <article class="main">
+      <header class="title">
+      
+<h1>Oracle实践数据库笔记-1</h1>
+
+
+<h3>Rehoni / 
+2018-02-27</h3>
+
+<hr>
+
+
+      </header>
+
+
+
+<h3 id="oracle服务器">oracle服务器</h3>
+<p>1.instance</p>
+<ul>
+<li>SGA（system global area 系统）</li>
+<li>PGA（程序用的 局部）</li>
+</ul>
+<p>2.database（文件的集合）</p>
+<ul>
+<li>table 表 全称 heap table 堆表</li>
+<li>代码</li>
+<li>数据（系统数据+用户数据）</li>
+<li>共享池shared pool
+<ul>
+<li>库缓存 放代码</li>
+</ul>
+<ul>
+<li>数据字典缓存</li>
+</ul>
+</li>
+</ul>
+<h3 id="数据字典-dictionary">数据字典 dictionary</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">sys<span style="color:#f92672">@</span>db<span style="color:#f92672">&gt;</span><span style="color:#66d9ef">desc</span> <span style="color:#66d9ef">dictionary</span>
+<span style="color:#66d9ef">select</span> <span style="color:#66d9ef">table_name</span> <span style="color:#66d9ef">from</span> dict <span style="color:#66d9ef">where</span> <span style="color:#66d9ef">table_name</span> <span style="color:#66d9ef">like</span> <span style="color:#e6db74">&#39;%SGA%&#39;</span>
+</code></pre></div><p>1.数据字典视图（数据文件 不改就不变）</p>
+<ul>
+<li>USER_ 当前用户是所有者 属于他自己的对象</li>
+<li>ALL_ 当前用户有select权限 能访问</li>
+<li>DBA_</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">scott<span style="color:#f92672">@</span><span style="color:#66d9ef">DESC</span> user_tables
+<span style="color:#66d9ef">select</span> <span style="color:#66d9ef">table_name</span> <span style="color:#66d9ef">from</span> user_tables  <span style="color:#f92672">/</span>all_tables可以看到用户的表 <span style="color:#f92672">/</span><span style="color:#960050;background-color:#1e0010">能访问的表</span>
+<span style="color:#66d9ef">desc</span> user_indexes
+<span style="color:#66d9ef">select</span> index_name <span style="color:#66d9ef">from</span> user_indexes
+</code></pre></div><p>2.动态性能视图（内存和控制文件）</p>
+<ul>
+<li>v$</li>
+<li><strong>注意了解一下</strong></li>
+</ul>
+<p>cache 提高读性能 buffer 提高写性能
+<strong>推荐书籍《oracle concepts》</strong></p>
+<h3 id="使用oracle">使用oracle</h3>
+<p>1.用户接口 界面 sqlplus</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">sqlplus <span style="color:#f92672">/</span><span style="color:#66d9ef">as</span> sysdba
+</code></pre></div><p>2.了解用户</p>
+<ul>
+<li>
+<p>sys(sysdba 管理整个oracle服务器)
+@&gt;conn sys/admin as sysdba</p>
+</li>
+<li>
+<p>sys(sysoper 只管例程instance 不能管database)
+conn sys。。。</p>
+</li>
+<li>
+<p>system（只管database）
+conn sys。。。。</p>
+</li>
+<li>
+<p>一般用户 scott和hr————<strong>conn hr/abc (账号密码)</strong></p>
+</li>
+</ul>
+<p>3.用户账号解锁</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">seclect user_name,account_status_
+col username format a30 <span style="color:#960050;background-color:#1e0010">该列宽</span>
+<span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">user</span> hr account unlock <span style="color:#960050;background-color:#1e0010">解锁</span>
+</code></pre></div><p>4.修改用户密码</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#f92672">@&gt;</span>conn<span style="color:#f92672">/</span><span style="color:#66d9ef">as</span> sysdba
+<span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">user</span> hr identified <span style="color:#66d9ef">by</span> abc
+conn hr<span style="color:#f92672">/</span>abc或者conn <span style="color:#f92672">/</span> <span style="color:#66d9ef">as</span> sysdba
+password hr
+sqlprompt sql提示符
+<span style="color:#66d9ef">set</span> sqlprompt_user<span style="color:#e6db74">&#34;@&#34;</span>_donnect_identifier<span style="color:#f92672">&gt;</span><span style="color:#960050;background-color:#1e0010">显示用户连接</span>
+<span style="color:#66d9ef">connect</span> <span style="color:#f92672">???</span> scott<span style="color:#f92672">/</span>tiger
+<span style="color:#66d9ef">show</span> <span style="color:#66d9ef">all</span>
+<span style="color:#66d9ef">set</span> time <span style="color:#66d9ef">on</span><span style="color:#f92672">/</span>off显示时间
+product<span style="color:#f92672">-</span><span style="color:#ae81ff">11</span>.<span style="color:#ae81ff">2</span>.<span style="color:#ae81ff">0</span><span style="color:#f92672">-</span>dbhome_1<span style="color:#f92672">-</span>sqlplus<span style="color:#f92672">-</span><span style="color:#66d9ef">admin</span><span style="color:#f92672">-</span>glogin
+<span style="color:#66d9ef">set</span> sqlprompt_user<span style="color:#e6db74">&#34;@&#34;</span>_connect_identifier
+<span style="color:#66d9ef">set</span> linesize <span style="color:#ae81ff">120</span>
+<span style="color:#66d9ef">set</span> rollsize <span style="color:#ae81ff">25</span> <span style="color:#960050;background-color:#1e0010">设置行宽列宽</span>
+</code></pre></div><p>5.会查询数据字典</p>
+
+
+  <footer>
+  
+<nav class="post-nav">
+  <span class="nav-prev">&larr; <a href="/cn/2018-01-27-thoughts-5/">大三上学期末总结</a></span>
+  <span class="nav-next"><a href="/cn/2018-03-06-oracle-3/">Oracle实践数据库笔记-3</a> &rarr;</span>
+</nav>
+<script type="text/javascript">
+document.addEventListener('keyup', function(e) {
+  if (e.target.nodeName.toUpperCase() != 'BODY') return;
+  var url = false;
+  if (e.which == 37) {  
+    
+    url = '\/cn\/2018-01-27-thoughts-5\/';
+    
+  } else if (e.which == 39) {  
+    
+    url = '\/cn\/2018-03-06-oracle-3\/';
+    
+  }
+  if (url) window.location = url;
+});
+</script>
+
+
+
+
+
+
+<script async src="/js/fix-toc.js"></script>
+
+<script async src="/js/center-img.js"></script>
+
+<script async src="/js/right-quote.js"></script>
+
+<script async src="/js/no-highlight.js"></script>
+
+<script async src="/js/fix-footnote.js"></script>
+
+<script async src="/js/math-code.js"></script>
+
+<script async src="/js/external-link.js"></script>
+
+<script async src="/js/alt-title.js"></script>
+
+<script async src="/js/header-link.js"></script>
+
+
+
+<script async src="//mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+  
+
+
+
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/java.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/SQL.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/CSS.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+  
+  <hr>
+  <div class="copyright">© <a href="/">Luo Hao</a> 2016 - 2019</div>
+  
+  </footer>
+  </article>
+  
+  </body>
+</html>
+

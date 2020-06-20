@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>Oracle实践数据库笔记-6 - Rehoni | 罗皓</title>
+    <meta property="og:title" content="Oracle实践数据库笔记-6 - Rehoni | 罗皓">
+    
+    <meta name="twitter:card" content="summary">
+
+    
+      
+    
+
+    
+      
+      <meta property="description" content="删除操作delete和drop的区别 回收站的机制 删除表的时候其实不删除文件而是改动文件名，实现加入回收站的操作
+[&amp;hellip;] flashback ***** 数据完整性  代码 触发器 约束（开销小）  数据&#43;规则&amp;mdash;&amp;ndash;&amp;gt;合理，有效 建立表的时候:关键字&#43;起名字&#43;约束类型（&#43;字段）;
+一些关键字: CHECK 检查条件 FOREIGN KEY, &amp;hellip;">
+      <meta property="og:description" content="删除操作delete和drop的区别 回收站的机制 删除表的时候其实不删除文件而是改动文件名，实现加入回收站的操作
+[&amp;hellip;] flashback ***** 数据完整性  代码 触发器 约束（开销小）  数据&#43;规则&amp;mdash;&amp;ndash;&amp;gt;合理，有效 建立表的时候:关键字&#43;起名字&#43;约束类型（&#43;字段）;
+一些关键字: CHECK 检查条件 FOREIGN KEY, &amp;hellip;">
+      
+    
+
+    
+    
+    
+    <meta name="twitter:image" content="/images/logo.png">
+    
+    
+
+    
+
+    
+    
+
+
+<link href='//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+<script async src="/js/load-typekit.js"></script>
+
+
+<link rel="stylesheet" href="/css/custom.css" />
+
+  </head>
+
+  
+  <body class="cn">
+    <header class="masthead">
+      
+
+<h1><a href="/"><img src="/images/logo.png" alt="Luo Hao" /></a></h1>
+
+
+
+      <nav class="menu">
+  <ul>
+  
+  
+  <li><a href="/">首页</a></li>
+  
+  <li><a href="/cn/about/">关于</a></li>
+  
+  <li><a href="/cn/">日志</a></li>
+  
+  <li><a href="/categories/">分类</a></li>
+  
+  <li><a href="/tags/">标签</a></li>
+  
+  <li><a href="/cn/vitae/">简历</a></li>
+  
+  <li><a href="/en/">English</a></li>
+  
+  
+
+<li class="menu-extra"></li>
+
+
+
+<li><a href="https://github.com/rehonicn%5c2018-03-20-Oracle-6.md" target="_blank">编辑</a></li>
+
+
+<li><a href="/cn/index.xml" type="application/rss+xml" title="RSS feed">订阅</a></li>
+
+<li><a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="Attribution-NonCommercial-ShareAlike 4.0 International">版权</a></li>
+
+
+  </ul>
+</nav>
+
+    </header>
+
+    <article class="main">
+      <header class="title">
+      
+<h1>Oracle实践数据库笔记-6</h1>
+
+
+<h3>Rehoni / 
+2018-03-20</h3>
+
+<hr>
+
+
+      </header>
+
+
+
+<h3 id="回顾">回顾</h3>
+<p>删除操作delete和drop的区别
+回收站的机制
+删除表的时候其实不删除文件而是改动文件名，实现加入回收站的操作</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">flashback <span style="color:#f92672">*****</span>
+</code></pre></div><h3 id="数据完整性">数据完整性</h3>
+<ol>
+<li>代码</li>
+<li>触发器</li>
+<li>约束（开销小）</li>
+</ol>
+<p>数据+规则&mdash;&ndash;&gt;合理，有效
+建立表的时候:关键字+起名字+约束类型（+字段）;</p>
+<p>一些关键字:
+CHECK 检查条件
+FOREIGN KEY, REFERENCES
+ON DELETE CASECADE, 删除部门，员工回家
+ON DELETE SET NULL, 删除部门，员工待分配</p>
+<p>添加约束和删除约束:
+ALTER ADD/DROP/ENABLE/DISABLE</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#75715e">---一点例子
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">ALTER</span> <span style="color:#66d9ef">TABLE</span> <span style="color:#66d9ef">table</span>
+<span style="color:#66d9ef">ADD</span> [<span style="color:#66d9ef">CONSTRAINT</span>  <span style="color:#66d9ef">constraint</span>] <span style="color:#66d9ef">type</span> (<span style="color:#66d9ef">column</span>) ;
+<span style="color:#66d9ef">ALTER</span> <span style="color:#66d9ef">TABLE</span> employee s
+<span style="color:#66d9ef">ADD</span> <span style="color:#66d9ef">CONSTRAINT</span> emp_manager_f k <span style="color:#66d9ef">FOREIGN</span> <span style="color:#66d9ef">KEY</span> (manager_id)
+<span style="color:#66d9ef">REFERENCES</span> employees (empoyee_id) ;
+<span style="color:#66d9ef">ALTER</span> <span style="color:#66d9ef">TABLE</span> employees
+<span style="color:#66d9ef">DROP</span> <span style="color:#66d9ef">CONSTRAINT</span> emp_manager_fk;
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">desc</span> user_constraints;
+<span style="color:#66d9ef">desc</span> user_cons_columns;
+<span style="color:#75715e">---添加约束的时候注意处理异常数据的操作
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">desc</span> exceptions;<span style="color:#960050;background-color:#1e0010">异常表不存在</span>
+<span style="color:#f92672">@?/</span>rdbms<span style="color:#f92672">/</span><span style="color:#66d9ef">admin</span><span style="color:#f92672">/</span>utlexcpt <span style="color:#960050;background-color:#1e0010">创建异常表</span><span style="color:#75715e">---&gt;查询启用约束后违反约束的数据
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">table</span> test
+enable <span style="color:#66d9ef">constraints</span> uni_c2
+exceptions <span style="color:#66d9ef">into</span> exceptions<span style="color:#75715e">---启用约束时候注意把异常放入exceptions表中
+</span><span style="color:#75715e"></span> <span style="color:#66d9ef">select</span> rowid,c1,c2
+  <span style="color:#ae81ff">2</span>  <span style="color:#66d9ef">from</span> test
+  <span style="color:#ae81ff">3</span>  <span style="color:#66d9ef">where</span> rowid <span style="color:#66d9ef">in</span> (<span style="color:#66d9ef">select</span> row_id <span style="color:#66d9ef">from</span> exceptions);<span style="color:#75715e">---查询异常数据然后修改
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">truncate</span> <span style="color:#66d9ef">table</span> exceptions;
+<span style="color:#75715e">---
+</span></code></pre></div><h3 id="视图">视图</h3>
+<p>没认真听</p>
+<ol>
+<li>屏蔽敏感数据</li>
+<li>便于查询</li>
+<li>数据独立性</li>
+</ol>
+<p>虚表&mdash;不是存储结构
+表&mdash;是存储结构</p>
+<p>存在一些DML操作无法修改data：</p>
+<ul>
+<li>Group function</li>
+<li>GROUP BY</li>
+<li>DISTINCT</li>
+<li>pseudocolumn ROWNUM</li>
+<li>columns defined by exceptions</li>
+</ul>
+<p>复杂视图
+内嵌视图</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">create</span> <span style="color:#66d9ef">view</span> emp_info
+<span style="color:#66d9ef">as</span> <span style="color:#66d9ef">select</span> empno,ename,sal <span style="color:#66d9ef">from</span> emp;
+<span style="color:#66d9ef">create</span> <span style="color:#66d9ef">or</span> <span style="color:#66d9ef">replace</span> <span style="color:#66d9ef">view</span> emp_info
+<span style="color:#66d9ef">as</span> <span style="color:#66d9ef">select</span> empno,ename,sal,deptno <span style="color:#66d9ef">from</span> emp;<span style="color:#75715e">--如果删除原来的view，所有的上边的权限会丢失（Oracle是按照id来操作的），那么删掉重建hr会改变导致出现问题
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">grant</span> <span style="color:#66d9ef">create</span> <span style="color:#66d9ef">any</span> <span style="color:#66d9ef">view</span> <span style="color:#66d9ef">to</span> scott;<span style="color:#75715e">--给他的权限
+</span><span style="color:#75715e"></span><span style="color:#f92672">***</span> <span style="color:#66d9ef">with</span> <span style="color:#66d9ef">check</span> <span style="color:#66d9ef">option</span><span style="color:#75715e">---符合条件才能更改
+</span><span style="color:#75715e"></span><span style="color:#f92672">***</span> <span style="color:#66d9ef">with</span> <span style="color:#66d9ef">read</span> <span style="color:#66d9ef">only</span><span style="color:#75715e">---只读视图
+</span><span style="color:#75715e">------子查询
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> empno,ename,sal <span style="color:#66d9ef">from</span> emp
+<span style="color:#66d9ef">where</span> rownum<span style="color:#f92672">&lt;=</span><span style="color:#ae81ff">3</span>
+<span style="color:#66d9ef">order</span> <span style="color:#66d9ef">by</span> sal <span style="color:#66d9ef">desc</span>;
+<span style="color:#75715e">------内嵌式图
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> empno,ename,sal <span style="color:#66d9ef">from</span> (<span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> emp <span style="color:#66d9ef">order</span> <span style="color:#66d9ef">by</span> sal <span style="color:#66d9ef">desc</span>)
+<span style="color:#66d9ef">where</span> rownum<span style="color:#f92672">&lt;=</span><span style="color:#ae81ff">3</span>;
+</code></pre></div><h3 id="sequence-序列">sequence 序列</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">create</span> sequence s1;<span style="color:#75715e">----序列
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> s1.nextval <span style="color:#66d9ef">from</span> dual;
+<span style="color:#66d9ef">select</span> s1.currval <span style="color:#66d9ef">from</span> dual;
+<span style="color:#75715e">-------------
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">create</span> sequence s2
+<span style="color:#66d9ef">start</span> <span style="color:#66d9ef">with</span> <span style="color:#ae81ff">20</span>
+<span style="color:#66d9ef">increment</span> <span style="color:#66d9ef">by</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>
+<span style="color:#66d9ef">maxvalue</span> <span style="color:#ae81ff">30</span>
+<span style="color:#66d9ef">minvalue</span> <span style="color:#ae81ff">0</span>
+<span style="color:#66d9ef">cycle</span>
+<span style="color:#66d9ef">cache</span> <span style="color:#ae81ff">4</span>;
+</code></pre></div><h3 id="索引-index">索引 index</h3>
+<p>看ppt</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">
+</code></pre></div><h3 id="synonyms-同义词">synonyms 同义词</h3>
+<p>没讲</p>
+<h2 id="例程管理">例程管理</h2>
+<p>很多没听懂</p>
+<p>关于权限不足的问题：</p>
+<ol>
+<li>关闭例程（shutdown）</li>
+</ol>
+<p>4种模式 （N,T,I,A）</p>
+<ol start="2">
+<li>启动数据库（startup）</li>
+</ol>
+<ul>
+<li>启动例程 nomount
+加载初始化参数文件，只能访问一部分动态性能视图（内容来自内存的）</li>
+<li>加载数据库 mount
+加载控制文件，可以访问所有的动态性能视图</li>
+<li>打开数据库 open
+加载联机日志文件和数据文件</li>
+</ul>
+<ol start="3">
+<li>例程配置</li>
+</ol>
+<ul>
+<li>
+<p>了解初始化文件</p>
+<ul>
+<li>文本文件pfile    init<!-- raw HTML omitted -->.ora &mdash;initdb11.ora</li>
+<li>二进制文件spfile spfile<!-- raw HTML omitted -->.ora &mdash;spfiledb11.ora</li>
+</ul>
+</li>
+<li>
+<p>查看初始化参数 show parameter **=</p>
+</li>
+<li>
+<p>修改初始化参数 alter system set **=</p>
+</li>
+<li>
+<p>**将初始化参数还原成默认值 alter system reset ** (重启才生效)**重设所有的默认值该怎么写</p>
+</li>
+<li>
+<p><strong>修复出错的初始化参数</strong></p>
+</li>
+<li>
+<p>根据spfile/pfile创建pfile/spfile</p>
+</li>
+<li>
+<p>启动时选择初始化参数文件的顺序</p>
+<ul>
+<li>spfile<!-- raw HTML omitted -->.ora</li>
+<li>spfile.ora</li>
+<li>init<!-- raw HTML omitted -->.ora</li>
+</ul>
+</li>
+<li>
+<p>用指定的初始化参数文件启动
+startup pfile=</p>
+<ul>
+<li>静态参数和动态参数</li>
+<li>静态参数需要修改文件，alter system set sga_max_size=3000m;报错，false的mod在文件修改完之后，需要重启后生效</li>
+<li>动态参数可以改动，如share_pool_size，desc v$parameter查询   immediate的mod为可以直接改动后当前会话立即生效，</li>
+<li>deferred的mod为新会话生效</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">system</span> <span style="color:#66d9ef">set</span> shared_pool_size<span style="color:#f92672">=</span><span style="color:#ae81ff">208</span>m <span style="color:#66d9ef">scope</span><span style="color:#f92672">=</span>memory;
+<span style="color:#66d9ef">show</span> <span style="color:#66d9ef">parameter</span> shared_pool_size;
+<span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">system</span> <span style="color:#66d9ef">set</span> sga_max_size<span style="color:#f92672">=</span><span style="color:#ae81ff">3000</span>m <span style="color:#66d9ef">scope</span><span style="color:#f92672">=</span>spfile;<span style="color:#75715e">---重启之后
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">create</span> spfile <span style="color:#66d9ef">from</span> pfile
+</code></pre></div></li>
+</ul>
+
+
+  <footer>
+  
+<nav class="post-nav">
+  <span class="nav-prev">&larr; <a href="/cn/2018-03-16-oracle-5/">Oracle实践数据库笔记-5</a></span>
+  <span class="nav-next"><a href="/cn/2018-03-23-oracle-7/">Oracle实践数据库笔记-7</a> &rarr;</span>
+</nav>
+<script type="text/javascript">
+document.addEventListener('keyup', function(e) {
+  if (e.target.nodeName.toUpperCase() != 'BODY') return;
+  var url = false;
+  if (e.which == 37) {  
+    
+    url = '\/cn\/2018-03-16-oracle-5\/';
+    
+  } else if (e.which == 39) {  
+    
+    url = '\/cn\/2018-03-23-oracle-7\/';
+    
+  }
+  if (url) window.location = url;
+});
+</script>
+
+
+
+
+
+
+<script async src="/js/fix-toc.js"></script>
+
+<script async src="/js/center-img.js"></script>
+
+<script async src="/js/right-quote.js"></script>
+
+<script async src="/js/no-highlight.js"></script>
+
+<script async src="/js/fix-footnote.js"></script>
+
+<script async src="/js/math-code.js"></script>
+
+<script async src="/js/external-link.js"></script>
+
+<script async src="/js/alt-title.js"></script>
+
+<script async src="/js/header-link.js"></script>
+
+
+
+<script async src="//mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+  
+
+
+
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/java.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/SQL.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/CSS.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+  
+  <hr>
+  <div class="copyright">© <a href="/">Luo Hao</a> 2016 - 2019</div>
+  
+  </footer>
+  </article>
+  
+  </body>
+</html>
+

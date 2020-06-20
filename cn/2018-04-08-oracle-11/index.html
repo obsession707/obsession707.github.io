@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>Oracle实践数据库笔记-11 - Rehoni | 罗皓</title>
+    <meta property="og:title" content="Oracle实践数据库笔记-11 - Rehoni | 罗皓">
+    
+    <meta name="twitter:card" content="summary">
+
+    
+      
+    
+
+    
+      
+      <meta property="description" content="desc dbms_fga;---STATEMENT_TYPES审核语句类型  execute dbms_fga.add_policy(&amp;#39;SCOTT&amp;#39;,&amp;#39;EMP&amp;#39;,&amp;#39;FGA_DEMO&amp;#39;,STATEMENT_TYPES=&amp;gt;&amp;#39;SELECT,INSERT,DELETE&amp;#39;); ---执行select,insert,delete &amp;hellip;">
+      <meta property="og:description" content="desc dbms_fga;---STATEMENT_TYPES审核语句类型  execute dbms_fga.add_policy(&amp;#39;SCOTT&amp;#39;,&amp;#39;EMP&amp;#39;,&amp;#39;FGA_DEMO&amp;#39;,STATEMENT_TYPES=&amp;gt;&amp;#39;SELECT,INSERT,DELETE&amp;#39;); ---执行select,insert,delete &amp;hellip;">
+      
+    
+
+    
+    
+    <meta name="twitter:image" content="https://static.notion-static.com/801127da-7c3c-439e-8c98-4e9aa6330129/Untitled">
+    
+    
+    
+    
+
+    
+
+    
+    
+
+
+<link href='//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+<script async src="/js/load-typekit.js"></script>
+
+
+<link rel="stylesheet" href="/css/custom.css" />
+
+  </head>
+
+  
+  <body class="cn">
+    <header class="masthead">
+      
+
+<h1><a href="/"><img src="/images/logo.png" alt="Luo Hao" /></a></h1>
+
+
+
+      <nav class="menu">
+  <ul>
+  
+  
+  <li><a href="/">首页</a></li>
+  
+  <li><a href="/cn/about/">关于</a></li>
+  
+  <li><a href="/cn/">日志</a></li>
+  
+  <li><a href="/categories/">分类</a></li>
+  
+  <li><a href="/tags/">标签</a></li>
+  
+  <li><a href="/cn/vitae/">简历</a></li>
+  
+  <li><a href="/en/">English</a></li>
+  
+  
+
+<li class="menu-extra"></li>
+
+
+
+<li><a href="https://github.com/rehonicn%5c2018-04-08-Oracle-11.md" target="_blank">编辑</a></li>
+
+
+<li><a href="/cn/index.xml" type="application/rss+xml" title="RSS feed">订阅</a></li>
+
+<li><a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="Attribution-NonCommercial-ShareAlike 4.0 International">版权</a></li>
+
+
+  </ul>
+</nav>
+
+    </header>
+
+    <article class="main">
+      <header class="title">
+      
+<h1>Oracle实践数据库笔记-11</h1>
+
+
+<h3>Rehoni / 
+2018-04-08</h3>
+
+<hr>
+
+
+      </header>
+
+
+
+<h3 id="审核">审核</h3>
+<ul>
+<li><strong>强制审核</strong></li>
+<li><strong>标准数据库审核</strong></li>
+<li><strong>基于值的审核</strong></li>
+<li><strong>细粒度审核(FGA)</strong></li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">    <span style="color:#66d9ef">desc</span> dbms_fga;<span style="color:#75715e">---STATEMENT_TYPES审核语句类型
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">execute</span> dbms_fga.add_policy(<span style="color:#e6db74">&#39;SCOTT&#39;</span>,<span style="color:#e6db74">&#39;EMP&#39;</span>,<span style="color:#e6db74">&#39;FGA_DEMO&#39;</span>,STATEMENT_TYPES<span style="color:#f92672">=&gt;</span><span style="color:#e6db74">&#39;SELECT,INSERT,DELETE&#39;</span>);
+    <span style="color:#75715e">---执行select,insert,delete操作
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">desc</span> dba_fga_audit_trail
+    <span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">session</span> <span style="color:#66d9ef">set</span> nls_date_format<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;yyyy-mm-dd hh24:mi:ss&#39;</span>;
+    <span style="color:#75715e">---中间进行scott用户下的select,insert和delete操作
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">select</span> <span style="color:#66d9ef">TIMESTAMP</span>,DB_USER,SQL_TEXT <span style="color:#66d9ef">from</span> dba_fga_audit_trail
+</code></pre></div><ul>
+<li><strong>审核DBA</strong></li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">    <span style="color:#66d9ef">show</span> <span style="color:#66d9ef">parameter</span> audit
+</code></pre></div><h3 id="触发器头部触发条件被触发代码">触发器(头部,触发条件,被触发代码)</h3>
+<ul>
+<li>
+<p><strong>DML触发器</strong></p>
+<p>添加for each row进行逐行操作显示</p>
+<p>添加referencing old as o new as n for each row when(n.sal&gt;5000)进行条件</p>
+</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">    <span style="color:#66d9ef">create</span> <span style="color:#66d9ef">table</span> demo1(a varchar(<span style="color:#ae81ff">20</span>));
+    <span style="color:#66d9ef">create</span> <span style="color:#66d9ef">or</span> <span style="color:#66d9ef">replace</span> <span style="color:#66d9ef">trigger</span> scott.tr1
+    <span style="color:#66d9ef">after</span> <span style="color:#66d9ef">update</span> <span style="color:#66d9ef">on</span> scott.emp <span style="color:#66d9ef">for</span> <span style="color:#66d9ef">each</span> <span style="color:#66d9ef">row</span>
+    <span style="color:#66d9ef">begin</span>
+    	<span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> scott.demo1 <span style="color:#66d9ef">values</span>(<span style="color:#e6db74">&#39;changed!&#39;</span>);
+    <span style="color:#66d9ef">end</span>;
+    <span style="color:#66d9ef">update</span> emp <span style="color:#66d9ef">set</span> sal<span style="color:#f92672">=</span><span style="color:#ae81ff">2000</span> <span style="color:#66d9ef">where</span> empno<span style="color:#f92672">=</span><span style="color:#ae81ff">7369</span>;
+    <span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> demo1;
+    <span style="color:#66d9ef">create</span> <span style="color:#66d9ef">or</span> <span style="color:#66d9ef">replace</span> <span style="color:#66d9ef">trigger</span> scott.tr1
+    <span style="color:#66d9ef">after</span> <span style="color:#66d9ef">update</span> <span style="color:#66d9ef">on</span> scott.emp <span style="color:#66d9ef">referencing</span> <span style="color:#66d9ef">old</span> <span style="color:#66d9ef">as</span> o <span style="color:#66d9ef">new</span> <span style="color:#66d9ef">as</span> n <span style="color:#66d9ef">for</span> <span style="color:#66d9ef">each</span> <span style="color:#66d9ef">row</span> <span style="color:#66d9ef">when</span>(n.sal<span style="color:#f92672">&gt;</span><span style="color:#ae81ff">5000</span>)
+    <span style="color:#66d9ef">begin</span>
+    	<span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> scott.demo1 <span style="color:#66d9ef">values</span>(<span style="color:#e6db74">&#39;changed!&#39;</span>);
+    <span style="color:#66d9ef">end</span>;
+</code></pre></div><p><strong>创建一个工资表, 用触发器实现更改工资之后, 显示旧的工资和新的工资的变化</strong>🆗</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">    <span style="color:#66d9ef">create</span> <span style="color:#66d9ef">table</span> sal_change(empno number(<span style="color:#ae81ff">4</span>),ename varchar2(<span style="color:#ae81ff">10</span>), old_sal number(<span style="color:#ae81ff">7</span>,<span style="color:#ae81ff">2</span>), new_sal number(<span style="color:#ae81ff">7</span>,<span style="color:#ae81ff">2</span>));
+    <span style="color:#66d9ef">create</span> <span style="color:#66d9ef">or</span> <span style="color:#66d9ef">replace</span> <span style="color:#66d9ef">trigger</span> scott.tr1
+    <span style="color:#66d9ef">after</span> <span style="color:#66d9ef">update</span> <span style="color:#66d9ef">on</span> scott.emp <span style="color:#66d9ef">referencing</span> <span style="color:#66d9ef">old</span> <span style="color:#66d9ef">as</span> o <span style="color:#66d9ef">new</span> <span style="color:#66d9ef">as</span> n <span style="color:#66d9ef">for</span> <span style="color:#66d9ef">each</span> <span style="color:#66d9ef">row</span>
+    <span style="color:#66d9ef">begin</span>
+      <span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> scott.sal_change <span style="color:#66d9ef">values</span>(:o.empno, :o.ename,:o.sal,:n.sal);
+    <span style="color:#66d9ef">end</span>;
+    <span style="color:#66d9ef">update</span> emp <span style="color:#66d9ef">set</span> sal<span style="color:#f92672">=</span><span style="color:#ae81ff">4000</span> <span style="color:#66d9ef">where</span> empno<span style="color:#f92672">=</span><span style="color:#ae81ff">7902</span>;
+    <span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> sal_change;
+</code></pre></div><ul>
+<li>
+<p><strong>系统触发器</strong></p>
+<p><strong>如用来记录用户的登陆情况</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">login_rec <span style="color:#f92672">+++</span>(username,login_time)
+<span style="color:#66d9ef">create</span> <span style="color:#66d9ef">or</span> <span style="color:#66d9ef">replace</span> <span style="color:#66d9ef">trigger</span> scott.tr1
+<span style="color:#66d9ef">after</span> logon <span style="color:#66d9ef">on</span> <span style="color:#66d9ef">database</span>
+<span style="color:#66d9ef">begin</span>
+    <span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> login_rec <span style="color:#66d9ef">values</span> ();
+<span style="color:#66d9ef">end</span>;<span style="color:#75715e">---scott权限不足得换用户
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">session</span> <span style="color:#66d9ef">set</span> nls_data_format<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;yyyy-mm-dd hh24:mi:ss&#39;</span>;
+<span style="color:#66d9ef">desc</span> dbms_shared_pool;<span style="color:#75715e">---共享池
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">desc</span> v$db_object_cache;<span style="color:#75715e">---内存中的东西
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> <span style="color:#66d9ef">owner</span>,name,<span style="color:#66d9ef">type</span> <span style="color:#66d9ef">from</span> v$db_object_cache
+<span style="color:#66d9ef">where</span> <span style="color:#66d9ef">owner</span><span style="color:#f92672">&lt;&gt;</span><span style="color:#e6db74">&#39;SYS&#39;</span> <span style="color:#66d9ef">and</span> kept<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;YES&#39;</span>;<span style="color:#75715e">---查询内存中的内存
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">desc</span> user_procedures;
+<span style="color:#66d9ef">select</span> object_name,object_type <span style="color:#66d9ef">from</span> user_procedures
+<span style="color:#66d9ef">where</span> object_type <span style="color:#f92672">=</span><span style="color:#e6db74">&#39;PROCEDURE&#39;</span>;<span style="color:#75715e">---查询存储过程
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">execute</span> dbms_shared_pool.keep(<span style="color:#e6db74">&#39;scott.p20&#39;</span>);<span style="color:#75715e">---保持p20这个存储过程
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> object_name,object_type <span style="color:#66d9ef">from</span> user_procedures
+<span style="color:#66d9ef">where</span> object_type <span style="color:#f92672">=</span><span style="color:#e6db74">&#39;procedure&#39;</span>;
+</code></pre></div><p><strong>创建一个startup的触发器</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">create</span> <span style="color:#66d9ef">or</span> <span style="color:#66d9ef">replace</span> <span style="color:#66d9ef">procedure</span> scott.p20
+<span style="color:#66d9ef">as</span>
+<span style="color:#66d9ef">begin</span>
+<span style="color:#66d9ef">null</span>;
+<span style="color:#66d9ef">end</span>;
+<span style="color:#f92672">/</span>
+<span style="color:#66d9ef">select</span> <span style="color:#66d9ef">owner</span>,name,<span style="color:#66d9ef">type</span> <span style="color:#66d9ef">from</span> v$db_object_cache
+<span style="color:#66d9ef">where</span> <span style="color:#66d9ef">owner</span><span style="color:#f92672">&lt;&gt;</span><span style="color:#e6db74">&#39;SYS&#39;</span> <span style="color:#66d9ef">and</span> kept<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;YES&#39;</span>;<span style="color:#75715e">---查询一下内存中是否存在 N
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">execute</span> dbms_shared_pool.keep(<span style="color:#e6db74">&#39;scott.p20&#39;</span>);
+<span style="color:#66d9ef">select</span> <span style="color:#66d9ef">owner</span>,name,<span style="color:#66d9ef">type</span> <span style="color:#66d9ef">from</span> v$db_object_cache
+<span style="color:#66d9ef">where</span> <span style="color:#66d9ef">owner</span><span style="color:#f92672">&lt;&gt;</span><span style="color:#e6db74">&#39;SYS&#39;</span> <span style="color:#66d9ef">and</span> kept<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;YES&#39;</span>;<span style="color:#75715e">---查询一下内存中是否存在 Y
+</span><span style="color:#75715e">---经过shutdown和startup之后,p20在内存中不会存在了
+</span><span style="color:#75715e">---如果遇见shutdown和startup之后,操作报错就再操作一遍
+</span><span style="color:#75715e"></span>shutdown <span style="color:#66d9ef">immediate</span>
+startup
+<span style="color:#75715e">---如果是scott.tr2就是在scott下进行keep操作就需要grant权限
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">create</span> <span style="color:#66d9ef">or</span> <span style="color:#66d9ef">replace</span> <span style="color:#66d9ef">trigger</span> tr2
+<span style="color:#66d9ef">after</span> startup <span style="color:#66d9ef">on</span> <span style="color:#66d9ef">database</span>
+<span style="color:#66d9ef">begin</span>
+    sys.dbms_shared_pool.keep(<span style="color:#e6db74">&#39;scott.p20&#39;</span>);
+<span style="color:#66d9ef">end</span>;
+shutdown <span style="color:#66d9ef">immediate</span>
+startup
+<span style="color:#66d9ef">select</span> <span style="color:#66d9ef">owner</span>,name,<span style="color:#66d9ef">type</span> <span style="color:#66d9ef">from</span> v$db_object_cache
+<span style="color:#66d9ef">where</span> <span style="color:#66d9ef">owner</span><span style="color:#f92672">&lt;&gt;</span><span style="color:#e6db74">&#39;SYS&#39;</span> <span style="color:#66d9ef">and</span> kept<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;YES&#39;</span>;<span style="color:#75715e">---有了
+</span></code></pre></div></li>
+</ul>
+<h3 id="移动数据">移动数据</h3>
+<ul>
+<li>
+<p><strong>数据文件—&gt;数据库</strong></p>
+<ul>
+<li>
+<p><strong>cmd下sqlldr</strong></p>
+</li>
+<li>
+<p><strong>cmd下exp/imp (export和import)</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">  <span style="color:#960050;background-color:#1e0010">查询</span>exp和imp的参数
+  CMD<span style="color:#f92672">&gt;</span>exp help<span style="color:#f92672">=</span>y
+
+  <span style="color:#960050;background-color:#1e0010">导出工资在</span><span style="color:#ae81ff">2500</span><span style="color:#960050;background-color:#1e0010">以上的</span>emp表中的数据<span style="color:#75715e">---cmd中
+</span><span style="color:#75715e"></span>  CMD<span style="color:#f92672">&gt;</span>exp scott<span style="color:#f92672">/</span>tiger file<span style="color:#f92672">=</span>d:<span style="color:#960050;background-color:#1e0010">\</span>demo1.dmp tables<span style="color:#f92672">=</span>emp query<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;where sal&gt;2500&#39;</span>
+  <span style="color:#960050;background-color:#1e0010">报错</span> LRM<span style="color:#f92672">-</span><span style="color:#ae81ff">00111</span>: <span style="color:#960050;background-color:#1e0010">值</span> <span style="color:#e6db74">&#39;where sal&#39;</span> <span style="color:#960050;background-color:#1e0010">缺少右引号</span>
+  <span style="color:#960050;background-color:#1e0010">是因为</span><span style="color:#f92672">&gt;</span><span style="color:#960050;background-color:#1e0010">是管道命令</span>,<span style="color:#960050;background-color:#1e0010">输出的意思</span>. <span style="color:#960050;background-color:#1e0010">因此会在当前</span>cmd目录下产生一个名为<span style="color:#e6db74">&#34;2500&#39;&#34;</span><span style="color:#960050;background-color:#1e0010">的文件</span>
+  <span style="color:#960050;background-color:#1e0010">因此要屏蔽大于号</span>
+  CMD<span style="color:#f92672">&gt;</span>exp scott<span style="color:#f92672">/</span>tiger file<span style="color:#f92672">=</span>d:<span style="color:#960050;background-color:#1e0010">\</span>demo1.dmp tables<span style="color:#f92672">=</span>emp query<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;where &#34;sal&gt;2500&#34;&#39;</span>
+  <span style="color:#960050;background-color:#1e0010">或者在</span><span style="color:#f92672">&gt;</span>SQL中加上$跑
+  <span style="color:#66d9ef">SQL</span><span style="color:#f92672">&gt;</span><span style="color:#960050;background-color:#1e0010">$</span>exp scott<span style="color:#f92672">/</span>tiger file<span style="color:#f92672">=</span>d:<span style="color:#960050;background-color:#1e0010">\</span>demo1.dmp tables<span style="color:#f92672">=</span>emp query<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;where &#34;sal&gt;2500&#34;&#39;</span>
+
+  <span style="color:#960050;background-color:#1e0010">字符集问题</span> <span style="color:#ae81ff">16</span><span style="color:#960050;background-color:#1e0010">进制</span><span style="color:#f92672">-&gt;</span><span style="color:#ae81ff">354</span><span style="color:#960050;background-color:#1e0010">对应字符集</span>id<span style="color:#f92672">-&gt;</span><span style="color:#ae81ff">852</span>,<span style="color:#960050;background-color:#1e0010">查询为</span>ZHS16GBK
+  <span style="color:#66d9ef">select</span> nls_charset_name(<span style="color:#ae81ff">852</span>) <span style="color:#66d9ef">from</span> dual;
+  <span style="color:#960050;background-color:#1e0010">更改字符集为</span>WE8ISO8859P1,<span style="color:#960050;background-color:#1e0010">查询该</span>id得到为31,<span style="color:#960050;background-color:#1e0010">转为</span><span style="color:#ae81ff">16</span><span style="color:#960050;background-color:#1e0010">进制</span><span style="color:#f92672">-&gt;</span><span style="color:#ae81ff">1</span>F
+  <span style="color:#66d9ef">select</span> nls_charset_id(<span style="color:#e6db74">&#39;WE8ISO8859P1&#39;</span>) <span style="color:#66d9ef">from</span> dual;
+</code></pre></div></li>
+</ul>
+<p><img src="https://static.notion-static.com/801127da-7c3c-439e-8c98-4e9aa6330129/Untitled" alt="效果图"></p>
+<p><img src="https://static.notion-static.com/bb819c5c-0092-4d36-89f5-2a5a7609e4e6/Untitled" alt="效果图"></p>
+<ul>
+<li>
+<p><strong>expdp/impdp 数据泵, 并行(大任务, 足够多的空闲资源)</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">  CMD<span style="color:#f92672">&gt;</span>expdp scott<span style="color:#f92672">/</span>tiger file<span style="color:#f92672">=</span>d:<span style="color:#960050;background-color:#1e0010">\</span>demo2.dmp tables<span style="color:#f92672">=</span>emp
+  <span style="color:#960050;background-color:#1e0010">报错</span>:
+  ORA<span style="color:#f92672">-</span><span style="color:#ae81ff">39001</span>: <span style="color:#960050;background-color:#1e0010">参数值无效</span>
+  ORA<span style="color:#f92672">-</span><span style="color:#ae81ff">39000</span>: <span style="color:#960050;background-color:#1e0010">转储文件说明错误</span>
+  ORA<span style="color:#f92672">-</span><span style="color:#ae81ff">39088</span>: <span style="color:#960050;background-color:#1e0010">文件名不能包含路径说明</span>
+  <span style="color:#66d9ef">SQL</span><span style="color:#f92672">&gt;</span><span style="color:#66d9ef">create</span> directory sha <span style="color:#66d9ef">as</span> <span style="color:#e6db74">&#39;d:\dxp&#39;</span> <span style="color:#960050;background-color:#1e0010">只是在数据库中声明</span>,<span style="color:#960050;background-color:#1e0010">实际目录需要在文件中创建好</span>
+  <span style="color:#66d9ef">SQL</span><span style="color:#f92672">&gt;</span><span style="color:#66d9ef">grant</span> <span style="color:#66d9ef">read</span>,<span style="color:#66d9ef">write</span> <span style="color:#66d9ef">on</span> directory sha <span style="color:#66d9ef">to</span> scott;
+  CMD<span style="color:#f92672">&gt;</span>expdp scott<span style="color:#f92672">/</span>tiger directory<span style="color:#f92672">=</span>sha file<span style="color:#f92672">=</span>demo2.dmp tables<span style="color:#f92672">=</span>emp
+  <span style="color:#66d9ef">SQL</span><span style="color:#f92672">&gt;</span>conn scott<span style="color:#f92672">/</span>tiger
+  <span style="color:#66d9ef">SQL</span><span style="color:#f92672">&gt;</span><span style="color:#66d9ef">drop</span> <span style="color:#66d9ef">table</span> emp;
+  CMD<span style="color:#f92672">&gt;</span>impdp scott<span style="color:#f92672">/</span>tiger directory<span style="color:#f92672">=</span>sha file<span style="color:#f92672">=</span>demo2.dmp tables<span style="color:#f92672">=</span>emp
+</code></pre></div></li>
+</ul>
+<p><img src="https://static.notion-static.com/2b622c7a-1bf2-4fe6-b312-3553fc69ab74/Untitled" alt="4"></p>
+<p><img src="https://static.notion-static.com/f5f13bc0-df35-459a-a931-6d09a4ea7682/Untitled" alt="5"></p>
+</li>
+<li>
+<p><strong>数据库&lt;—&gt;数据库</strong></p>
+</li>
+<li>
+<p><strong>数据库—&gt;数据文件</strong></p>
+</li>
+</ul>
+
+
+  <footer>
+  
+<nav class="post-nav">
+  <span class="nav-prev">&larr; <a href="/cn/2018-04-10-oracle-12/">Oracle实践数据库笔记-12</a></span>
+  <span class="nav-next"><a href="/cn/2018-04-08-javacore4/">Java核心技术卷(4)</a> &rarr;</span>
+</nav>
+<script type="text/javascript">
+document.addEventListener('keyup', function(e) {
+  if (e.target.nodeName.toUpperCase() != 'BODY') return;
+  var url = false;
+  if (e.which == 37) {  
+    
+    url = '\/cn\/2018-04-10-oracle-12\/';
+    
+  } else if (e.which == 39) {  
+    
+    url = '\/cn\/2018-04-08-javacore4\/';
+    
+  }
+  if (url) window.location = url;
+});
+</script>
+
+
+
+
+
+
+<script async src="/js/fix-toc.js"></script>
+
+<script async src="/js/center-img.js"></script>
+
+<script async src="/js/right-quote.js"></script>
+
+<script async src="/js/no-highlight.js"></script>
+
+<script async src="/js/fix-footnote.js"></script>
+
+<script async src="/js/math-code.js"></script>
+
+<script async src="/js/external-link.js"></script>
+
+<script async src="/js/alt-title.js"></script>
+
+<script async src="/js/header-link.js"></script>
+
+
+
+<script async src="//mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+  
+
+
+
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/java.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/SQL.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/CSS.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+  
+  <hr>
+  <div class="copyright">© <a href="/">Luo Hao</a> 2016 - 2019</div>
+  
+  </footer>
+  </article>
+  
+  </body>
+</html>
+

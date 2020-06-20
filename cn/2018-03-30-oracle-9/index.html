@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>Oracle实践数据库笔记-9 - Rehoni | 罗皓</title>
+    <meta property="og:title" content="Oracle实践数据库笔记-9 - Rehoni | 罗皓">
+    
+    <meta name="twitter:card" content="summary">
+
+    
+      
+    
+
+    
+      
+      <meta property="description" content="desc dba_segments show parameter db_block_size create tablespace tbs1 datafile &amp;#39;D:\app\hwj\oradata\sales\tbs1.dbf&amp;#39; size 10m blocksize 2048;---报错  alter session set nls_language=america;---解决报错 &amp;hellip;">
+      <meta property="og:description" content="desc dba_segments show parameter db_block_size create tablespace tbs1 datafile &amp;#39;D:\app\hwj\oradata\sales\tbs1.dbf&amp;#39; size 10m blocksize 2048;---报错  alter session set nls_language=america;---解决报错 &amp;hellip;">
+      
+    
+
+    
+    
+    
+    <meta name="twitter:image" content="/images/logo.png">
+    
+    
+
+    
+
+    
+    
+
+
+<link href='//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+<script async src="/js/load-typekit.js"></script>
+
+
+<link rel="stylesheet" href="/css/custom.css" />
+
+  </head>
+
+  
+  <body class="cn">
+    <header class="masthead">
+      
+
+<h1><a href="/"><img src="/images/logo.png" alt="Luo Hao" /></a></h1>
+
+
+
+      <nav class="menu">
+  <ul>
+  
+  
+  <li><a href="/">首页</a></li>
+  
+  <li><a href="/cn/about/">关于</a></li>
+  
+  <li><a href="/cn/">日志</a></li>
+  
+  <li><a href="/categories/">分类</a></li>
+  
+  <li><a href="/tags/">标签</a></li>
+  
+  <li><a href="/cn/vitae/">简历</a></li>
+  
+  <li><a href="/en/">English</a></li>
+  
+  
+
+<li class="menu-extra"></li>
+
+
+
+<li><a href="https://github.com/rehonicn%5c2018-03-30-Oracle-9.md" target="_blank">编辑</a></li>
+
+
+<li><a href="/cn/index.xml" type="application/rss+xml" title="RSS feed">订阅</a></li>
+
+<li><a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="Attribution-NonCommercial-ShareAlike 4.0 International">版权</a></li>
+
+
+  </ul>
+</nav>
+
+    </header>
+
+    <article class="main">
+      <header class="title">
+      
+<h1>Oracle实践数据库笔记-9</h1>
+
+
+<h3>Rehoni / 
+2018-03-30</h3>
+
+<hr>
+
+
+      </header>
+
+
+
+<h3 id="管理表空间和数据文件">管理表空间和数据文件</h3>
+<ol>
+<li>数据库的存储层次结构 PPT153
+<ul>
+<li>数据库,</li>
+<li>表空间,</li>
+<li>段(存储结构)</li>
+<li>区(最小的空间分配单位)___空间管理
+<ul>
+<li>数据字典管理[占用系统表空间,增加系统负担,现已被废弃]</li>
+<li>本地管理 bitmap位图
+extend_id bitmap
+1           1
+2           0 //可用</li>
+</ul>
+</li>
+<li>块(最小的IO单位) 根据访问数据量来控制块的单位大小</li>
+<li>碎片,本地管理
+依据管理和性能分配表空间
+索引和数据不要放在一个表空间里</li>
+</ul>
+</li>
+<li>空间管理
+<ul>
+<li>系统空间</li>
+<li>非系统空间</li>
+</ul>
+</li>
+<li>创建表空间
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">    <span style="color:#66d9ef">desc</span> dba_segments
+    <span style="color:#66d9ef">show</span> <span style="color:#66d9ef">parameter</span> db_block_size
+    <span style="color:#66d9ef">create</span> tablespace tbs1 datafile <span style="color:#e6db74">&#39;D:\app\hwj\oradata\sales\tbs1.dbf&#39;</span> <span style="color:#66d9ef">size</span> <span style="color:#ae81ff">10</span>m blocksize <span style="color:#ae81ff">2048</span>;<span style="color:#75715e">---报错
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">session</span> <span style="color:#66d9ef">set</span> nls_language<span style="color:#f92672">=</span>america;<span style="color:#75715e">---解决报错为?????的办法
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">show</span> <span style="color:#66d9ef">parameter</span> <span style="color:#66d9ef">cache</span>;
+    <span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">system</span> <span style="color:#66d9ef">set</span> db_2k_cache_size<span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>m;
+    <span style="color:#66d9ef">create</span> tablespace userdata datafile <span style="color:#e6db74">&#39;E:\app\Res0liya\oradata\orcl\userdata01.dbf&#39;</span> <span style="color:#66d9ef">size</span> <span style="color:#ae81ff">100</span>m autoextend <span style="color:#66d9ef">on</span> <span style="color:#66d9ef">next</span> <span style="color:#ae81ff">5</span>m maxsize <span style="color:#ae81ff">200</span>m;<span style="color:#75715e">---创建表空间
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">create</span> tablespace userdata datafile <span style="color:#e6db74">&#39;E:\app\Res0liya\oradata\orcl\userdata01.dbf&#39;</span> <span style="color:#66d9ef">size</span> <span style="color:#ae81ff">100</span>m extend management <span style="color:#66d9ef">dictionary</span>;<span style="color:#75715e">---创建表空间
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">desc</span> dba_tablespaces;<span style="color:#75715e">---如果你的system表空间是本地管理local的,那你只能创建本地管理表空间,如果是dictionary的那么两者都可以创建
+</span></code></pre></div></li>
+<li>表空间的类型
+<ul>
+<li>常规表空间</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">    <span style="color:#66d9ef">select</span> name <span style="color:#66d9ef">from</span> v$tablespace;
+</code></pre></div><ul>
+<li>临时表空间(排序)
+数据库属性视图</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">    <span style="color:#66d9ef">desc</span> database_properties;
+    <span style="color:#66d9ef">select</span> property_name,property_value <span style="color:#66d9ef">from</span> database_properties;<span style="color:#75715e">---default_temp_tablespace临时表空间,default_permament_tablespace默认常规表空间
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">create</span> tablespace users datafile <span style="color:#e6db74">&#39;E:\app\Res0liya\oradata\orcl\users01.dbf&#39;</span> <span style="color:#66d9ef">size</span> <span style="color:#ae81ff">30</span>m;
+    <span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">database</span> <span style="color:#66d9ef">default</span> tablespace users;<span style="color:#75715e">---设置为默认表空间
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">create</span> <span style="color:#66d9ef">temporary</span> tablespace temp2 tempfile <span style="color:#e6db74">&#39;E:\app\Res0liya\oradata\orcl\users02.dbf&#39;</span> <span style="color:#66d9ef">size</span> <span style="color:#ae81ff">30</span>m;
+    <span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">database</span> <span style="color:#66d9ef">default</span> <span style="color:#66d9ef">temporary</span> tablespace temp2;
+</code></pre></div><ul>
+<li>大文件表空间理解一下</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">    default_tbs_type <span style="color:#75715e">---smallfile
+</span></code></pre></div><ul>
+<li>撤销表空间(放回滚的数据的DML修改之前可以回滚)</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">    <span style="color:#66d9ef">show</span> <span style="color:#66d9ef">parameter</span> undo_tablespace;
+    <span style="color:#66d9ef">create</span> undo tablespace undotbs2 datafile <span style="color:#e6db74">&#39;E:\app\Res0liya\oradata\orcl\undotbs02.dbf&#39;</span> <span style="color:#66d9ef">size</span> <span style="color:#ae81ff">20</span>m;
+    <span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">system</span> <span style="color:#66d9ef">set</span> undo_tablespace<span style="color:#f92672">=</span>undotbs2;
+</code></pre></div></li>
+<li>表空间的状态
+<ul>
+<li>正常状态(联机,可读可写)</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">    <span style="color:#66d9ef">desc</span> dba_tablespaces;
+    <span style="color:#66d9ef">select</span> tablespace_name,status <span style="color:#66d9ef">from</span> dba_tablespaces;<span style="color:#75715e">---online,read only
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">create</span> <span style="color:#66d9ef">table</span> scott.demo(id int,name varchar(<span style="color:#ae81ff">20</span>)) tablespace tbs1;
+    <span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> scott.demo <span style="color:#66d9ef">values</span>(<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#39;luobo&#39;</span>);
+    <span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> scott.demo <span style="color:#66d9ef">values</span>(<span style="color:#ae81ff">2</span>,<span style="color:#e6db74">&#39;aaa&#39;</span>);
+    <span style="color:#66d9ef">commit</span>;
+    <span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">system</span> <span style="color:#66d9ef">checkpoint</span>;
+</code></pre></div><ul>
+<li>只读状态</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">    <span style="color:#66d9ef">alter</span> tablespace tbs1 <span style="color:#66d9ef">read</span> <span style="color:#66d9ef">only</span>;
+    <span style="color:#66d9ef">drop</span> <span style="color:#66d9ef">table</span> scott.demo;<span style="color:#75715e">---是可以删除掉的
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">alter</span> tablespace tbs1 <span style="color:#66d9ef">read</span> <span style="color:#66d9ef">write</span>;
+    flashback <span style="color:#66d9ef">table</span> demo <span style="color:#66d9ef">to</span> <span style="color:#66d9ef">before</span> <span style="color:#66d9ef">drop</span>;
+</code></pre></div><ul>
+<li>脱机状态
+不能脱机的表空间 <strong>system,undotbs1,所有的临时表空间</strong>
+sysaux辅助系统表空间,自动优化调整,自动化管理,能够脱机,功能失效
+undotbs撤销表空间,活动/当前的undotbs不能够脱机</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">    <span style="color:#66d9ef">alter</span> tablespace <span style="color:#66d9ef">system</span> offline;<span style="color:#75715e">---online
+</span></code></pre></div></li>
+<li>删除表空间
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">    <span style="color:#66d9ef">drop</span> tablespace tbs1;<span style="color:#75715e">---内容不是空的,就不能删
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">drop</span> tablespace tbs1 <span style="color:#66d9ef">including</span> contents;
+</code></pre></div></li>
+<li>OMF的表空间
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">    <span style="color:#66d9ef">show</span> <span style="color:#66d9ef">parameter</span> db_create;
+    <span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">system</span> <span style="color:#66d9ef">set</span> db_create_file_dest;
+    <span style="color:#66d9ef">create</span> tablespace tbs2;<span style="color:#75715e">---报错
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">create</span> tablespace tbs2 datafile <span style="color:#e6db74">&#39;path&#39;</span> <span style="color:#66d9ef">size</span> <span style="color:#ae81ff">10</span>m;
+    <span style="color:#66d9ef">drop</span> tablespace tbs2;<span style="color:#75715e">---文件没被删掉
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">system</span> <span style="color:#66d9ef">set</span> db_create_file_dest<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;E:\app\OMF\dest&#39;</span>;
+    <span style="color:#66d9ef">create</span> tablespace tbs2;
+    <span style="color:#66d9ef">select</span> tablespace name,file_name <span style="color:#66d9ef">from</span> <span style="color:#960050;background-color:#1e0010">某个表</span>;
+    <span style="color:#66d9ef">drop</span> tablespace tbs2;<span style="color:#75715e">---文件被删掉
+</span></code></pre></div></li>
+<li>扩展表空间 PPT167
+<ul>
+<li>修改原数据文件的大小
+<ul>
+<li>自动扩展</li>
+<li>手动扩展</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">    <span style="color:#66d9ef">ALTER</span> <span style="color:#66d9ef">DATABASE</span> DATAFILE
+    <span style="color:#e6db74">&#39;/u01/oradata/userdata02.dbf&#39;</span> <span style="color:#66d9ef">SIZE</span> <span style="color:#ae81ff">200</span>M
+    AUTOEXTEND <span style="color:#66d9ef">ON</span> <span style="color:#66d9ef">NEXT</span> <span style="color:#ae81ff">10</span>M MAXSIZE <span style="color:#ae81ff">500</span>M;
+    <span style="color:#66d9ef">ALTER</span> <span style="color:#66d9ef">DATABASE</span>
+    DATAFILE <span style="color:#e6db74">&#39;/u03/oradata/userdata02.dbf&#39;</span>
+    RESIZE <span style="color:#ae81ff">200</span>M;
+</code></pre></div><ul>
+<li>添加新的数据文件</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">    <span style="color:#66d9ef">ALTER</span> TABLESPACE app_data
+    <span style="color:#66d9ef">ADD</span> DATAFILE <span style="color:#e6db74">&#39;/u01/oradata/userdata03.dbf&#39;</span>
+    <span style="color:#66d9ef">SIZE</span> <span style="color:#ae81ff">200</span>M;
+</code></pre></div></li>
+<li>移动数据文件 PPT171
+<ul>
+<li>可以移动 不再用的文件</li>
+<li>物理移动</li>
+<li>更新控制文件</li>
+</ul>
+</li>
+</ol>
+<h3 id="实验">实验</h3>
+<p>创建USERS表空间,并设置为数据库默认的永久表空间</p>
+<ol>
+<li>创建一个由4K的块组成表空间TEST(TEST01.dbf 10M) 🆗</li>
+<li>向TEST表空间增加一个10M的数据文件(TEST02.dbf),将TEST01.DBF修改为15m 🆗</li>
+<li>移动TEST01.DBF 🆗</li>
+<li>在TEST表空间内创建一张表table1(insert)🆗</li>
+<li>将TEST表空间改为read only🆗</li>
+<li>删除表table1🆗</li>
+<li>将表空间改为read write🆗</li>
+<li>删除TEST表空间 检测数据文件是否被删除🆗</li>
+<li>OMF创建表空间 检测数据文件是否被删除🆗</li>
+<li>创建1个撤销表空间undotbs2,并把它设为系统当前的撤销表空间🆗</li>
+<li>创建临时表空间temp2,并把它设为数据库默认的临时表空间🆗</li>
+<li>没有备份的恢复(归档模式)
+<ul>
+<li>创建一个表空间TBS1(TBS1.DBF)🆗</li>
+<li>在TBS1表空间内创建一张表T1🆗</li>
+<li>shutdown immediate🆗</li>
+<li>手工删除表空间TBS1的数据文件🆗</li>
+<li>startup🆗</li>
+<li>将数据文件TBS1.DBF脱机🆗</li>
+<li>alter database open;🆗</li>
+<li>alter database create datafile &lsquo;pth\tbs1.bdf&rsquo;;🆗</li>
+<li>recover datafile &lsquo;path\tbs1.dbf&rsquo;;🆗</li>
+<li>将数据文件TBS1.DBF联机🆗</li>
+<li>检查数据是否恢复🆗</li>
+</ul>
+</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">    <span style="color:#66d9ef">create</span> tablespace TEST datafile <span style="color:#e6db74">&#39;E:\app\Res0liya\oradata\orcl\test01.dbf&#39;</span> <span style="color:#66d9ef">size</span> <span style="color:#ae81ff">10</span>m blocksize <span style="color:#ae81ff">4096</span>;<span style="color:#75715e">---报错
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">system</span> <span style="color:#66d9ef">set</span> db_4k_cache_size<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>m;
+    <span style="color:#66d9ef">create</span> tablespace TEST datafile <span style="color:#e6db74">&#39;E:\app\Res0liya\oradata\orcl\test01.dbf&#39;</span> <span style="color:#66d9ef">size</span> <span style="color:#ae81ff">10</span>m blocksize <span style="color:#ae81ff">4096</span>;
+    <span style="color:#66d9ef">alter</span> tablespace TEST <span style="color:#66d9ef">add</span> datafile <span style="color:#e6db74">&#39;E:\app\Res0liya\oradata\orcl\test02.dbf&#39;</span> <span style="color:#66d9ef">size</span> <span style="color:#ae81ff">10</span>m;
+    <span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">database</span> datafile <span style="color:#e6db74">&#39;E:\app\Res0liya\oradata\orcl\test01.dbf&#39;</span> resize <span style="color:#ae81ff">15</span>m;
+    <span style="color:#66d9ef">select</span> tablespace_name,status <span style="color:#66d9ef">from</span> dba_tablespaces;
+    <span style="color:#66d9ef">alter</span> tablespace test offline;
+    <span style="color:#66d9ef">alter</span> tablespace TEST
+  <span style="color:#ae81ff">2</span>  <span style="color:#66d9ef">rename</span>
+  <span style="color:#ae81ff">3</span>  datafile <span style="color:#e6db74">&#39;E:\app\Res0liya\oradata\orcl\test01.dbf&#39;</span>
+  <span style="color:#ae81ff">4</span>  <span style="color:#66d9ef">to</span> <span style="color:#e6db74">&#39;E:\app\Res0liya\oradata\test01.dbf&#39;</span>;
+    <span style="color:#66d9ef">alter</span> tablespace TEST online;
+    <span style="color:#66d9ef">create</span> <span style="color:#66d9ef">table</span> scott.table1(id int,name varchar(<span style="color:#ae81ff">20</span>)) tablespace test;
+    <span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> scott.table1 <span style="color:#66d9ef">values</span>(<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#39;luobo&#39;</span>);
+    <span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> scott.table1 <span style="color:#66d9ef">values</span>(<span style="color:#ae81ff">2</span>,<span style="color:#e6db74">&#39;aaa&#39;</span>);
+    <span style="color:#66d9ef">alter</span> tablespace TEST <span style="color:#66d9ef">read</span> <span style="color:#66d9ef">only</span>;
+    <span style="color:#66d9ef">select</span> tablespace_name,status <span style="color:#66d9ef">from</span> dba_tablespaces;
+    <span style="color:#66d9ef">drop</span> <span style="color:#66d9ef">table</span> scott.table1;
+    <span style="color:#66d9ef">alter</span> tablespace TEST <span style="color:#66d9ef">read</span> <span style="color:#66d9ef">write</span>;
+    <span style="color:#66d9ef">drop</span> tablespace TEST;<span style="color:#75715e">---数据文件未被删除
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">show</span> <span style="color:#66d9ef">parameter</span> db_create;
+    <span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">system</span> <span style="color:#66d9ef">set</span> db_create_file_dest<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;E:\app\OMF&#39;</span>;
+    <span style="color:#66d9ef">create</span> tablespace TEST;
+    <span style="color:#66d9ef">drop</span> tablespace TEST;<span style="color:#75715e">---数据文件删除了
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">create</span> undo tablespace undotbs2 datafile <span style="color:#e6db74">&#39;E:\app\Res0liya\oradata\orcl\undotbs2.dbf&#39;</span> <span style="color:#66d9ef">size</span> <span style="color:#ae81ff">30</span>m;
+    <span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">system</span> <span style="color:#66d9ef">set</span> undo_tablespace<span style="color:#f92672">=</span>undotbs2;
+    <span style="color:#66d9ef">show</span> <span style="color:#66d9ef">parameter</span> undo_tablespace;<span style="color:#75715e">---查询
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">create</span> <span style="color:#66d9ef">temporary</span> tablespace temp2 tempfile <span style="color:#e6db74">&#39;E:\app\Res0liya\oradata\orcl\temp2.dbf&#39;</span> <span style="color:#66d9ef">size</span> <span style="color:#ae81ff">30</span>m;
+    <span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">database</span> <span style="color:#66d9ef">default</span> <span style="color:#66d9ef">temporary</span> tablespace temp2;
+    <span style="color:#66d9ef">select</span> property_name,property_value <span style="color:#66d9ef">from</span> database_properties;<span style="color:#75715e">---查询
+</span><span style="color:#75715e"></span>    col PROPERTY_NAME <span style="color:#66d9ef">for</span> a32;
+    col PROPERTY_VALUE <span style="color:#66d9ef">for</span> a32;
+    <span style="color:#66d9ef">select</span> property_name,property_value <span style="color:#66d9ef">from</span> database_properties;
+    <span style="color:#66d9ef">create</span> tablespace TBS1 datafile <span style="color:#e6db74">&#39;E:\app\Res0liya\oradata\orcl\tbs01.dbf&#39;</span> <span style="color:#66d9ef">size</span> <span style="color:#ae81ff">30</span>m;
+    <span style="color:#66d9ef">select</span> tablespace_name,status <span style="color:#66d9ef">from</span> dba_tablespaces;<span style="color:#75715e">---查询
+</span></code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">    <span style="color:#66d9ef">create</span> tablespace TBS1 datafile <span style="color:#e6db74">&#39;E:\app\Res0liya\oradata\orcl\tbs01.dbf&#39;</span> <span style="color:#66d9ef">size</span> <span style="color:#ae81ff">30</span>m;
+    <span style="color:#66d9ef">select</span> tablespace_name,status <span style="color:#66d9ef">from</span> dba_tablespaces;
+    <span style="color:#66d9ef">create</span> <span style="color:#66d9ef">table</span> scott.t1(id int);
+    <span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">table</span> scott.t1 <span style="color:#66d9ef">values</span> (<span style="color:#ae81ff">1</span>);
+    <span style="color:#66d9ef">commit</span>;
+    <span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">system</span> <span style="color:#66d9ef">checkpoint</span>;
+    shutdown <span style="color:#66d9ef">immediate</span>
+    <span style="color:#960050;background-color:#1e0010">删除本地文件</span>tbs01.dbf
+    startup<span style="color:#75715e">---报错
+</span><span style="color:#75715e"></span>    ORA<span style="color:#f92672">-</span><span style="color:#ae81ff">01157</span>: <span style="color:#960050;background-color:#1e0010">无法标识</span><span style="color:#f92672">/</span><span style="color:#960050;background-color:#1e0010">锁定数据文件</span> <span style="color:#ae81ff">8</span> <span style="color:#f92672">-</span> <span style="color:#960050;background-color:#1e0010">请参阅</span> DBWR <span style="color:#960050;background-color:#1e0010">跟踪文件</span>
+    ORA<span style="color:#f92672">-</span><span style="color:#ae81ff">01110</span>: <span style="color:#960050;background-color:#1e0010">数据文件</span> <span style="color:#ae81ff">8</span>: <span style="color:#e6db74">&#39;E:\APP\RES0LIYA\ORADATA\ORCL\TBS01.DBF&#39;</span>
+    <span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">database</span> datafile <span style="color:#ae81ff">8</span> offline;<span style="color:#75715e">---报错
+</span><span style="color:#75715e"></span>    archive log list;<span style="color:#75715e">---检查是不是归档模式
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">database</span> archivelog;<span style="color:#75715e">--设置了归档模式(见之前的笔记)之后就不会报错
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">database</span> <span style="color:#66d9ef">open</span>;
+    <span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">database</span> <span style="color:#66d9ef">create</span> datafile <span style="color:#e6db74">&#39;E:\APP\RES0LIYA\ORADATA\ORCL\TBS01.DBF&#39;</span>;
+    recover datafile <span style="color:#e6db74">&#39;E:\APP\RES0LIYA\ORADATA\ORCL\TBS01.DBF&#39;</span>;
+    <span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">database</span> datafile <span style="color:#ae81ff">8</span> online;
+    <span style="color:#960050;background-color:#1e0010">本地文件</span>tbs01.dbf回来了
+    <span style="color:#66d9ef">desc</span> scott.t1;
+    <span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> scott.t1;
+</code></pre></div><p><strong>Oracle最基础的部分已经结束了,后边的部分可以自学了</strong>啧</p>
+
+
+  <footer>
+  
+<nav class="post-nav">
+  <span class="nav-prev">&larr; <a href="/cn/2018-03-27-oracle-8/">Oracle实践数据库笔记-8</a></span>
+  <span class="nav-next"><a href="/cn/2018-04-03-oracle-10/">Oracle实践数据库笔记-10</a> &rarr;</span>
+</nav>
+<script type="text/javascript">
+document.addEventListener('keyup', function(e) {
+  if (e.target.nodeName.toUpperCase() != 'BODY') return;
+  var url = false;
+  if (e.which == 37) {  
+    
+    url = '\/cn\/2018-03-27-oracle-8\/';
+    
+  } else if (e.which == 39) {  
+    
+    url = '\/cn\/2018-04-03-oracle-10\/';
+    
+  }
+  if (url) window.location = url;
+});
+</script>
+
+
+
+
+
+
+<script async src="/js/fix-toc.js"></script>
+
+<script async src="/js/center-img.js"></script>
+
+<script async src="/js/right-quote.js"></script>
+
+<script async src="/js/no-highlight.js"></script>
+
+<script async src="/js/fix-footnote.js"></script>
+
+<script async src="/js/math-code.js"></script>
+
+<script async src="/js/external-link.js"></script>
+
+<script async src="/js/alt-title.js"></script>
+
+<script async src="/js/header-link.js"></script>
+
+
+
+<script async src="//mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+  
+
+
+
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/java.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/SQL.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/CSS.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+  
+  <hr>
+  <div class="copyright">© <a href="/">Luo Hao</a> 2016 - 2019</div>
+  
+  </footer>
+  </article>
+  
+  </body>
+</html>
+

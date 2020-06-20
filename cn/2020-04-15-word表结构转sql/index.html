@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>word转sql表结构 - Rehoni | 罗皓</title>
+    <meta property="og:title" content="word转sql表结构 - Rehoni | 罗皓">
+    
+    <meta name="twitter:card" content="summary">
+
+    
+      
+    
+
+    
+      
+      <meta property="description" content="工作流如下：
+[&amp;hellip;] 已经在office word编辑好的数据库说明文档
+[&amp;hellip;] 通过按照特定的表结构，录入到excel中，前两行为中文表名和英文表名，下边为字段，下方的sheet名也为中文表名，并且注意”名称“列，是不可以有重名的，否则执行脚本的时候会报错，并且一直占用该excel导致此excel只读，无法编辑（如果修改完excel没有退出则继续修改就行）只能创 &amp;hellip;">
+      <meta property="og:description" content="工作流如下：
+[&amp;hellip;] 已经在office word编辑好的数据库说明文档
+[&amp;hellip;] 通过按照特定的表结构，录入到excel中，前两行为中文表名和英文表名，下边为字段，下方的sheet名也为中文表名，并且注意”名称“列，是不可以有重名的，否则执行脚本的时候会报错，并且一直占用该excel导致此excel只读，无法编辑（如果修改完excel没有退出则继续修改就行）只能创 &amp;hellip;">
+      
+    
+
+    
+    
+    
+    <meta name="twitter:image" content="/images/logo.png">
+    
+    
+
+    
+
+    
+    
+
+
+<link href='//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+<script async src="/js/load-typekit.js"></script>
+
+
+<link rel="stylesheet" href="/css/custom.css" />
+
+  </head>
+
+  
+  <body class="cn">
+    <header class="masthead">
+      
+
+<h1><a href="/"><img src="/images/logo.png" alt="Luo Hao" /></a></h1>
+
+
+
+      <nav class="menu">
+  <ul>
+  
+  
+  <li><a href="/">首页</a></li>
+  
+  <li><a href="/cn/about/">关于</a></li>
+  
+  <li><a href="/cn/">日志</a></li>
+  
+  <li><a href="/categories/">分类</a></li>
+  
+  <li><a href="/tags/">标签</a></li>
+  
+  <li><a href="/cn/vitae/">简历</a></li>
+  
+  <li><a href="/en/">English</a></li>
+  
+  
+
+<li class="menu-extra"></li>
+
+
+
+<li><a href="https://github.com/rehonicn%5c2020-04-15-word%e8%a1%a8%e7%bb%93%e6%9e%84%e8%bd%acsql.md" target="_blank">编辑</a></li>
+
+
+<li><a href="/cn/index.xml" type="application/rss+xml" title="RSS feed">订阅</a></li>
+
+<li><a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="Attribution-NonCommercial-ShareAlike 4.0 International">版权</a></li>
+
+
+  </ul>
+</nav>
+
+    </header>
+
+    <article class="main">
+      <header class="title">
+      
+<h1>word转sql表结构</h1>
+
+
+<h3>rehoni / 
+2020-04-15</h3>
+
+<hr>
+
+
+      </header>
+
+
+
+<h5 id="word转sql表结构">word转sql表结构：</h5>
+<p>工作流如下：</p>
+<ol>
+<li>
+<p>已经在office word编辑好的数据库说明文档</p>
+</li>
+<li>
+<p>通过按照特定的表结构，录入到excel中，前两行为中文表名和英文表名，下边为字段，下方的sheet名也为中文表名，并且注意”名称“列，是不可以有重名的，否则执行脚本的时候会报错，并且一直占用该excel导致此excel只读，无法编辑（如果修改完excel没有退出则继续修改就行）只能创建excel副本。</p>
+<p><img src="/images/word2Sql.png" alt="word2Sql"></p>
+</li>
+<li>
+<p>打开power designer-&gt;create model-&gt;physical data，创建物理模型，DBMS选择对应的数据库，版本低一点没有关系，商用库为12a，选择最高的Oracle version 11g，创建之后按ctrl+shift+x打开脚本执行界面，执行以下VB脚本，生成表的物理模型。可以根据数据库文档中每一列的含义，在脚本中进行调整。执行完之后可以保存到power designer的脚本库中，方便之后重用。</p>
+<pre><code class="language-vbscript" data-lang="vbscript">'
+' @Author: 罗皓
+' @Date: 2020-03-25 14:41:57
+' @LastEditTime: 2020-03-26 10:11:31
+' @Description:
+' @LastEditors: 罗皓
+'
+Option Explicit
+Dim mdl ' the current model
+Set mdl = ActiveModel
+If (mdl Is Nothing) Then
+  MsgBox &quot;There is no Active Model&quot;
+End If
+   
+Dim HaveExcel
+Dim RQ
+RQ = vbYes 'MsgBox(&quot;Is Excel Installed on your machine ?&quot;, vbYesNo + vbInformation, &quot;Confirmation&quot;)
+If RQ = vbYes Then
+   HaveExcel = True
+' Open &amp; Create Excel Document
+ Dim x1 '
+ Dim wb
+ Dim Sht
+ Dim count
+ Dim newTableName  'sheet中的表名
+ Dim singleTable   'powerdesigner中的表名
+ Dim existsFlag
+  Set x1 = CreateObject(&quot;Excel.Application&quot;)
+  '打开excel文件
+  Set wb = x1.Workbooks.Open(&quot;C:\Users\Res0l\Documents\珠海项目归档\8.数据库\气象数据.xlsx&quot;)
+    '遍历每个sheet
+  For Each Sht In wb.Sheets
+        '打印sheet名
+         'msgbox( Sht.Name)
+         'msgbox( mdl.Tables.count)
+         '获取到当前需要创建的表名，查看它是否在powerdesigner中已经存在
+         newTableName = Sht.Cells(1, 2).Value
+         'msgbox( newTableName)
+         For Each singleTable In mdl.Tables
+   
+            'msgbox(singleTable.Name)
+             If singleTable.Name = newTableName Then
+               existsFlag = True
+                End If
+         Next
+      If existsFlag Then
+         MsgBox (newTableName + &quot;已经存在&quot;)
+         '重置flag
+         existsFlag = False
+      Else
+   
+         '调用子模块
+         immigrate_function Sht, mdl
+         count = count + 1
+      End If
+   Next
+  MsgBox &quot;生成数据表结构共计&quot; + CStr(count), vbOK + vbInformation, &quot;表&quot;
+   
+'关闭流
+Set Sht = Nothing
+wb.Close
+Set wb = Nothing
+x1.Quit
+Set x1 = Nothing
+   
+Else
+   HaveExcel = False
+End If
+ '子程序模块
+Sub immigrate_function(Sht, mdl)
+Dim rwIndex
+Dim tableName
+Dim colname
+Dim table
+Dim col
+'on error Resume Next
+For rwIndex = 1 To 1000 Step 1'指定要遍历的Excel行标  从第1行开始
+With Sht
+   If .Cells(rwIndex, 1).Value = &quot;&quot; Then
+       rwIndex = rwIndex + 1
+       If .Cells(rwIndex, 1).Value = &quot;&quot; Then '连续第一列的两行为空，则退出for
+       Exit For
+       End If
+   End If
+  If rwIndex = 1 Then
+    Set table = mdl.Tables.CreateNew '创建表
+        table.Name = .Cells(rwIndex, 2).Value '表名
+        table.Comment = .Cells(rwIndex , 2).Value '指定表注释，以表名
+           ElseIf rwIndex = 2 Then
+        table.Code = .Cells(rwIndex, 2).Value '表英文名
+       rwIndex = rwIndex + 1
+      Else
+    colname = .Cells(rwIndex, 1).Value
+    Set col = table.Columns.CreateNew '创建一列/字段
+    col.Name = Replace(.Cells(rwIndex, 1).Value,&quot; &quot;,&quot;&quot;) '指定列名——中文
+    col.Code = Replace(.Cells(rwIndex, 2).Value,&quot; &quot;,&quot;&quot;) '指定列名——英文字段
+    col.DataType = Replace(.Cells(rwIndex, 3).Value,&quot; &quot;,&quot;&quot;)'指定列数据类型
+    If Replace(.Cells(rwIndex, 4).Value,&quot; &quot;,&quot;&quot;) = &quot;True&quot; Then '标True的为主键
+        col.Primary = True
+    End If
+    If Replace(.Cells(rwIndex, 5).Value,&quot; &quot;,&quot;&quot;) = &quot;Default0&quot; Then 'Default0，指默认值为0
+        col.DefaultValue = 0
+        ElseIf Replace(.Cells(rwIndex, 5).Value,&quot; &quot;,&quot;&quot;) = &quot;Default''&quot; Then 'Default''，指默认值为''
+            col.DefaultValue = &quot;&quot;
+    End If
+    If Replace(.Cells(rwIndex, 6).Value,&quot; &quot;,&quot;&quot;) = &quot;&quot; or Replace(.Cells(rwIndex, 6).Value,&quot; &quot;,&quot;&quot;) = Replace(.Cells(rwIndex, 1).Value,&quot; &quot;,&quot;&quot;) Then
+        col.Comment = Replace(.Cells(rwIndex, 1).Value,&quot; &quot;,&quot;&quot;) '列说明放入中文列名值
+        Else
+            col.Comment = Replace(.Cells(rwIndex, 1).Value,&quot; &quot;,&quot;&quot;) &amp; &quot;：&quot; &amp; Replace(.Cells(rwIndex, 6).Value,&quot; &quot;,&quot;&quot;)'指定列说明
+    End If
+   End If
+  End With
+  Next
+ End Sub
+</code></pre></li>
+<li>
+<p>脚本执行成功后，将会在power designer左侧边栏生成Tables，右键对应表名-&gt;SQL previews，即可生成建表语句，看情况决定是否注释第一行的drop table 语句。</p>
+</li>
+</ol>
+
+
+  <footer>
+  
+<nav class="post-nav">
+  <span class="nav-prev">&larr; <a href="/cn/2020-03-16-%E5%A4%A7%E4%BD%ACqa/">QA：记录最近和大佬交流</a></span>
+  <span class="nav-next"><a href="/cn/2920-06-20-manual/">写给自己的说明书</a> &rarr;</span>
+</nav>
+<script type="text/javascript">
+document.addEventListener('keyup', function(e) {
+  if (e.target.nodeName.toUpperCase() != 'BODY') return;
+  var url = false;
+  if (e.which == 37) {  
+    
+    url = '\/cn\/2020-03-16-%E5%A4%A7%E4%BD%ACqa\/';
+    
+  } else if (e.which == 39) {  
+    
+    url = '\/cn\/2920-06-20-manual\/';
+    
+  }
+  if (url) window.location = url;
+});
+</script>
+
+
+
+
+
+
+<script async src="/js/fix-toc.js"></script>
+
+<script async src="/js/center-img.js"></script>
+
+<script async src="/js/right-quote.js"></script>
+
+<script async src="/js/no-highlight.js"></script>
+
+<script async src="/js/fix-footnote.js"></script>
+
+<script async src="/js/math-code.js"></script>
+
+<script async src="/js/external-link.js"></script>
+
+<script async src="/js/alt-title.js"></script>
+
+<script async src="/js/header-link.js"></script>
+
+
+
+<script async src="//mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+  
+
+
+
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/java.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/SQL.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/CSS.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+  
+  <hr>
+  <div class="copyright">© <a href="/">Luo Hao</a> 2016 - 2019</div>
+  
+  </footer>
+  </article>
+  
+  </body>
+</html>
+

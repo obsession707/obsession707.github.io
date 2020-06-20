@@ -1,0 +1,230 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Homepage on Rehoni | 罗皓</title>
+    <link>/</link>
+    <description>Recent content in Homepage on Rehoni | 罗皓</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 31 Jan 2017 00:00:00 +0000</lastBuildDate>
+    <atom:link href="/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Github Issue Guide</title>
+      <link>/issue/</link>
+      <pubDate>Mon, 04 Mar 2019 00:00:00 +0000</pubDate>
+      <author>Yihui Xie</author>
+      <guid>/issue/</guid>
+      <description>
+        &lt;p&gt;This is a guide expected to be read before anyone files an issue to a repository that I maintain on Github. Please help me help you.&lt;/p&gt;
+&lt;h2 id=&#34;got-a-question&#34;&gt;Got a question?&lt;/h2&gt;
+&lt;p&gt;For general questions, please post them on Stack Overflow first: &lt;a href=&#34;http://stackoverflow.com/questions/ask&#34;&gt;http://stackoverflow.com/questions/ask&lt;/a&gt; (typically you want to use at least the tags &lt;code&gt;r&lt;/code&gt; and relevant R package names such as &lt;code&gt;knitr&lt;/code&gt;, &lt;code&gt;rmarkdown&lt;/code&gt;, &lt;code&gt;blogdown&lt;/code&gt;, and so on). You can also ask in the RStudio Community: &lt;a href=&#34;https://community.rstudio.com&#34;&gt;https://community.rstudio.com&lt;/a&gt;. Please come back to Github only if nobody answers your question there in at least 24 hours, and &lt;a href=&#34;/en/2017/10/cross-posting/&#34;&gt;let us know the URL&lt;/a&gt; of your post. There are several benefits of asking questions on popular public forums than asking a single developer (&lt;a href=&#34;/en/2017/08/so-gh-email/&#34;&gt;see this post&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;If you have asked the question elsewhere, &lt;a href=&#34;/en/2017/10/cross-posting/&#34;&gt;please mention your cross-posting&lt;/a&gt; in all places where you asked the question. After your question has been answered in one place, please notify people in other places so they won&amp;rsquo;t waste their time.&lt;/p&gt;
+&lt;p&gt;If an issue has been closed, please refrain from continuing to reply to it. An issue that can never be &amp;ldquo;truly&amp;rdquo; closed makes me feel stressful. Instead, please feel free to open a new issue and you can reference the closed issue if you think it is relevant.&lt;/p&gt;
+&lt;h2 id=&#34;bug-reports&#34;&gt;Bug reports&lt;/h2&gt;
+&lt;p&gt;For bug reports, please provide &lt;a href=&#34;/en/2017/09/the-minimal-reprex-paradox/&#34;&gt;a minimal, self-contained, and reproducible example&lt;/a&gt; by reducing your example as much as possible right before the problem goes away. By doing this, you may be able to figure out what the problem really is before reporting to us.&lt;/p&gt;
+&lt;p&gt;If your example is a single plain-text file, post the content in the issue (be sure to format it as a verbatim block). If your example contains multiple files, please upload them as a zip file to the Github issue.&lt;/p&gt;
+&lt;p&gt;Please always provide &lt;code&gt;xfun::session_info()&lt;/code&gt;. If the relevant package is not in the session info, you may pass the package name to this function, e.g.,&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-r&#34; data-lang=&#34;r&#34;&gt;xfun&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;session_info&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;rmarkdown&amp;#39;&lt;/span&gt;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Screenshots are often very helpful to illustrate your issues, but &lt;a href=&#34;/en/2018/01/screenshots-vs-text/&#34;&gt;please don&amp;rsquo;t post code as screenshots&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;It will be helpful if you make sure &lt;a href=&#34;/en/2017/05/when-in-doubt-upgrade/&#34;&gt;all your packages are up-to-date&lt;/a&gt; before reporting issues. You should at least run:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-r&#34; data-lang=&#34;r&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;update.packages&lt;/span&gt;(ask &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;FALSE&lt;/span&gt;, checkBuilt &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;TRUE&lt;/span&gt;)
+&lt;span style=&#34;color:#75715e&#34;&gt;# please remember to restart R after updating packages&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Even better if you could test the development version of the package, e.g. (taking &lt;strong&gt;knitr&lt;/strong&gt; for example below),&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-r&#34; data-lang=&#34;r&#34;&gt;remotes&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;install_github&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;yihui/knitr&amp;#39;&lt;/span&gt;, upgrade &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;TRUE&lt;/span&gt;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;proposing-a-feature-implementation-or-bug-fix&#34;&gt;Proposing a feature implementation or bug fix&lt;/h2&gt;
+&lt;p&gt;If you are able to fix the bug by yourself, you are welcome to submit a pull request. When you feel the fix would require some substantial effort, please talk to us before doing all the hard work, because we want to make sure you would work on something that we would be willing to accept later. This also applies to feature requests.&lt;/p&gt;
+&lt;p&gt;Two common problems in pull requests are:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&#34;/en/2018/11/cosmetic-changes/&#34;&gt;Making cosmetic changes&lt;/a&gt; in the original codebase. Please refrain from doing this, so the reviewer won&amp;rsquo;t be distracted by trivial changes or argue with you. If you have strong opinions on cosmetic changes, please send a separate pull request.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Including multiple features or bug fixes in a single pull request. This often makes it hard for us to make the decision. Please try to bring &lt;a href=&#34;/en/2018/02/bite-sized-pull-requests/&#34;&gt;bite-sized pull requests&lt;/a&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;please-format-your-issue-correctly&#34;&gt;Please format your issue correctly&lt;/h2&gt;
+&lt;p&gt;To include a verbatim chunk of arbitrary text, wrap it in a pair of three backticks. When any line of your text contains N backticks (N &amp;gt;= 3), use N + 1 backticks to wrap the text, e.g. use four backticks to wrap three:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;````
+A sample document.
+
+```{r}
+1 + 1  # a line of code
+```
+
+Another paragraph.
+````
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;If it is just a chunk of R code (or other languages) and you want syntax highlighting, you may use three backticks to format it, e.g.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;```r
+rnorm(10)
+```
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;That is often enough to know about the formatting problems. To know more about other common formatting issues, you may &lt;a href=&#34;/en/2018/05/github-issue-format/&#34;&gt;read this post&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Usually your issue will be closed after it is fixed, but sometimes it is closed only because we are unable to offer any help. It does not mean your issue is not real or bad. You can propose a fix by yourself through a pull request. Your constructive feedback is always appreciated.&lt;/p&gt;
+
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>Yihui&#39;s Blog</title>
+      <link>/en/</link>
+      <pubDate>Tue, 31 Jan 2017 00:00:00 +0000</pubDate>
+      <author>Luo Hao</author>
+      <guid>/en/</guid>
+      <description>
+        
+        
+        &lt;script&gt;location.href=&#39;/en/&#39;;&lt;/script&gt;
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>中文日志</title>
+      <link>/cn/</link>
+      <pubDate>Tue, 31 Jan 2017 00:00:00 +0000</pubDate>
+      <author>罗皓</author>
+      <guid>/cn/</guid>
+      <description>
+        
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>About</title>
+      <link>/en/about/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/en/about/</guid>
+      <description>
+        &lt;h1 id=&#34;to-be-finished&#34;&gt;to be finished&lt;/h1&gt;
+
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>Curriculum Vitae</title>
+      <link>/en/vitae/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/en/vitae/</guid>
+      <description>
+        &lt;h1 id=&#34;luo-hao&#34;&gt;Luo Hao&lt;/h1&gt;
+
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>Links</title>
+      <link>/en/links/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/en/links/</guid>
+      <description>
+        &lt;p&gt;This page has been moved to the &lt;a href=&#34;../about/&#34;&gt;About&lt;/a&gt; page.&lt;/p&gt;
+
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>Publications</title>
+      <link>/en/publication/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/en/publication/</guid>
+      <description>
+        &lt;p&gt;Please see my &lt;a href=&#34;../vitae/&#34;&gt;vitae&lt;/a&gt;.&lt;/p&gt;
+
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>关于</title>
+      <link>/cn/about/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/about/</guid>
+      <description>
+        &lt;h1 id=&#34;等待修改&#34;&gt;等待修改&lt;/h1&gt;
+&lt;h1 id=&#34;我是谁&#34;&gt;我是谁&lt;/h1&gt;
+&lt;h1 id=&#34;个人兴趣&#34;&gt;个人兴趣&lt;/h1&gt;
+&lt;h1 id=&#34;写作原则&#34;&gt;写作原则&lt;/h1&gt;
+&lt;h1 id=&#34;本站架构&#34;&gt;本站架构&lt;/h1&gt;
+&lt;p&gt;本站目前采用 Hugo 作为后台系统，我希望这是我的最后一站。此前我曾走过很多地方：2004 年我开始在博客中国（后来改名为 bokee）写博客，后来改到 blog.com.cn，再后来到 MSN Space 写英文，再后来自己用 Bo-blog 建站，两年后再次换系统为如今流行的 WordPress，三年后我到了码农的乐土，Jekyll，一个以纯文本文件形式写博客的系统，五年后我越来越不能忍受 Jekyll 之慢（本地预览动不动要花 30 秒），于是投奔了以速度见长的 Hugo，并写了一个 R 包装 &lt;a href=&#34;https://github.com/rstudio/blogdown&#34;&gt;blogdown&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;博客模板是我从一个小巧的静态网站编译工具 &lt;a href=&#34;https://github.com/dmulholland/ivy&#34;&gt;Ivy&lt;/a&gt; 那里抄来的；为了表达对原作者使用“无许可证”（Unlicense）的敬意，我仔细着把它的样式整理成了一个 Hugo 模板 &lt;a href=&#34;https://github.com/yihui/hugo-ivy&#34;&gt;hugo-ivy&lt;/a&gt;，并且同样使用无许可证；这个许可证的意思是你特么想拿这个软件干什么就干什么，是删是改是烹煮蒸炸，敬请随意，都与我无关。所有页面都基于 Markdown 创建，源文件可以在 &lt;a href=&#34;https://github.com/rbind/yihui&#34;&gt;Github&lt;/a&gt; 上找到；如果你发现任何页面有任何错误，可以点击菜单栏上的编辑链接编辑该文的源文件，并在 Github 上向我提交一个合并请求。对了，本站的日志文章可以用键盘上的左右箭头导航，如果你要从盘古开天辟地看起，就到第一篇文章开始一步步按右箭头吧。因为搬过几次家，所以偶尔可能会遇到格式乱糟糟的文字或图片缺失，若有此类情况，请帮忙给我留言提醒一下。本站在苹果系统下浏览体验最佳（有漂亮的宋体和楷体）；建议不要用 IE 浏览器；为了最流畅的阅读体验，我强烈建议安装&lt;a href=&#34;/cn/2017/04/source-han-serif/&#34;&gt;思源宋体&lt;/a&gt;。&lt;/p&gt;
+&lt;h1 id=&#34;常见问题&#34;&gt;常见问题&lt;/h1&gt;
+&lt;h1 id=&#34;我佩服的人&#34;&gt;我佩服的人&lt;/h1&gt;
+&lt;h1 id=&#34;其它链接&#34;&gt;其它链接&lt;/h1&gt;
+&lt;h2 id=&#34;个人&#34;&gt;个人&lt;/h2&gt;
+&lt;h2 id=&#34;软件&#34;&gt;软件&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.r-project.org&#34;&gt;R 语言&lt;/a&gt;：自由的统计计算和图形软件&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://pandoc.org&#34;&gt;pandoc&lt;/a&gt;：强大的文档转换工具，极客必备杀器，以防愣头客户索要 Word 版本&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.lyx.org&#34;&gt;LyX&lt;/a&gt;：让 LaTeX 死忠死忠去吧，反正我讨厌阅读 TeX 源代码&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://gohugo.io&#34;&gt;Hugo&lt;/a&gt;：静态网站生成器&lt;/li&gt;
+&lt;/ul&gt;
+
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>出版物</title>
+      <link>/cn/publication/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/publication/</guid>
+      <description>
+        &lt;p&gt;请移步&lt;a href=&#34;../vitae/&#34;&gt;简历页面&lt;/a&gt;。&lt;/p&gt;
+
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>留言</title>
+      <link>/cn/guestbook/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/guestbook/</guid>
+      <description>
+        &lt;p&gt;这里是以前的留言页面。过去的留言已经被迁移至&lt;a href=&#34;../about/&#34;&gt;关于&lt;/a&gt;页面，若需留言，请前往“关于”页面。&lt;/p&gt;
+
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>简历</title>
+      <link>/cn/vitae/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/vitae/</guid>
+      <description>
+        &lt;h1 id=&#34;罗皓&#34;&gt;罗皓&lt;/h1&gt;
+&lt;h2 id=&#34;联系方式&#34;&gt;联系方式&lt;/h2&gt;
+&lt;p&gt;Email：res0liya@outlook.com；&lt;/p&gt;
+
+        
+      </description>
+    </item>
+    
+    <item>
+      <title>链接</title>
+      <link>/cn/links/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/links/</guid>
+      <description>
+        &lt;p&gt;请移步&lt;a href=&#34;../about/&#34;&gt;关于页面&lt;/a&gt;。&lt;/p&gt;
+
+        
+      </description>
+    </item>
+    
+  </channel>
+</rss>

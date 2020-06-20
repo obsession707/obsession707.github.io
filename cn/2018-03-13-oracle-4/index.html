@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>Oracle实践数据库笔记-4 - Rehoni | 罗皓</title>
+    <meta property="og:title" content="Oracle实践数据库笔记-4 - Rehoni | 罗皓">
+    
+    <meta name="twitter:card" content="summary">
+
+    
+      
+    
+
+    
+      
+      <meta property="description" content="循环 (sql中用斜杠/执行命令)
+[&amp;hellip;] begin for i in 1..10 loop insert into t1 values(i); end loop; commit; end;（功能结束就加分号，块结束） 块结构  声明部分（可选） 可执行部分（必须） 异常处理部分（可选）   匿名块：4个部分   declare begin exception end  命名块： &amp;hellip;">
+      <meta property="og:description" content="循环 (sql中用斜杠/执行命令)
+[&amp;hellip;] begin for i in 1..10 loop insert into t1 values(i); end loop; commit; end;（功能结束就加分号，块结束） 块结构  声明部分（可选） 可执行部分（必须） 异常处理部分（可选）   匿名块：4个部分   declare begin exception end  命名块： &amp;hellip;">
+      
+    
+
+    
+    
+    
+    <meta name="twitter:image" content="/images/logo.png">
+    
+    
+
+    
+
+    
+    
+
+
+<link href='//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+<script async src="/js/load-typekit.js"></script>
+
+
+<link rel="stylesheet" href="/css/custom.css" />
+
+  </head>
+
+  
+  <body class="cn">
+    <header class="masthead">
+      
+
+<h1><a href="/"><img src="/images/logo.png" alt="Luo Hao" /></a></h1>
+
+
+
+      <nav class="menu">
+  <ul>
+  
+  
+  <li><a href="/">首页</a></li>
+  
+  <li><a href="/cn/about/">关于</a></li>
+  
+  <li><a href="/cn/">日志</a></li>
+  
+  <li><a href="/categories/">分类</a></li>
+  
+  <li><a href="/tags/">标签</a></li>
+  
+  <li><a href="/cn/vitae/">简历</a></li>
+  
+  <li><a href="/en/">English</a></li>
+  
+  
+
+<li class="menu-extra"></li>
+
+
+
+<li><a href="https://github.com/rehonicn%5c2018-03-13-Oracle-4.md" target="_blank">编辑</a></li>
+
+
+<li><a href="/cn/index.xml" type="application/rss+xml" title="RSS feed">订阅</a></li>
+
+<li><a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="Attribution-NonCommercial-ShareAlike 4.0 International">版权</a></li>
+
+
+  </ul>
+</nav>
+
+    </header>
+
+    <article class="main">
+      <header class="title">
+      
+<h1>Oracle实践数据库笔记-4</h1>
+
+
+<h3>Rehoni / 
+2018-03-13</h3>
+
+<hr>
+
+
+      </header>
+
+
+
+<h3 id="plsql-qlselect">PL/SQL QL(select)</h3>
+<p><strong>循环 (sql中用斜杠/执行命令)</strong></p>
+<ol>
+<li>绝对循环</li>
+<li>while循环</li>
+<li>for循环</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++">begin
+    <span style="color:#66d9ef">for</span> i in <span style="color:#ae81ff">1..10</span> loop
+        insert into t1 values(i);
+    end loop;
+    commit;
+end;<span style="color:#960050;background-color:#1e0010">（功能结束就加分号，块结束）</span>
+</code></pre></div><h3 id="块结构">块结构</h3>
+<ul>
+<li>声明部分（可选）</li>
+<li>可执行部分（必须）</li>
+<li>异常处理部分（可选）</li>
+</ul>
+<ol>
+<li>匿名块：4个部分</li>
+</ol>
+<ul>
+<li>declare</li>
+<li>begin</li>
+<li>exception</li>
+<li>end</li>
+</ul>
+<ol start="2">
+<li>命名块：</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++">create or replace procedure p1
+    as
+        begin
+            <span style="color:#66d9ef">for</span> i in <span style="color:#ae81ff">1..10</span> loop
+                insert into t1 values(i);
+            end loop;
+            commit;
+        end;
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">    <span style="color:#66d9ef">select</span> a.id,b.id <span style="color:#66d9ef">from</span> t1 a,t1 b
+    <span style="color:#66d9ef">where</span> a.id<span style="color:#f92672">+</span><span style="color:#ae81ff">5</span><span style="color:#f92672">=</span>b.id;
+    <span style="color:#960050;background-color:#1e0010">或者</span><span style="color:#66d9ef">where</span> a.id<span style="color:#f92672">+</span>(<span style="color:#66d9ef">select</span> <span style="color:#66d9ef">count</span>(<span style="color:#f92672">*</span>) <span style="color:#66d9ef">from</span> t1)<span style="color:#f92672">/</span><span style="color:#ae81ff">2</span><span style="color:#f92672">=</span>b.id;
+    <span style="color:#66d9ef">where</span> a.id<span style="color:#f92672">+</span>round((<span style="color:#66d9ef">select</span> <span style="color:#66d9ef">count</span>(<span style="color:#f92672">*</span>) <span style="color:#66d9ef">from</span> t1)<span style="color:#f92672">/</span><span style="color:#ae81ff">2</span>)<span style="color:#f92672">=</span>b.id; <span style="color:#f92672">//</span>round <span style="color:#960050;background-color:#1e0010">四舍五入</span>
+    <span style="color:#960050;background-color:#1e0010">不显示</span><span style="color:#ae81ff">12</span><span style="color:#960050;background-color:#1e0010">的话，用外部语句</span>
+    <span style="color:#66d9ef">where</span> a.id<span style="color:#f92672">+</span>round((<span style="color:#66d9ef">select</span> <span style="color:#66d9ef">count</span>(<span style="color:#f92672">*</span>) <span style="color:#66d9ef">from</span> t1)<span style="color:#f92672">/</span><span style="color:#ae81ff">2</span>)<span style="color:#f92672">=</span>b.id(<span style="color:#f92672">+</span>); <span style="color:#f92672">//</span><span style="color:#960050;background-color:#1e0010">报错</span>
+    <span style="color:#66d9ef">where</span> a.id<span style="color:#f92672">=</span>b.id(<span style="color:#f92672">+</span>)<span style="color:#f92672">-</span>round((<span style="color:#66d9ef">select</span> <span style="color:#66d9ef">count</span>(<span style="color:#f92672">*</span>) <span style="color:#66d9ef">from</span> t1)<span style="color:#f92672">/</span><span style="color:#ae81ff">2</span>);
+    <span style="color:#66d9ef">and</span> a.id<span style="color:#f92672">&lt;=</span>round((<span style="color:#66d9ef">select</span> <span style="color:#66d9ef">count</span>(<span style="color:#f92672">*</span>) <span style="color:#66d9ef">from</span> t1)<span style="color:#f92672">/</span><span style="color:#ae81ff">2</span>);
+</code></pre></div><h3 id="子查询">子查询</h3>
+<ol>
+<li>嵌套子查询</li>
+<li>关联子查询</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">        <span style="color:#960050;background-color:#1e0010">查询</span>lastname<span style="color:#960050;background-color:#1e0010">，</span>
+        <span style="color:#960050;background-color:#1e0010">条件老百姓，不要领导</span>
+        <span style="color:#66d9ef">select</span> last_name <span style="color:#66d9ef">from</span> employees
+        <span style="color:#66d9ef">where</span> employee_id <span style="color:#66d9ef">not</span> <span style="color:#66d9ef">in</span> (<span style="color:#66d9ef">select</span> nvl(manager_id,<span style="color:#ae81ff">0</span>)  <span style="color:#66d9ef">from</span> employees)
+        <span style="color:#66d9ef">select</span> last_name <span style="color:#66d9ef">from</span> employees e
+        <span style="color:#66d9ef">where</span> <span style="color:#66d9ef">not</span> <span style="color:#66d9ef">exists</span>
+            (<span style="color:#66d9ef">select</span> employee_id <span style="color:#66d9ef">from</span> employees
+            <span style="color:#66d9ef">where</span> e.employee_id <span style="color:#f92672">=</span> manager_id)
+</code></pre></div><ul>
+<li>&amp;</li>
+<li>define</li>
+<li>&amp;&amp;</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">        <span style="color:#66d9ef">select</span> empno,ename <span style="color:#66d9ef">from</span> emp <span style="color:#66d9ef">where</span> ename<span style="color:#f92672">=</span><span style="color:#66d9ef">upper</span>(<span style="color:#f92672">&amp;</span>xm);
+        define gh<span style="color:#f92672">=</span><span style="color:#ae81ff">7839</span>; <span style="color:#f92672">//</span>undefine <span style="color:#960050;background-color:#1e0010">取消定义</span>
+        <span style="color:#66d9ef">select</span> empno,ename <span style="color:#66d9ef">from</span> emp <span style="color:#66d9ef">where</span> ename<span style="color:#f92672">=&amp;</span>gh;
+
+        <span style="color:#66d9ef">select</span> empno,ename,<span style="color:#f92672">&amp;</span>c3 <span style="color:#66d9ef">from</span> emp <span style="color:#66d9ef">order</span> <span style="color:#66d9ef">by</span> <span style="color:#f92672">&amp;</span>c3;
+        <span style="color:#66d9ef">select</span> empno,ename,<span style="color:#f92672">&amp;&amp;</span>c3 <span style="color:#66d9ef">from</span> emp <span style="color:#66d9ef">order</span> <span style="color:#66d9ef">by</span> <span style="color:#f92672">&amp;</span>c3;
+</code></pre></div><h3 id="dmlinsertupdatedeletemerge">DML(insert,update,delete.merge)</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">grant</span> ...<span style="color:#960050;background-color:#1e0010">限制</span>
+<span style="color:#66d9ef">select</span> department_id <span style="color:#66d9ef">from</span> departments <span style="color:#66d9ef">order</span> <span style="color:#66d9ef">by</span> <span style="color:#ae81ff">1</span>;
+</code></pre></div><p>合并 读写一致性</p>
+<p>回滚段的作用：</p>
+<ul>
+<li>读一致性</li>
+<li>回退</li>
+<li>闪回回复</li>
+</ul>
+
+
+  <footer>
+  
+<nav class="post-nav">
+  <span class="nav-prev">&larr; <a href="/cn/2018-03-11-cloudcomputing/">「云计算比赛」总结</a></span>
+  <span class="nav-next"><a href="/cn/2018-03-16-oracle-5/">Oracle实践数据库笔记-5</a> &rarr;</span>
+</nav>
+<script type="text/javascript">
+document.addEventListener('keyup', function(e) {
+  if (e.target.nodeName.toUpperCase() != 'BODY') return;
+  var url = false;
+  if (e.which == 37) {  
+    
+    url = '\/cn\/2018-03-11-cloudcomputing\/';
+    
+  } else if (e.which == 39) {  
+    
+    url = '\/cn\/2018-03-16-oracle-5\/';
+    
+  }
+  if (url) window.location = url;
+});
+</script>
+
+
+
+
+
+
+<script async src="/js/fix-toc.js"></script>
+
+<script async src="/js/center-img.js"></script>
+
+<script async src="/js/right-quote.js"></script>
+
+<script async src="/js/no-highlight.js"></script>
+
+<script async src="/js/fix-footnote.js"></script>
+
+<script async src="/js/math-code.js"></script>
+
+<script async src="/js/external-link.js"></script>
+
+<script async src="/js/alt-title.js"></script>
+
+<script async src="/js/header-link.js"></script>
+
+
+
+
+  
+
+
+
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/java.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/SQL.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/CSS.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+  
+  <hr>
+  <div class="copyright">© <a href="/">Luo Hao</a> 2016 - 2019</div>
+  
+  </footer>
+  </article>
+  
+  </body>
+</html>
+

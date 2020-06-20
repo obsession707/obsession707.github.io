@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Java on Rehoni | 罗皓</title>
+    <link>/categories/java/</link>
+    <description>Recent content in Java on Rehoni | 罗皓</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 08 Apr 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/categories/java/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Java核心技术卷(4)</title>
+      <link>/cn/2018-04-08-javacore4/</link>
+      <pubDate>Sun, 08 Apr 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2018-04-08-javacore4/</guid>
+      <description>需要了解的类库   java.util.GregorianCalendar java.text.DateFormatSymbols java.util.Random  类   类, 构造, 实例, 封装, 实例域, 方法等概念 对象: 对象的行为, 状态, 标识三个特性 类之间的关系: 依赖(uses-a), 聚合(has-a), 继承(is-a) UML语言来表达类之间的一些关系 一个对象变量并没有实际包含一个对象,而是仅仅引用一个对象. 任何对象变量的值都是对存储在另一个地方的一个对象的引用, new操作符的返回值也是一个引用. 隐式参数和显式参数, 隐式参数指对象的实例, 在方法中可以用this代指, 显式参数则为方法括号中的参数 封装的优点: 保护私密数据, 更改器方法可以执行错误检查. 封装的要求: 一个私有的数据域, 一个公有的域访问器方法, 一个公有的域更改器方法. 私有域private以及final的用法 静态域与静态方法, 静态常量和静态方法可以不用实例化对象就调用. 用静态方法的情况: 1.不需要访问对象状态,其所需参数都是通过显式参数提供 2.只需要访问类的静态域 工厂方法 对象引用进行的是值的传递 重载: 相同方法名, 不同参数 初始化块以及静态的初始化块 对象析构和finalize方法, 由于Java自动垃圾回收的机制而不支持析构器, 同时因为难以知道finalize方法什么时候调用而不用(不安全), 一般需要关闭的是一些资源如文件流等对象的close方法 静态导入, 如 import static java.lang.System.*; 就可以直接 out.println了(似乎也不常见) 类设计技巧  一定要保证数据私有 一定要对数据初始化 不要在类中使用过多的基本类型 不是所有的域都需要独立的域访问器和域更改器 将职责过多的类进行分解 类名和方法名要能够体现他们的职责    一些代码注意点 所有与通配符匹配的源文件都将被编译成为类文件</description>
+    </item>
+    
+    <item>
+      <title>Java核心技术卷(1)</title>
+      <link>/cn/2018-04-06-javacore1/</link>
+      <pubDate>Fri, 06 Apr 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2018-04-06-javacore1/</guid>
+      <description>Java的一些特性   简单性
+  面向对象
+  网络技能
+  健壮性
+ Java采用的指针模型可以消除重写内存和损坏数据的可能性
+   安全性
+  体系结构中立
+  可移植性
+ Java规范中没有依赖具体实现的地方
+   解释型
+ 增量式且轻量级的链接
+   高性能
+  多线程
+  动态性
+  </description>
+    </item>
+    
+    <item>
+      <title>Java核心技术卷(2)</title>
+      <link>/cn/2018-04-06-javacore2/</link>
+      <pubDate>Fri, 06 Apr 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2018-04-06-javacore2/</guid>
+      <description>JDK 从开始学习java的java7到现在已经有java10了
+一些名词    术语名词 缩写 解释     Java development Kit JDK 编写Java程序的程序员使用的软件   Java runtime environment JRE 运行Java程序的用户使用的软件   Standard Edition SE 用于桌面或者简单的服务器应用的Java平台   Enterprise Edition EE 用于复杂的服务器应用的Java平台   Micro Edition ME 用于手机和其他小型设备的Java平台   Java 2 J2 过时   Software development kit SDK 过时    Java安装  Java位置 C:\Program Files\Java Java文档安装 Java jdk目录结构  使用命令行工具 javac Welcome.</description>
+    </item>
+    
+    <item>
+      <title>Java核心技术卷(3)</title>
+      <link>/cn/2018-04-06-javacore3/</link>
+      <pubDate>Fri, 06 Apr 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2018-04-06-javacore3/</guid>
+      <description>Java类  java.lang.stringv java.lang.StringBuilder java.util.Scanner java.lang.System java.io.Console java.io.PrintWriter java.nio.file.Paths java,math.BigInteger java.util.Arrays  数据类型  整形     数据类型 存储需求 取值范围     int 4字节 -2147483648~2147483647(正好超过20亿)   short 2字节 -32768~32767   long 8字节 &amp;hellip;算了   byte 1字节 -128~127     Java没有unsigned类型 浮点型     数据类型 存储需求 取值范围     float 4字节 有效位数6-7位   double 8字节 有效位数15位     注意3.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>Oracle实践数据库笔记-12 - Rehoni | 罗皓</title>
+    <meta property="og:title" content="Oracle实践数据库笔记-12 - Rehoni | 罗皓">
+    
+    <meta name="twitter:card" content="summary">
+
+    
+      
+    
+
+    
+      
+      <meta property="description" content="需要数据库备份恢复的情况 PDF D17090
+[&amp;hellip;] logmnr的使用
+[&amp;hellip;] desc v$database 🆗 select supplementallog from v$database ---不太确定supplementallog  alter database add supplemental log data;🆗  产生数据字典文件  设置数据字典文件的 &amp;hellip;">
+      <meta property="og:description" content="需要数据库备份恢复的情况 PDF D17090
+[&amp;hellip;] logmnr的使用
+[&amp;hellip;] desc v$database 🆗 select supplementallog from v$database ---不太确定supplementallog  alter database add supplemental log data;🆗  产生数据字典文件  设置数据字典文件的 &amp;hellip;">
+      
+    
+
+    
+    
+    <meta name="twitter:image" content="https://static.notion-static.com/3729c29a-5919-4e8e-8496-e24177713690/Untitled">
+    
+    
+    
+    
+
+    
+
+    
+    
+
+
+<link href='//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+<script async src="/js/load-typekit.js"></script>
+
+
+<link rel="stylesheet" href="/css/custom.css" />
+
+  </head>
+
+  
+  <body class="cn">
+    <header class="masthead">
+      
+
+<h1><a href="/"><img src="/images/logo.png" alt="Luo Hao" /></a></h1>
+
+
+
+      <nav class="menu">
+  <ul>
+  
+  
+  <li><a href="/">首页</a></li>
+  
+  <li><a href="/cn/about/">关于</a></li>
+  
+  <li><a href="/cn/">日志</a></li>
+  
+  <li><a href="/categories/">分类</a></li>
+  
+  <li><a href="/tags/">标签</a></li>
+  
+  <li><a href="/cn/vitae/">简历</a></li>
+  
+  <li><a href="/en/">English</a></li>
+  
+  
+
+<li class="menu-extra"></li>
+
+
+
+<li><a href="https://github.com/rehonicn%5c2018-04-10-Oracle-12.md" target="_blank">编辑</a></li>
+
+
+<li><a href="/cn/index.xml" type="application/rss+xml" title="RSS feed">订阅</a></li>
+
+<li><a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="Attribution-NonCommercial-ShareAlike 4.0 International">版权</a></li>
+
+
+  </ul>
+</nav>
+
+    </header>
+
+    <article class="main">
+      <header class="title">
+      
+<h1>Oracle实践数据库笔记-12</h1>
+
+
+<h3>Rehoni / 
+2018-04-08</h3>
+
+<hr>
+
+
+      </header>
+
+
+
+<h3 id="数据库备份和恢复">数据库备份和恢复</h3>
+<ul>
+<li>
+<p><strong>需要数据库备份恢复的情况</strong> PDF D17090</p>
+</li>
+<li>
+<p><strong>logmnr的使用</strong></p>
+<ul>
+<li><strong>启动数据库补充日志</strong>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">  <span style="color:#66d9ef">desc</span> v$database <span style="color:#960050;background-color:#1e0010">🆗</span>
+  <span style="color:#66d9ef">select</span> supplementallog <span style="color:#66d9ef">from</span> v$database <span style="color:#75715e">---不太确定supplementallog
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">database</span> <span style="color:#66d9ef">add</span> supplemental log <span style="color:#66d9ef">data</span>;<span style="color:#960050;background-color:#1e0010">🆗</span>
+</code></pre></div></li>
+<li><strong>产生数据字典文件</strong>
+<ul>
+<li><strong>设置数据字典文件的目的地(初始化参数)</strong></li>
+<li><strong>产生数据字典文件</strong></li>
+<li><strong>产生一个事务</strong></li>
+<li><strong>添加需要分析的日志文件</strong></li>
+<li><strong>启动分析</strong></li>
+<li><strong>查询内容</strong></li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">  <span style="color:#75715e">---老师教程
+</span><span style="color:#75715e"></span>  <span style="color:#75715e">---自己跑一遍🆗
+</span><span style="color:#75715e"></span>  <span style="color:#75715e">---设置一下目录,得先在文件系统中创建好文件夹
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">show</span> <span style="color:#66d9ef">parameter</span> utl_file_dir  <span style="color:#960050;background-color:#1e0010">🆗</span>
+  <span style="color:#75715e">---重启生效shutdown immediate&amp;startup , path1为之前在文件系统中创建好的文件夹路径 🆗
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">system</span> <span style="color:#66d9ef">set</span> utl_file_dir <span style="color:#f92672">=</span><span style="color:#e6db74">&#39;path1&#39;</span> <span style="color:#66d9ef">scope</span><span style="color:#f92672">=</span>spfile;<span style="color:#960050;background-color:#1e0010">🆗</span> <span style="color:#75715e">---再show一遍是没有的,重启才生效
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">execute</span> dbms_logmnr_d.build(dictionary_filename<span style="color:#f92672">=&gt;</span><span style="color:#e6db74">&#39;名字.ora&#39;</span>,dictionary_location<span style="color:#f92672">=&gt;</span><span style="color:#e6db74">&#39;path&#39;</span>)<span style="color:#960050;background-color:#1e0010">🆗</span>
+  <span style="color:#75715e">---产生数据文件 提交事务
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">select</span> empno,ename,sal <span style="color:#66d9ef">from</span> emp;<span style="color:#960050;background-color:#1e0010">🆗</span>
+  <span style="color:#66d9ef">update</span> emp <span style="color:#66d9ef">set</span> sal<span style="color:#f92672">=</span><span style="color:#ae81ff">5000</span> <span style="color:#66d9ef">where</span> empno<span style="color:#f92672">=</span><span style="color:#ae81ff">7934</span>;<span style="color:#960050;background-color:#1e0010">🆗</span>
+  <span style="color:#66d9ef">commit</span>;<span style="color:#960050;background-color:#1e0010">🆗</span>
+  <span style="color:#66d9ef">execute</span> dbms_logmnr.add_logfile(LogFileName<span style="color:#f92672">=&gt;</span><span style="color:#e6db74">&#39;path2&#39;</span>,<span style="color:#66d9ef">Options</span><span style="color:#f92672">=&gt;</span>dbms_logmnr.<span style="color:#66d9ef">new</span>)<span style="color:#960050;background-color:#1e0010">🆗</span>
+  <span style="color:#75715e">---如果是追加为.addfile
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">select</span> <span style="color:#66d9ef">group</span><span style="color:#960050;background-color:#1e0010">\</span><span style="color:#f92672">#</span>,status <span style="color:#66d9ef">from</span> v$log;<span style="color:#960050;background-color:#1e0010">🆗</span> <span style="color:#75715e">---查询当前组 current
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">select</span> <span style="color:#66d9ef">group</span><span style="color:#960050;background-color:#1e0010">\</span><span style="color:#f92672">#</span>,member <span style="color:#66d9ef">from</span> v$logfile;<span style="color:#960050;background-color:#1e0010">🆗</span>
+  <span style="color:#75715e">---对应current编号的path2=&gt;E:\APP\RES0LIYA\ORADATA\ORCL\REDO02.LOG
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">execute</span> dbms_logmnr.start_logmnr(DictFileName<span style="color:#f92672">=&gt;</span><span style="color:#e6db74">&#39;path1&#39;</span>)<span style="color:#960050;background-color:#1e0010">🆗</span> <span style="color:#75715e">---数据字典文件在此步之前创建好就行
+</span><span style="color:#75715e"></span>  <span style="color:#75715e">---报错,sysaux报错 ❗因为本身没有脱机所以没有碰到这个bug
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">desc</span> dbs_tablespaces
+  <span style="color:#66d9ef">select</span> tablespacename,status <span style="color:#66d9ef">from</span> dbs_tablespaces
+  <span style="color:#75715e">---发现sysaux脱机了,让它联机就ok
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">desc</span> v$logmnr_contents<span style="color:#960050;background-color:#1e0010">🆗</span>
+  <span style="color:#66d9ef">select</span> <span style="color:#66d9ef">TIMESTAMP</span>,USERNAME,SQL_REDO <span style="color:#66d9ef">from</span> v$logmnr_contents<span style="color:#960050;background-color:#1e0010">🆗</span><span style="color:#75715e">---一定要记得选加where
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">where</span> SEG_NAME<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;EMP&#39;</span> <span style="color:#66d9ef">and</span> <span style="color:#66d9ef">OPERATION</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#39;UPDATE&#39;</span><span style="color:#960050;background-color:#1e0010">🆗</span>
+  <span style="color:#75715e">---调整时间格式 alter set session nls_date_format=&#39;&#39;
+</span></code></pre></div></li>
+</ul>
+<p><img src="https://static.notion-static.com/3729c29a-5919-4e8e-8496-e24177713690/Untitled" alt="效果图"></p>
+</li>
+<li>
+<p><strong>备份类型</strong></p>
+<ul>
+<li>
+<p><strong>用户管理的备份</strong></p>
+<ul>
+<li>
+<p><strong>冷备份—关闭数据库的备份/一致性备份</strong></p>
+<ul>
+<li><strong>文件列表</strong></li>
+<li><strong>shutdown</strong></li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">  spool E:<span style="color:#960050;background-color:#1e0010">\</span>app<span style="color:#960050;background-color:#1e0010">\</span>luohaobackup<span style="color:#960050;background-color:#1e0010">\</span>filelist.txt
+  <span style="color:#66d9ef">show</span> <span style="color:#66d9ef">parameter</span> spfile
+  <span style="color:#66d9ef">select</span> name <span style="color:#66d9ef">from</span> v$controlfile;
+  <span style="color:#66d9ef">select</span> member <span style="color:#66d9ef">from</span> v$logfile;
+  <span style="color:#66d9ef">select</span> name <span style="color:#66d9ef">from</span> v$datafile;
+  <span style="color:#66d9ef">select</span> name <span style="color:#66d9ef">from</span> v$tempfile;
+  <span style="color:#75715e">---检测一下是否为存档模式
+</span><span style="color:#75715e"></span>  archive log list <span style="color:#75715e">---如果是存档模式
+</span><span style="color:#75715e"></span>  <span style="color:#75715e">---开启归档模式
+</span><span style="color:#75715e"></span>  shutdown <span style="color:#66d9ef">immediate</span>
+  startup mount <span style="color:#75715e">---正常startup 为open状态数据库打开,mount为装载数据库,nomount为实例启动
+</span><span style="color:#75715e"></span>  <span style="color:#75715e">---
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">select</span> name <span style="color:#66d9ef">from</span> v$archivelog
+  spool <span style="color:#66d9ef">off</span>
+  <span style="color:#66d9ef">create</span> <span style="color:#66d9ef">table</span> scott.cold(a varchar(<span style="color:#ae81ff">20</span>));
+  <span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> scott.cold <span style="color:#66d9ef">values</span>(<span style="color:#e6db74">&#39;before backup&#39;</span>);
+  <span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> scott.cold;
+  <span style="color:#66d9ef">commit</span>;
+  shutdown <span style="color:#66d9ef">immediate</span>
+  <span style="color:#75715e">---到文件系统中复制粘贴所有文件,路径可以在上边查到
+</span><span style="color:#75715e"></span>  <span style="color:#75715e">---.SPFILE文件,外部,没有shutdown不影响
+</span><span style="color:#75715e"></span>  <span style="color:#75715e">---.CTL控制文件,都是一样
+</span><span style="color:#75715e"></span>  <span style="color:#75715e">---.LOG日志文件
+</span><span style="color:#75715e"></span>  <span style="color:#75715e">---.DBF数据文件
+</span><span style="color:#75715e"></span>  <span style="color:#75715e">---.ARC归档文件
+</span><span style="color:#75715e"></span>  startup
+  <span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> scott.cold value(<span style="color:#e6db74">&#39;after backup&#39;</span>);
+  <span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> scott.cold;
+  shutdown <span style="color:#66d9ef">immediate</span>
+  <span style="color:#75715e">---新建一个log文件夹 放入.CTL和.LOG文件
+</span><span style="color:#75715e"></span>  startup
+  cmd<span style="color:#f92672">&gt;</span>dbca <span style="color:#75715e">---删除数据库orcl
+</span><span style="color:#75715e"></span>  <span style="color:#75715e">---恢复 ❗
+</span><span style="color:#75715e"></span>  cmd<span style="color:#f92672">&gt;</span>oradim <span style="color:#f92672">-</span><span style="color:#66d9ef">new</span> <span style="color:#f92672">-</span>sid sales;
+  <span style="color:#75715e">---把SPFILE放入E:\app\Res0liya\product\11.2.0\dbhome_1\database
+</span><span style="color:#75715e"></span>  <span style="color:#75715e">---根据SPFILE的内容创建各种目录
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> v$recoverfile
+  recover <span style="color:#66d9ef">database</span>
+  <span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">database</span> <span style="color:#66d9ef">open</span>
+  <span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> scott.cold
+
+  <span style="color:#75715e">---我的操作
+</span><span style="color:#75715e"></span>  cortana<span style="color:#f92672">&gt;</span> net configuration assistant <span style="color:#75715e">---配置监听器
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">admin</span> cmd<span style="color:#f92672">&gt;</span> dbca
+  <span style="color:#75715e">---傻瓜式创建完库luohao之后
+</span><span style="color:#75715e"></span>  <span style="color:#75715e">---net start 服务名 启动服务名
+</span><span style="color:#75715e"></span>  cmd<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">set</span> oracle_sid<span style="color:#f92672">=</span>luohao
+  cmd<span style="color:#f92672">&gt;</span> sqlplus <span style="color:#75715e">---输入sys as sysdba 密码
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">sql</span><span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">show</span> <span style="color:#66d9ef">parameter</span> db_name;<span style="color:#75715e">---luohao
+</span><span style="color:#75715e"></span>  conn scott <span style="color:#75715e">---未解锁 解锁
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">user</span> scott account unlock;
+  <span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">user</span> scott identified <span style="color:#66d9ef">by</span> tiger;
+  conn scott<span style="color:#f92672">/</span>tiger
+</code></pre></div></li>
+<li>
+<p><strong>热备份 可以做全备份也可以做部分备份</strong></p>
+<ul>
+<li><strong>归档模式</strong></li>
+<li><strong>备份模式</strong></li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">    <span style="color:#66d9ef">select</span> tablespace_name <span style="color:#66d9ef">from</span> dba_tables
+    <span style="color:#66d9ef">where</span> <span style="color:#66d9ef">table_name</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#39;COLD&#39;</span>;
+    <span style="color:#66d9ef">select</span> file_name <span style="color:#66d9ef">from</span> dba_data_files
+    <span style="color:#66d9ef">where</span> tablespace_name<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;USERS&#39;</span>;<span style="color:#75715e">---在文件系统中拷贝一份
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> v$backup;
+    <span style="color:#75715e">---单个表
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">alter</span> tablespace users <span style="color:#66d9ef">begin</span> backup;<span style="color:#75715e">---开启备份模式
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> scott.cold;
+    <span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> scott.cold <span style="color:#66d9ef">values</span>(<span style="color:#e6db74">&#39;after hot backup&#39;</span>);
+    <span style="color:#66d9ef">commit</span>;
+    <span style="color:#66d9ef">alter</span> tablespace users offline;
+    <span style="color:#960050;background-color:#1e0010">第</span> <span style="color:#ae81ff">1</span> <span style="color:#960050;background-color:#1e0010">行出现错误</span>:
+    ORA<span style="color:#f92672">-</span><span style="color:#ae81ff">01150</span>: <span style="color:#960050;background-color:#1e0010">无法防止写入</span> <span style="color:#f92672">-</span> <span style="color:#960050;background-color:#1e0010">文件</span> <span style="color:#ae81ff">4</span> <span style="color:#960050;background-color:#1e0010">设置了联机备份</span>
+    ORA<span style="color:#f92672">-</span><span style="color:#ae81ff">01110</span>: <span style="color:#960050;background-color:#1e0010">数据文件</span> <span style="color:#ae81ff">4</span>: <span style="color:#e6db74">&#39;E:\APP\RES0LIYA\ORADATA\LUOHAO\USERS01.DBF&#39;</span>
+    <span style="color:#66d9ef">alter</span> tablespace users <span style="color:#66d9ef">end</span> backup;<span style="color:#75715e">---结束备份模式
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">alter</span> tablespace users offline;<span style="color:#75715e">---删除users01.dbf,拷贝原来的回去
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">alter</span> tablespace users online;
+    ORA<span style="color:#f92672">-</span><span style="color:#ae81ff">01113</span>: <span style="color:#960050;background-color:#1e0010">文件</span> <span style="color:#ae81ff">4</span> <span style="color:#960050;background-color:#1e0010">需要介质恢复</span>
+    ORA<span style="color:#f92672">-</span><span style="color:#ae81ff">01110</span>: <span style="color:#960050;background-color:#1e0010">数据文件</span> <span style="color:#ae81ff">4</span>: <span style="color:#e6db74">&#39;E:\APP\RES0LIYA\ORADATA\LUOHAO\USERS01.DBF&#39;</span>
+    recover datafile <span style="color:#ae81ff">4</span>;<span style="color:#960050;background-color:#1e0010">或者</span><span style="color:#66d9ef">alter</span> tablespace users ...
+    <span style="color:#66d9ef">alter</span> tablespace users online;
+    <span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> scott.cold;
+    <span style="color:#75715e">---多个表
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">database</span> <span style="color:#66d9ef">begin</span> backup
+</code></pre></div><p><img src="https://static.notion-static.com/4be09484-4e67-4108-8c42-71145a288546/Untitled" alt="效果图"></p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>服务器管理的备份 (RMAN)</strong></p>
+</li>
+</ul>
+</li>
+</ul>
+
+
+  <footer>
+  
+<nav class="post-nav">
+  <span class="nav-prev">&larr; <a href="/cn/2018-04-06-javacore1/">Java核心技术卷(1)</a></span>
+  <span class="nav-next"><a href="/cn/2018-04-08-oracle-11/">Oracle实践数据库笔记-11</a> &rarr;</span>
+</nav>
+<script type="text/javascript">
+document.addEventListener('keyup', function(e) {
+  if (e.target.nodeName.toUpperCase() != 'BODY') return;
+  var url = false;
+  if (e.which == 37) {  
+    
+    url = '\/cn\/2018-04-06-javacore1\/';
+    
+  } else if (e.which == 39) {  
+    
+    url = '\/cn\/2018-04-08-oracle-11\/';
+    
+  }
+  if (url) window.location = url;
+});
+</script>
+
+
+
+
+
+
+<script async src="/js/fix-toc.js"></script>
+
+<script async src="/js/center-img.js"></script>
+
+<script async src="/js/right-quote.js"></script>
+
+<script async src="/js/no-highlight.js"></script>
+
+<script async src="/js/fix-footnote.js"></script>
+
+<script async src="/js/math-code.js"></script>
+
+<script async src="/js/external-link.js"></script>
+
+<script async src="/js/alt-title.js"></script>
+
+<script async src="/js/header-link.js"></script>
+
+
+
+<script async src="//mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+  
+
+
+
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/java.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/SQL.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/CSS.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+  
+  <hr>
+  <div class="copyright">© <a href="/">Luo Hao</a> 2016 - 2019</div>
+  
+  </footer>
+  </article>
+  
+  </body>
+</html>
+

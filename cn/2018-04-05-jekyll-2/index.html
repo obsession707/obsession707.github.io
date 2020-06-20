@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>个人搭建NexT博客的一点小问题和解决方案 - Rehoni | 罗皓</title>
+    <meta property="og:title" content="个人搭建NexT博客的一点小问题和解决方案 - Rehoni | 罗皓">
+    
+    <meta name="twitter:card" content="summary">
+
+    
+      
+    
+
+    
+      
+      <meta property="description" content="初步步骤参照指南，此次搭建建立于上次搭建安装失败的基础上。
+[&amp;hellip;] 安装包应该都可以下载到,我这里用的是rubyinstaller-2.5.0-2-x64版本，完成后会询问你是否安装msys2和mingw开发工具包等,我这里默认安装，具体也不太清楚这两者的具体用途,但是之前搭建失败貌似就是这方面的原因,因此考虑全部安装。
+[&amp;hellip;] 因为考虑到安装包bundler的位置问 &amp;hellip;">
+      <meta property="og:description" content="初步步骤参照指南，此次搭建建立于上次搭建安装失败的基础上。
+[&amp;hellip;] 安装包应该都可以下载到,我这里用的是rubyinstaller-2.5.0-2-x64版本，完成后会询问你是否安装msys2和mingw开发工具包等,我这里默认安装，具体也不太清楚这两者的具体用途,但是之前搭建失败貌似就是这方面的原因,因此考虑全部安装。
+[&amp;hellip;] 因为考虑到安装包bundler的位置问 &amp;hellip;">
+      
+    
+
+    
+    
+    
+    <meta name="twitter:image" content="/images/logo.png">
+    
+    
+
+    
+
+    
+    
+
+
+<link href='//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+<script async src="/js/load-typekit.js"></script>
+
+
+<link rel="stylesheet" href="/css/custom.css" />
+
+  </head>
+
+  
+  <body class="cn">
+    <header class="masthead">
+      
+
+<h1><a href="/"><img src="/images/logo.png" alt="Luo Hao" /></a></h1>
+
+
+
+      <nav class="menu">
+  <ul>
+  
+  
+  <li><a href="/">首页</a></li>
+  
+  <li><a href="/cn/about/">关于</a></li>
+  
+  <li><a href="/cn/">日志</a></li>
+  
+  <li><a href="/categories/">分类</a></li>
+  
+  <li><a href="/tags/">标签</a></li>
+  
+  <li><a href="/cn/vitae/">简历</a></li>
+  
+  <li><a href="/en/">English</a></li>
+  
+  
+
+<li class="menu-extra"></li>
+
+
+
+<li><a href="https://github.com/rehonicn%5c2018-04-05-jekyll-2.md" target="_blank">编辑</a></li>
+
+
+<li><a href="/cn/index.xml" type="application/rss+xml" title="RSS feed">订阅</a></li>
+
+<li><a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="Attribution-NonCommercial-ShareAlike 4.0 International">版权</a></li>
+
+
+  </ul>
+</nav>
+
+    </header>
+
+    <article class="main">
+      <header class="title">
+      
+<h1>个人搭建NexT博客的一点小问题和解决方案</h1>
+
+
+<h3>Rehoni / 
+2018-04-05</h3>
+
+<hr>
+
+
+      </header>
+
+
+
+<h1 id="heading"></h1>
+<p>初步步骤参照<a href="http://theme-next.simpleyyt.com/getting-started.html">指南</a>，此次搭建建立于上次搭建安装失败的基础上。</p>
+<h4 id="安装ruby包">安装ruby包</h4>
+<p>安装包应该都可以下载到,我这里用的是rubyinstaller-2.5.0-2-x64版本，完成后会询问你是否安装msys2和mingw开发工具包等,我这里默认安装，具体也不太清楚这两者的具体用途,但是之前搭建失败貌似就是这方面的原因,因此考虑全部安装。</p>
+<h4 id="安装bundler">安装bundler</h4>
+<p>因为考虑到安装包bundler的位置问题,我打算放在F:\GitHub下,安装好包,然后再考虑clone这个next主题。关于cmd(我用的Cmder)无法进入其他盘的办法,直接输入盘符F:就好了。</p>
+<h4 id="下载next主题">下载next主题</h4>
+<h4 id="安装依赖">安装依赖</h4>
+<p>报错如下:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ bundle install
+  Bundler could not find compatible versions <span style="color:#66d9ef">for</span> gem <span style="color:#e6db74">&#34;mini_portile2&#34;</span>:
+  In snapshot <span style="color:#f92672">(</span>Gemfile.lock<span style="color:#f92672">)</span>:
+    mini_portile2 <span style="color:#f92672">(=</span> 2.2.0<span style="color:#f92672">)</span>
+
+  In Gemfile:
+    github-pages was resolved to 155, which depends on
+      jekyll-mentions <span style="color:#f92672">(=</span> 1.2.0<span style="color:#f92672">)</span> was resolved to 1.2.0, which depends on
+        html-pipeline <span style="color:#f92672">(</span>~&gt; 2.3<span style="color:#f92672">)</span> was resolved to 2.7.0, which depends on
+          nokogiri <span style="color:#f92672">(</span>&gt;<span style="color:#f92672">=</span> 1.4<span style="color:#f92672">)</span> was resolved to 1.8.1, which depends on
+            mini_portile2 <span style="color:#f92672">(</span>~&gt; 2.3.0<span style="color:#f92672">)</span> x64-mingw32
+
+    github-pages was resolved to 155, which depends on
+      jekyll-mentions <span style="color:#f92672">(=</span> 1.2.0<span style="color:#f92672">)</span> was resolved to 1.2.0, which depends on
+        html-pipeline <span style="color:#f92672">(</span>~&gt; 2.3<span style="color:#f92672">)</span> was resolved to 2.7.0, which depends on
+          nokogiri <span style="color:#f92672">(</span>&gt;<span style="color:#f92672">=</span> 1.4<span style="color:#f92672">)</span> was resolved to 1.8.1, which depends on
+            mini_portile2 <span style="color:#f92672">(</span>~&gt; 2.2.0<span style="color:#f92672">)</span>
+
+Running <span style="color:#e6db74">`</span>bundle update<span style="color:#e6db74">`</span> will rebuild your snapshot from scratch, using only
+the gems in your Gemfile, which may resolve the conflict.
+</code></pre></div><p>根据提示输入bundle update,装了一大堆莫名其妙的东西。好的然后bundle install,成功了。啧,果然之前总报错就是我没有完整安装msys2的原因吗？</p>
+<h4 id="简单部署">简单部署</h4>
+<p>报错如下:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ bundle exec jekyll server
+  Configuration file: F:/Github/jekyll-theme-next/_config.yml
+            Source: F:/Github/jekyll-theme-next
+       Destination: F:/Github/jekyll-theme-next/_site
+  Incremental build: disabled. Enable with --incremental
+      Generating...
+   GitHub Metadata: No GitHub API authentication could be found. Some fields may be missing or have incorrect data.
+   GitHub Metadata: Error processing value <span style="color:#e6db74">&#39;description&#39;</span>:
+  Liquid Exception: No repo name found. Specify using PAGES_REPO_NWO environment variables, <span style="color:#e6db74">&#39;repository&#39;</span> in your configuration, or set up an <span style="color:#e6db74">&#39;origin&#39;</span> git remote pointing to your github.com repository. in /_layouts/post.html
+             ERROR: YOUR SITE COULD NOT BE BUILT:
+                    ------------------------------------
+                    No repo name found. Specify using PAGES_REPO_NWO environment variables, <span style="color:#e6db74">&#39;repository&#39;</span> in your configuration, or set up an <span style="color:#e6db74">&#39;origin&#39;</span> git remote pointing to your github.com repository.
+</code></pre></div><p>大意大概是需要指向我自己的GitHub repository吧</p>
+<p>然后我这里考虑直接把jekyll-theme-next文件夹里的所有的文件直接拷贝到我自己的blog仓库(之前创建了一个空的只有readme的文件的仓库名为luoboyala.github.io)里了</p>
+<p>再次bundle install一遍,发现没有问题,开始bundle exec jekyll server仍然是上边的错误,根据提示开始修改config文件中的url</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yml" data-lang="yml">url:https://luoboyala.github.io
+</code></pre></div><p>报错如下:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">jekyll 3.7.3 | Error:  <span style="color:#f92672">(</span>F:/Github/luoboyala.github.io/_config.yml<span style="color:#f92672">)</span>: could not find expected <span style="color:#e6db74">&#39;:&#39;</span> <span style="color:#66d9ef">while</span> scanning a simple key at line <span style="color:#ae81ff">17</span> column <span style="color:#ae81ff">1</span>
+</code></pre></div><p>很明显是一个空格的原因吧&hellip;</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yml" data-lang="yml"><span style="color:#66d9ef">url</span>: https://luoboyala.github.io
+</code></pre></div><p>好的还是报错了,发现问题在于没有初始化git仓库,这个虽然是一个git仓库,但是应该是缺少了git authentication
+解决办法只需要:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ git init
+$ bundle exec jekyll server
+</code></pre></div><h4 id="其它配置">其它配置</h4>
+<p>见说明中,慢慢来吧</p>
+<h4 id="其它补充">其它补充</h4>
+<p>喜欢这个作者的<a href="https://notes.wanghao.work/">next博客</a>,学习一下吧&hellip;</p>
+
+
+  <footer>
+  
+<nav class="post-nav">
+  <span class="nav-prev">&larr; <a href="/cn/2018-04-03-oracle-10/">Oracle实践数据库笔记-10</a></span>
+  <span class="nav-next"><a href="/cn/2018-04-06-javacore3/">Java核心技术卷(3)</a> &rarr;</span>
+</nav>
+<script type="text/javascript">
+document.addEventListener('keyup', function(e) {
+  if (e.target.nodeName.toUpperCase() != 'BODY') return;
+  var url = false;
+  if (e.which == 37) {  
+    
+    url = '\/cn\/2018-04-03-oracle-10\/';
+    
+  } else if (e.which == 39) {  
+    
+    url = '\/cn\/2018-04-06-javacore3\/';
+    
+  }
+  if (url) window.location = url;
+});
+</script>
+
+
+
+
+
+
+<script async src="/js/fix-toc.js"></script>
+
+<script async src="/js/center-img.js"></script>
+
+<script async src="/js/right-quote.js"></script>
+
+<script async src="/js/no-highlight.js"></script>
+
+<script async src="/js/fix-footnote.js"></script>
+
+<script async src="/js/math-code.js"></script>
+
+<script async src="/js/external-link.js"></script>
+
+<script async src="/js/alt-title.js"></script>
+
+<script async src="/js/header-link.js"></script>
+
+
+
+<script async src="//mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+  
+
+
+
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/java.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/SQL.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/CSS.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+  
+  <hr>
+  <div class="copyright">© <a href="/">Luo Hao</a> 2016 - 2019</div>
+  
+  </footer>
+  </article>
+  
+  </body>
+</html>
+

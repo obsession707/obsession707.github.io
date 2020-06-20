@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>说明书 on Rehoni | 罗皓</title>
+    <link>/tags/%E8%AF%B4%E6%98%8E%E4%B9%A6/</link>
+    <description>Recent content in 说明书 on Rehoni | 罗皓</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 20 Jun 2020 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/%E8%AF%B4%E6%98%8E%E4%B9%A6/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>写给自己的说明书</title>
+      <link>/cn/2920-06-20-manual/</link>
+      <pubDate>Sat, 20 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2920-06-20-manual/</guid>
+      <description>私人仓库 用于推送博客。采用hugo。
+写给自己的说明书 1. 构建流程  在typora中写好文章 添加YAML front matter 放入此仓库的content文件夹中 图片放入static\images中，并且在博文中将路径修改为/images/xxx.jpg 使用hugo命令生成 使用脚本备份和部署  2. hugo使用 建议阅读 hugo 中文文档
+以及ivy作者说明书
+hugo --theme=ivy # hugo server (--theme=hyde --buildDrafts) hugo server # 部署方法不是采用的下边的方式 hugo --theme=hyde --baseUrl=&amp;#34;http://coderzh.github.io/&amp;#34; cd public git init git remote add origin https://github.com/coderzh/coderzh.github.io.git git add -A git commit -m &amp;#34;first commit&amp;#34; git push -u origin master 3. 图片路径问题   config.toml中设置baseurl，设置成‘/’即可。
+  在.md的图片路径中，以static为根目录写全路径。
+  假设测试baseurl为http://localhost:1313/，图片位置：/static/img/hugo/123.png，那么在Markdown中写作![图片说明](/img/hugo/123.png)。这时，在浏览器就可以看到图片了 。
+  typora软件设置，这样在每个大类文件夹中都有一个img文件夹，生产新的博文之后把对应的图片拷贝到项目的static/img中去就行。</description>
+    </item>
+    
+  </channel>
+</rss>

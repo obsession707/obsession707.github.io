@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>Oracle实践数据库笔记-7 - Rehoni | 罗皓</title>
+    <meta property="og:title" content="Oracle实践数据库笔记-7 - Rehoni | 罗皓">
+    
+    <meta name="twitter:card" content="summary">
+
+    
+      
+    
+
+    
+      
+      <meta property="description" content="没操作起来，得等大佬带着操作一下
+注意要用cmd别用windows powershell
+[&amp;hellip;] oradim -new -sid sales 将sales设为当前例程，  set oracle_sid = sales  创建/编辑初始化参数文件 pfile
+[&amp;hellip;] create pfile from spfile; &amp;hellip;">
+      <meta property="og:description" content="没操作起来，得等大佬带着操作一下
+注意要用cmd别用windows powershell
+[&amp;hellip;] oradim -new -sid sales 将sales设为当前例程，  set oracle_sid = sales  创建/编辑初始化参数文件 pfile
+[&amp;hellip;] create pfile from spfile; &amp;hellip;">
+      
+    
+
+    
+    
+    
+    <meta name="twitter:image" content="/images/logo.png">
+    
+    
+
+    
+
+    
+    
+
+
+<link href='//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+<script async src="/js/load-typekit.js"></script>
+
+
+<link rel="stylesheet" href="/css/custom.css" />
+
+  </head>
+
+  
+  <body class="cn">
+    <header class="masthead">
+      
+
+<h1><a href="/"><img src="/images/logo.png" alt="Luo Hao" /></a></h1>
+
+
+
+      <nav class="menu">
+  <ul>
+  
+  
+  <li><a href="/">首页</a></li>
+  
+  <li><a href="/cn/about/">关于</a></li>
+  
+  <li><a href="/cn/">日志</a></li>
+  
+  <li><a href="/categories/">分类</a></li>
+  
+  <li><a href="/tags/">标签</a></li>
+  
+  <li><a href="/cn/vitae/">简历</a></li>
+  
+  <li><a href="/en/">English</a></li>
+  
+  
+
+<li class="menu-extra"></li>
+
+
+
+<li><a href="https://github.com/rehonicn%5c2018-03-23-Oracle-7.md" target="_blank">编辑</a></li>
+
+
+<li><a href="/cn/index.xml" type="application/rss+xml" title="RSS feed">订阅</a></li>
+
+<li><a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="Attribution-NonCommercial-ShareAlike 4.0 International">版权</a></li>
+
+
+  </ul>
+</nav>
+
+    </header>
+
+    <article class="main">
+      <header class="title">
+      
+<h1>Oracle实践数据库笔记-7</h1>
+
+
+<h3>Rehoni / 
+2018-03-23</h3>
+
+<hr>
+
+
+      </header>
+
+
+
+<h3 id="手工创建数据库sales">手工创建数据库（sales）</h3>
+<p><strong>没操作起来，得等大佬带着操作一下</strong></p>
+<p><strong>注意要用cmd别用windows powershell</strong></p>
+<ol>
+<li>创建windows服务（instance） &ndash;oradim</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cmd" data-lang="cmd">    oradim -new -sid sales
+</code></pre></div><ol start="2">
+<li>将sales设为当前例程，</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cmd" data-lang="cmd">    <span style="color:#66d9ef">set</span> oracle_sid = sales
+</code></pre></div><ol start="3">
+<li>
+<p>创建/编辑初始化参数文件 pfile</p>
+<ul>
+<li>连接数据库 sqlplus————sys as sysdba——————123456</li>
+</ul>
+</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">    <span style="color:#66d9ef">create</span> pfile <span style="color:#66d9ef">from</span> spfile;
+</code></pre></div><ol start="4">
+<li>
+<p>根据初始化参数创建相应的目录结构</p>
+<ul>
+<li>在admin和flash_recovery_area和oradata中创建sales文件夹，</li>
+<li>对应的INITorcl.ora改成INITsales.ora并且改变其中的内容</li>
+<li>创建口令文件</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cmd" data-lang="cmd">    这个密码用于set Oracle_sid之后，登陆sysdba的密码
+     orapwd file=E:\app\Res0liya\product\11.2.0\dbhome_1\database\PWDsales.ora password=123 entries=2
+</code></pre></div></li>
+<li>
+<p>执行创建数据库的语句</p>
+<ul>
+<li>启动例程以及验证数据库</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">    startup nomount
+    showdown <span style="color:#66d9ef">immediate</span>
+    <span style="color:#66d9ef">show</span> <span style="color:#66d9ef">parameter</span> db_name
+</code></pre></div><ul>
+<li>三个文件必须要，数据文件和日志文件system,sysaux,undo</li>
+</ul>
+</li>
+<li>
+<p>创建数据字典视图</p>
+</li>
+<li>
+<p>创建Oracle内部包</p>
+</li>
+<li>
+<p>创建spfile</p>
+</li>
+<li>
+<p>创建scott方案</p>
+</li>
+<li>
+<p>加载产品用户概要文件信息</p>
+</li>
+<li>
+<p>配置监听器（服务器端）和服务名（客户端）</p>
+</li>
+<li>
+<p>配置DBConsole（EM，OEM）</p>
+<ul>
+<li>配置用户</li>
+</ul>
+</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">create</span> <span style="color:#66d9ef">database</span> sales
+datafile  <span style="color:#75715e">---数据文件
+</span><span style="color:#75715e"></span><span style="color:#e6db74">&#39;D:\app\hwj\oradata\sales\system01.dbf&#39;</span> <span style="color:#66d9ef">size</span> <span style="color:#ae81ff">350</span>m
+sysaux datafile
+<span style="color:#e6db74">&#39;D:\app\hwj\oradata\sales\sysaux01.dbf&#39;</span> <span style="color:#66d9ef">size</span> <span style="color:#ae81ff">350</span>m
+undo tablespace undotbs1 datafile
+<span style="color:#e6db74">&#39;D:\app\hwj\oradata\sales\undo01.dbf&#39;</span> <span style="color:#66d9ef">size</span> <span style="color:#ae81ff">350</span>m
+<span style="color:#66d9ef">default</span> <span style="color:#66d9ef">temporary</span> tablespace temp tempfile
+<span style="color:#e6db74">&#39;D:\app\hwj\oradata\sales\temp01.dbf&#39;</span> <span style="color:#66d9ef">size</span> <span style="color:#ae81ff">350</span>m
+logfile  <span style="color:#75715e">---日志文件
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">group</span> <span style="color:#ae81ff">1</span> (<span style="color:#e6db74">&#39;D:\app\hwj\oradata\sales\redo01.log&#39;</span>) <span style="color:#66d9ef">size</span> <span style="color:#ae81ff">10</span>m,
+<span style="color:#66d9ef">group</span> <span style="color:#ae81ff">2</span> (<span style="color:#e6db74">&#39;D:\app\hwj\oradata\sales\redo02.log&#39;</span>) <span style="color:#66d9ef">size</span> <span style="color:#ae81ff">10</span>m,
+<span style="color:#66d9ef">group</span> <span style="color:#ae81ff">3</span> (<span style="color:#e6db74">&#39;D:\app\hwj\oradata\sales\redo03.log&#39;</span>) <span style="color:#66d9ef">size</span> <span style="color:#ae81ff">10</span>m,
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">create</span> <span style="color:#66d9ef">database</span> sales
+datafile <span style="color:#e6db74">&#39;D:\app\Res0liya\oradata\sales\system01.dbf&#39;</span> <span style="color:#66d9ef">size</span> <span style="color:#ae81ff">350</span>m
+sysaux datafile <span style="color:#e6db74">&#39;D:\app\Res0liya\oradata\sales\sysaux01.dbf&#39;</span> <span style="color:#66d9ef">size</span> <span style="color:#ae81ff">350</span>m
+undo tablespace undotbs1 datafile <span style="color:#e6db74">&#39;D:\app\Res0liya\oradata\sales\undo01.dbf&#39;</span> <span style="color:#66d9ef">size</span> <span style="color:#ae81ff">350</span>m
+<span style="color:#66d9ef">default</span> <span style="color:#66d9ef">temporary</span> tablespace temp tempfile <span style="color:#e6db74">&#39;D:\app\Res0liya\oradata\sales\temp01.dbf&#39;</span> <span style="color:#66d9ef">size</span> <span style="color:#ae81ff">350</span>m
+logfile <span style="color:#66d9ef">group</span> <span style="color:#ae81ff">1</span> (<span style="color:#e6db74">&#39;D:\app\Res0liya\oradata\sales\redo01.log&#39;</span>) <span style="color:#66d9ef">size</span> <span style="color:#ae81ff">10</span>m,
+<span style="color:#66d9ef">group</span> <span style="color:#ae81ff">2</span> (<span style="color:#e6db74">&#39;D:\app\Res0liya\oradata\sales\redo02.log&#39;</span>) <span style="color:#66d9ef">size</span> <span style="color:#ae81ff">10</span>m,
+<span style="color:#66d9ef">group</span> <span style="color:#ae81ff">3</span> (<span style="color:#e6db74">&#39;D:\app\Res0liya\oradata\sales\redo03.log&#39;</span>) <span style="color:#66d9ef">size</span> <span style="color:#ae81ff">10</span>m;
+</code></pre></div><p>oracle 图形界面创建数据库</p>
+
+
+  <footer>
+  
+<nav class="post-nav">
+  <span class="nav-prev">&larr; <a href="/cn/2018-03-20-oracle-6/">Oracle实践数据库笔记-6</a></span>
+  <span class="nav-next"><a href="/cn/2018-03-27-oracle-8/">Oracle实践数据库笔记-8</a> &rarr;</span>
+</nav>
+<script type="text/javascript">
+document.addEventListener('keyup', function(e) {
+  if (e.target.nodeName.toUpperCase() != 'BODY') return;
+  var url = false;
+  if (e.which == 37) {  
+    
+    url = '\/cn\/2018-03-20-oracle-6\/';
+    
+  } else if (e.which == 39) {  
+    
+    url = '\/cn\/2018-03-27-oracle-8\/';
+    
+  }
+  if (url) window.location = url;
+});
+</script>
+
+
+
+
+
+
+<script async src="/js/fix-toc.js"></script>
+
+<script async src="/js/center-img.js"></script>
+
+<script async src="/js/right-quote.js"></script>
+
+<script async src="/js/no-highlight.js"></script>
+
+<script async src="/js/fix-footnote.js"></script>
+
+<script async src="/js/math-code.js"></script>
+
+<script async src="/js/external-link.js"></script>
+
+<script async src="/js/alt-title.js"></script>
+
+<script async src="/js/header-link.js"></script>
+
+
+
+<script async src="//mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+  
+
+
+
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/java.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/SQL.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/CSS.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+  
+  <hr>
+  <div class="copyright">© <a href="/">Luo Hao</a> 2016 - 2019</div>
+  
+  </footer>
+  </article>
+  
+  </body>
+</html>
+

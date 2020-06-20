@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>博客搭建 on Rehoni | 罗皓</title>
+    <link>/tags/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</link>
+    <description>Recent content in 博客搭建 on Rehoni | 罗皓</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 05 Apr 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>个人搭建NexT博客的一点小问题和解决方案</title>
+      <link>/cn/2018-04-05-jekyll-2/</link>
+      <pubDate>Thu, 05 Apr 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2018-04-05-jekyll-2/</guid>
+      <description>初步步骤参照指南，此次搭建建立于上次搭建安装失败的基础上。
+安装ruby包 安装包应该都可以下载到,我这里用的是rubyinstaller-2.5.0-2-x64版本，完成后会询问你是否安装msys2和mingw开发工具包等,我这里默认安装，具体也不太清楚这两者的具体用途,但是之前搭建失败貌似就是这方面的原因,因此考虑全部安装。
+安装bundler 因为考虑到安装包bundler的位置问题,我打算放在F:\GitHub下,安装好包,然后再考虑clone这个next主题。关于cmd(我用的Cmder)无法进入其他盘的办法,直接输入盘符F:就好了。
+下载next主题 安装依赖 报错如下:
+$ bundle install Bundler could not find compatible versions for gem &amp;#34;mini_portile2&amp;#34;: In snapshot (Gemfile.lock): mini_portile2 (= 2.2.0) In Gemfile: github-pages was resolved to 155, which depends on jekyll-mentions (= 1.2.0) was resolved to 1.2.0, which depends on html-pipeline (~&amp;gt; 2.3) was resolved to 2.7.0, which depends on nokogiri (&amp;gt;= 1.4) was resolved to 1.8.1, which depends on mini_portile2 (~&amp;gt; 2.3.0) x64-mingw32 github-pages was resolved to 155, which depends on jekyll-mentions (= 1.</description>
+    </item>
+    
+    <item>
+      <title>Github Pages</title>
+      <link>/cn/2017-11-21-jekyll-1/</link>
+      <pubDate>Tue, 21 Nov 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2017-11-21-jekyll-1/</guid>
+      <description>关于某天晚上又是深夜一两点在修改自己博客的故事
+关于这个主题 basically 发生了一些这样的故事
+![image-center]({{ site.url }}{{ site.baseurl }}/assets/images/chrome_2017-11-21_01-40-43.png){: .align-center}
+这个确实是意想不到的事情，总被github说这个主题不合适，但明明就是他自己商店里的主题。
+第二个地方是首页的图片 确实是一个个html找了好久，这个结构比较乱，当然也可能是我脑子转不动了。
+第三点 当我把 index.md 改好之后发生了一个这样的事情
+paginate: true alt_title: &amp;#34;Res0liya&amp;#34; sub_title: &amp;#34;To be or not to be&amp;#34; image: /assets/images/amine-ounnas-180287.jpg Posts都丢了，真是奇怪，但其实关键就在于这一行。
+paginate: false 是否翻页，这个让我有些无奈&amp;hellip;还需要自己仔细看看</description>
+    </item>
+    
+  </channel>
+</rss>
