@@ -12,6 +12,39 @@
     
     
     <item>
+      <title>Oracle排查账户锁定</title>
+      <link>/cn/2020-06-22-oracle%E6%8E%92%E6%9F%A5%E8%B4%A6%E6%88%B7%E9%94%81%E5%AE%9A/</link>
+      <pubDate>Mon, 22 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2020-06-22-oracle%E6%8E%92%E6%9F%A5%E8%B4%A6%E6%88%B7%E9%94%81%E5%AE%9A/</guid>
+      <description>设置时间格式 遇到登录报用户被锁时，先不要着急解锁，先使用dba角色的用户登录，设置具体时间格式，以便我们查询具体的被锁时间：
+alter session set nls_date_format=&amp;#39;yyyy-mm-dd hh24:mi:ss&amp;#39;; 查看具体被锁时间： select username,lock_date from dba_users where username=&amp;#39;username&amp;#39;; 或者
+select username,lock_date from dba_users where username=&amp;#39;xxx&amp;#39;; 如果发现被锁用户的时间信息已经不存在，原因是用户已经被客户解锁，所以视图dba_users中已经看不到用户被锁时间的信息。
+这个时候通过查看表user$来解决这个问题：
+select name,ltime from user$ where name =&amp;#39;XXXX&amp;#39;; 查看造成用户被锁的ip 主要监听日志，一般路径为：$ORACLE_HOME/network/admin/log/listener.log日志
+查看监听日志：可以看出IP、登录用户Res0l、端口2067、登陆程序Datagrip等内容。
+22-6月 -2020 15:31:20 * (CONNECT_DATA=(SID=ora12a)(CID=(PROGRAM=DataGrip)(HOST=__jdbc__)(USER=Res0l))) * (ADDRESS=(PROTOCOL=t cp)(HOST=198.120.100.198)(PORT=2067)) * establish * ora12a * 0 2020-06-22T15:31:23.829623+08:00 22-6月 -2020 15:31:23 * (CONNECT_DATA=(SID=ora12a)(CID=(PROGRAM=DataGrip)(HOST=__jdbc__)(USER=Res0l))) * (ADDRESS=(PROTOCOL=t cp)(HOST=198.120.100.198)(PORT=2071)) * establish * ora12a * 0 2020-06-22T15:31:26.862394+08:00 如果实在找不到，可以在终端或cmd窗口输入lsnrctl status 输出的信息中会有监听的日志文件路径
+或者执行全文件夹搜索
+find /users/oracle/ -name listener.</description>
+    </item>
+    
+    <item>
+      <title>Oracle数据库备份和恢复</title>
+      <link>/cn/2020-06-22-oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A4%87%E4%BB%BD%E4%B8%8E%E6%81%A2%E5%A4%8D/</link>
+      <pubDate>Mon, 22 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2020-06-22-oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A4%87%E4%BB%BD%E4%B8%8E%E6%81%A2%E5%A4%8D/</guid>
+      <description>两种导出程序的比较和区别  exp、imp是客户段工具程序， expdp和impdp是服务端的工具程序。 exp和imp效率比较低；expdp和impdp效率高。 expdp、impdp数据泵功能强大并行、过滤、转换、压缩、加密、交互等等; 数据泵不支持9i以前版本， EXP/IMP短期内还是比较适用;   EXP-0006:出现内部不一致的错误解决办法
+出现此问题的原因是：在超过9i的Oracle版本进行exp操作，并且导出的表有进行表分区，就会出现导出中断并且报错。
+因此新版本Oracle数据库以数据泵进行备份恢复为主。
+ 在expdp、impdp命令使用时，不要习惯性的在命令末尾加上分号“;”，会导致不经意间出现错误。
+1. expdp导出   在sqlplus下创建目录directory，创建逻辑目录，该命令不会在操作系统创建真正的目录，最好以system等管理员创建。
+-- 需要在系统中创建真正的目录 create or replace directory DMP as &amp;#39;/users/oracle/dmp&amp;#39;; -- 可以查看已创建的逻辑目录 select * from dba_directories;   把读写权限授予特定用户
+grant read,write on directory dir_dp to scott;   导出数据库
+# 导出整个数据库 expdp user/psw DIRECTORY=DMP DUMPFILE=expstd.dmp FULL=y; # 按用户（执行时选择按用户进行比较合适） expdp scott/tiger@orcl schemas=scott dumpfile=expdp.dmp DIRECTORY=dpdata1; # 并行进程 expdp scott/tiger@orcl directory=dpdata1 dumpfile=scott3.dmp parallel=40 job_name=scott3 # 按表名 expdp scott/tiger@orcl TABLES=emp,dept dumpfile=expdp.</description>
+    </item>
+    
+    <item>
       <title>java数据库（1）基本概念和try-with-resources</title>
       <link>/cn/2020-06-20-java%E6%95%B0%E6%8D%AE%E5%BA%93-1/</link>
       <pubDate>Sat, 20 Jun 2020 00:00:00 +0000</pubDate>

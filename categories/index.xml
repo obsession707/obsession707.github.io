@@ -6,10 +6,19 @@
     <description>Recent content in Categories on Rehoni | 罗皓</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 20 Jun 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 22 Jun 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/categories/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>数据库</title>
+      <link>/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/</link>
+      <pubDate>Mon, 22 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Java</title>
@@ -39,15 +48,6 @@
     </item>
     
     <item>
-      <title>Oracle</title>
-      <link>/categories/oracle/</link>
-      <pubDate>Wed, 08 Apr 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/oracle/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>随笔</title>
       <link>/categories/%E9%9A%8F%E7%AC%94/</link>
       <pubDate>Mon, 16 Mar 2020 00:00:00 +0000</pubDate>
@@ -66,20 +66,29 @@
     </item>
     
     <item>
-      <title>springboot</title>
-      <link>/categories/springboot/</link>
+      <title>后端</title>
+      <link>/categories/%E5%90%8E%E7%AB%AF/</link>
       <pubDate>Thu, 19 Dec 2019 00:00:00 +0000</pubDate>
       
-      <guid>/categories/springboot/</guid>
+      <guid>/categories/%E5%90%8E%E7%AB%AF/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Vue</title>
-      <link>/categories/vue/</link>
+      <title>版本控制</title>
+      <link>/categories/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/</link>
+      <pubDate>Fri, 11 Oct 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>前端</title>
+      <link>/categories/%E5%89%8D%E7%AB%AF/</link>
       <pubDate>Fri, 08 Mar 2019 00:00:00 +0000</pubDate>
       
-      <guid>/categories/vue/</guid>
+      <guid>/categories/%E5%89%8D%E7%AB%AF/</guid>
       <description></description>
     </item>
     
@@ -89,15 +98,6 @@
       <pubDate>Sat, 21 Apr 2018 00:00:00 +0000</pubDate>
       
       <guid>/categories/%E8%AF%BE%E7%A8%8B/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Example</title>
-      <link>/categories/example/</link>
-      <pubDate>Sun, 14 Feb 2016 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/example/</guid>
       <description></description>
     </item>
     

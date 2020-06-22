@@ -81,5 +81,16 @@ b = [x*x for x in range(1,11)] print(b) c = [x*x for x in range(1,11) if x%2 ==0
 文件读写 建议使用with open as f，（w写入，r读出）的方式，flush()，close()</description>
     </item>
     
+    <item>
+      <title>A Plain Markdown Post</title>
+      <link>/cn/2016-02-14-hello-markdown/</link>
+      <pubDate>Sun, 14 Feb 2016 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2016-02-14-hello-markdown/</guid>
+      <description>This sample post is mainly for blogdown users. If you do not use blogdown, you can skip the first section.
+1. Markdown or R Markdown This is a post written in plain Markdown (*.md) instead of R Markdown (*.Rmd). The major differences are:
+ You cannot run any R code in a plain Markdown document, whereas in an R Markdown document, you can embed R code chunks (```{r}); A plain Markdown post is rendered through Blackfriday, and an R Markdown document is compiled by rmarkdown and Pandoc.</description>
+    </item>
+    
   </channel>
 </rss>

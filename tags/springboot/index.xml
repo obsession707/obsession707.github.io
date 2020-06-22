@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>springboot on Rehoni | 罗皓</title>
+    <link>/tags/springboot/</link>
+    <description>Recent content in springboot on Rehoni | 罗皓</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 19 Dec 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/springboot/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>idea spring boot热部署</title>
+      <link>/cn/2019-12-19-springboot%E7%83%AD%E9%83%A8%E7%BD%B2/</link>
+      <pubDate>Thu, 19 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2019-12-19-springboot%E7%83%AD%E9%83%A8%E7%BD%B2/</guid>
+      <description>idea spring boot热部署 1. 引入spring boot devtools，添加maven依赖 &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-boot-devtools&amp;lt;/artifactId&amp;gt; &amp;lt;scope&amp;gt;runtime&amp;lt;/scope&amp;gt; &amp;lt;optional&amp;gt;true&amp;lt;/optional&amp;gt; &amp;lt;/dependency&amp;gt; 2. 在maven中添加插件 &amp;lt;plugin&amp;gt; &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-boot-maven-plugin&amp;lt;/artifactId&amp;gt; &amp;lt;configuration&amp;gt; &amp;lt;!--fork : 如果没有该项配置devtools不会起作用，即应用不会restart --&amp;gt; &amp;lt;fork&amp;gt;true&amp;lt;/fork&amp;gt; &amp;lt;addResources&amp;gt;true&amp;lt;/addResources&amp;gt;&amp;lt;!--支持静态文件热部署--&amp;gt; &amp;lt;/configuration&amp;gt; &amp;lt;/plugin&amp;gt; 3. 勾选File &amp;gt; Settings &amp;gt; Compiler-Build Project automatically 4. 一些其他的方式 非常详细的热部署说明 http://tengj.top/2017/06/01/springboot10/</description>
+    </item>
+    
+  </channel>
+</rss>

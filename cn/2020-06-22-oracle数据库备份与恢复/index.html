@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>Oracle数据库备份和恢复 - Rehoni | 罗皓</title>
+    <meta property="og:title" content="Oracle数据库备份和恢复 - Rehoni | 罗皓">
+    
+    <meta name="twitter:card" content="summary">
+
+    
+      
+    
+
+    
+      
+      <meta property="description" content="EXP-0006:出现内部不一致的错误解决办法
+出现此问题的原因是：在超过9i的Oracle版本进行exp操作，并且导出的表有进行表分区，就会出现导出中断并且报错。
+因此新版本Oracle数据库以数据泵进行备份恢复为主。
+[&amp;hellip;] 在expdp、impdp命令使用时，不要习惯性的在命令末尾加上分号“;”，会导致不经意间出现错误。
+[&amp;hellip;] 在sqlplus下创建目 &amp;hellip;">
+      <meta property="og:description" content="EXP-0006:出现内部不一致的错误解决办法
+出现此问题的原因是：在超过9i的Oracle版本进行exp操作，并且导出的表有进行表分区，就会出现导出中断并且报错。
+因此新版本Oracle数据库以数据泵进行备份恢复为主。
+[&amp;hellip;] 在expdp、impdp命令使用时，不要习惯性的在命令末尾加上分号“;”，会导致不经意间出现错误。
+[&amp;hellip;] 在sqlplus下创建目 &amp;hellip;">
+      
+    
+
+    
+    
+    
+    <meta name="twitter:image" content="/images/logo.png">
+    
+    
+
+    
+
+    
+    
+
+
+<link href='//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/styles/monokai-sublime.min.css' rel='stylesheet' type='text/css' />
+
+
+
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+<script async src="/js/load-typekit.js"></script>
+
+
+<link rel="stylesheet" href="/css/custom.css" />
+
+  </head>
+
+  
+  <body class="cn">
+    <header class="masthead">
+      
+
+<h1><a href="/"><img src="/images/logo.png" alt="Luo Hao" /></a></h1>
+
+
+
+      <nav class="menu">
+  <ul>
+  
+  
+  <li><a href="/">首页</a></li>
+  
+  <li><a href="/cn/about/">关于</a></li>
+  
+  <li><a href="/cn/">日志</a></li>
+  
+  <li><a href="/categories/">分类</a></li>
+  
+  <li><a href="/tags/">标签</a></li>
+  
+  <li><a href="/cn/vitae/">简历</a></li>
+  
+  <li><a href="/en/">English</a></li>
+  
+  
+
+<li class="menu-extra"></li>
+
+
+
+<li><a href="https://github.com/rehonicn%5c2020-06-22-Oracle%e6%95%b0%e6%8d%ae%e5%ba%93%e5%a4%87%e4%bb%bd%e4%b8%8e%e6%81%a2%e5%a4%8d.md" target="_blank">编辑</a></li>
+
+
+<li><a href="/cn/index.xml" type="application/rss+xml" title="RSS feed">订阅</a></li>
+
+<li><a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="Attribution-NonCommercial-ShareAlike 4.0 International">版权</a></li>
+
+
+  </ul>
+</nav>
+
+    </header>
+
+    <article class="main">
+      <header class="title">
+      
+<h1>Oracle数据库备份和恢复</h1>
+
+
+<h3>Rehoni / 
+2020-06-22</h3>
+
+<hr>
+
+
+      </header>
+
+
+
+<h3 id="两种导出程序的比较和区别">两种导出程序的比较和区别</h3>
+<ol>
+<li>exp、imp是客户段工具程序， expdp和impdp是服务端的工具程序。</li>
+<li>exp和imp效率比较低；expdp和impdp效率高。</li>
+<li>expdp、impdp数据泵功能强大并行、过滤、转换、压缩、加密、交互等等;</li>
+<li>数据泵不支持9i以前版本， EXP/IMP短期内还是比较适用;</li>
+</ol>
+<blockquote>
+<p>EXP-0006:出现内部不一致的错误解决办法</p>
+<p>出现此问题的原因是：在超过9i的Oracle版本进行exp操作，并且导出的表有进行表分区，就会出现导出中断并且报错。</p>
+<p>因此新版本Oracle数据库以数据泵进行备份恢复为主。</p>
+</blockquote>
+<p><strong>在expdp、impdp命令使用时，不要习惯性的在命令末尾加上分号“;”，会导致不经意间出现错误。</strong></p>
+<h3 id="1-expdp导出">1. expdp导出</h3>
+<ol>
+<li>
+<p>在sqlplus下创建目录directory，创建逻辑目录，该命令不会在操作系统创建真正的目录，最好以system等管理员创建。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#75715e">-- 需要在系统中创建真正的目录
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">create</span> <span style="color:#66d9ef">or</span> <span style="color:#66d9ef">replace</span> directory DMP <span style="color:#66d9ef">as</span> <span style="color:#e6db74">&#39;/users/oracle/dmp&#39;</span>;
+<span style="color:#75715e">-- 可以查看已创建的逻辑目录
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> dba_directories;
+</code></pre></div></li>
+<li>
+<p>把读写权限授予特定用户</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">grant</span> <span style="color:#66d9ef">read</span>,<span style="color:#66d9ef">write</span> <span style="color:#66d9ef">on</span> directory dir_dp <span style="color:#66d9ef">to</span> scott;
+</code></pre></div></li>
+<li>
+<p>导出数据库</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e"># 导出整个数据库</span>
+expdp user/psw DIRECTORY<span style="color:#f92672">=</span>DMP DUMPFILE<span style="color:#f92672">=</span>expstd.dmp FULL<span style="color:#f92672">=</span>y;
+<span style="color:#75715e"># 按用户（执行时选择按用户进行比较合适）</span>
+expdp scott/tiger@orcl schemas<span style="color:#f92672">=</span>scott dumpfile<span style="color:#f92672">=</span>expdp.dmp DIRECTORY<span style="color:#f92672">=</span>dpdata1;
+<span style="color:#75715e"># 并行进程</span>
+expdp scott/tiger@orcl directory<span style="color:#f92672">=</span>dpdata1 dumpfile<span style="color:#f92672">=</span>scott3.dmp parallel<span style="color:#f92672">=</span><span style="color:#ae81ff">40</span> job_name<span style="color:#f92672">=</span>scott3
+<span style="color:#75715e"># 按表名</span>
+expdp scott/tiger@orcl TABLES<span style="color:#f92672">=</span>emp,dept dumpfile<span style="color:#f92672">=</span>expdp.dmp DIRECTORY<span style="color:#f92672">=</span>dpdata1;
+<span style="color:#75715e"># 按查询条件导</span>
+expdp scott/tiger@orcl directory<span style="color:#f92672">=</span>dpdata1 dumpfile<span style="color:#f92672">=</span>expdp.dmp Tables<span style="color:#f92672">=</span>emp query<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;WHERE deptno=20&#39;</span>;
+<span style="color:#75715e"># 按表空间导</span>
+expdp system/manager DIRECTORY<span style="color:#f92672">=</span>dpdata1 DUMPFILE<span style="color:#f92672">=</span>tablespace.dmp TABLESPACES<span style="color:#f92672">=</span>temp,example;
+</code></pre></div><p>参数包括：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CONTENT</td>
+<td>用于指定要导出的内容，默认为ALL；<!-- raw HTML omitted -->1. CONTENT=ALL：导出对象定义和所有数据；<!-- raw HTML omitted -->2. DATA_ONLY：只导出数据；<!-- raw HTML omitted -->3. METADATA_ONLY：只导出对象定义。</td>
+</tr>
+<tr>
+<td>DIRECTORY</td>
+<td>指定逻辑目录的名称，为之前创建的逻辑目录。</td>
+</tr>
+<tr>
+<td>EXCLUDE</td>
+<td>用于指定执行操作时释放要排除的对象类型或相关对象。<!-- raw HTML omitted -->EXCLUDE=object_type[:name_clause] [,….]<!-- raw HTML omitted -->object_type用于指定要排除的对象类型,name_clause用于指定要排除的具体对象<!-- raw HTML omitted -->例：EXCLUDE=TABLE:EMP<!-- raw HTML omitted -->EXCLUDE和INCLUDE不能同时使用</td>
+</tr>
+<tr>
+<td>INCLUDE</td>
+<td>导出时包含指定的类型。例:INCLUDE=TABLE_DATA,<!-- raw HTML omitted -->INCLUDE=TABLE:&ldquo;LIKE &lsquo;TAB%'&ldquo;<!-- raw HTML omitted -->INCLUDE=TABLE:”NOT LIKE ‘TAB%’”…</td>
+</tr>
+<tr>
+<td>FILESIZE</td>
+<td>指定导出文件的大小，默认为0，表示没有大小限制（单位为bytes）</td>
+</tr>
+<tr>
+<td>TABLESPACE</td>
+<td>指定一个表空间导出</td>
+</tr>
+<tr>
+<td>QUERY</td>
+<td>QUERY=[schema.] [table_name:] query_clause<!-- raw HTML omitted -->schema为指定方案名，table_name为指定表名，query_clause用于指定条件限制子句schema为指定方案名，table_name为指定表名，query_clause用于指定条件限制子句；<!-- raw HTML omitted -->例：expdp answer/answer directory=my_dbdata dumpfiel=answer.dmp tables=a_answer query=’WHERE deptno=20’<!-- raw HTML omitted -->QUERY选项不能与CONNECT=METADATA_ONLY,EXTIMATE_ONLY,TRANSPORT_TABLESPACES等选项同时使用.</td>
+</tr>
+<tr>
+<td>PARALLEL</td>
+<td>并行操作：指定执行导出操作的并行进程个数，默认值为1。<!-- raw HTML omitted -->您可以通过PARALLEL 参数为导出使用一个以上的线程加速作业。每个线程创建一个单独的转储文件，因此参数dumpfile 应当拥有和并行度一样多的项目。您可以指定通配符作为文件名，而不是显式地输入各个文件名。<!-- raw HTML omitted -->例：expdp answer/answer tables=a_answer directory=my_dbdata dumpfile=expCASES_%U.dmp parallel=4<!-- raw HTML omitted -->注意:dumpfile 参数拥有一个通配符%U，它指示文件将按需要创建，格式将为expCASES_nn.dmp，其中nn 从01 开始，然后按需要向上增加。<!-- raw HTML omitted -->在并行模式下，状态屏幕将显示四个工作进程。（在默认模式下，只有一个进程是可见的）所有的工作进程同步取出数据，并在状态屏幕上显示它们的进度。</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ol>
+<h3 id="2-impdp导入">2. impdp导入</h3>
+<ol>
+<li>
+<p>创建逻辑目录</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#75715e">--导入时必须先创建文件夹路径  
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">create</span> <span style="color:#66d9ef">or</span> <span style="color:#66d9ef">replace</span> directory bao <span style="color:#66d9ef">as</span> <span style="color:#e6db74">&#39;d:\oracle\test&#39;</span>;  
+<span style="color:#75715e">-- 可以查看已创建的逻辑目录
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> dba_directories;
+<span style="color:#75715e">--给使用的用户授权（读写权限）  
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">Grant</span> <span style="color:#66d9ef">read</span>,<span style="color:#66d9ef">write</span> <span style="color:#66d9ef">on</span> directory bao <span style="color:#66d9ef">to</span> scott;
+</code></pre></div><p>这里直接使用上次创建好的DMP逻辑目录</p>
+</li>
+<li>
+<p>导入数据库</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">impdp user/psw DIRECTORY<span style="color:#f92672">=</span>DMP DUMPFILE<span style="color:#f92672">=</span>expstd.dmp TABLE_EXISTS_ACTION<span style="color:#f92672">=</span>drop TABLES<span style="color:#f92672">=</span>ALARM_DICT
+<span style="color:#75715e"># 导到指定用户下</span>
+impdp scott/tiger DIRECTORY<span style="color:#f92672">=</span>bao  DUMPFILE<span style="color:#f92672">=</span>expdp.dmp SCHEMAS<span style="color:#f92672">=</span>scott;
+<span style="color:#75715e"># 改变表的owner</span>
+impdp system/manager DIRECTORY<span style="color:#f92672">=</span>bao DUMPFILE<span style="color:#f92672">=</span>expdp.dmp TABLES<span style="color:#f92672">=</span>scott.dept REMAP_SCHEMA<span style="color:#f92672">=</span>scott:system;
+<span style="color:#75715e"># 导入表空间</span>
+impdp system/manager DIRECTORY<span style="color:#f92672">=</span>bao DUMPFILE<span style="color:#f92672">=</span>tablespace.dmp TABLESPACES<span style="color:#f92672">=</span>example;
+<span style="color:#75715e"># 直接导入数据库</span>
+impdb system/manager DIRECTORY<span style="color:#f92672">=</span>dump_dir DUMPFILE<span style="color:#f92672">=</span>full.dmp FULL<span style="color:#f92672">=</span>y;
+<span style="color:#75715e"># 追加数据</span>
+impdp system/manager DIRECTORY<span style="color:#f92672">=</span>bao DUMPFILE<span style="color:#f92672">=</span>expdp.dmp SCHEMAS<span style="color:#f92672">=</span>system TABLE_EXISTS_ACTION
+</code></pre></div><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TABBLE_EXISTS_ACTION={SKIP\APPEND\TRUNCATE\FRPLACE}</td>
+<td>SKIP：导入时会跳过已存在的对象；<!-- raw HTML omitted -->APPEND：导入时会追加数据；<!-- raw HTML omitted -->TRUNCATE：导入时会截断表，然后追加新的数据；<!-- raw HTML omitted -->REPLACE：导入时会删除已存在的表，重建表再追加数据。</td>
+</tr>
+<tr>
+<td>REMAP_SCHEMA</td>
+<td>用于将源方案中的所有对象装载到目标方案中。<!-- raw HTML omitted -->例：如果dmp文件导出时对应用户名为 user1，导入时对应用户名为user2，则因为用户名不一致而无法导入，需要这样用REMAP_SCHEMA=user1:user2</td>
+</tr>
+<tr>
+<td>REMAP_TABLESPACE</td>
+<td>将源表空间的所有对象导入到目标表空间：REMAP_TABLESPACE=source_tablespace:target:tablespace</td>
+</tr>
+<tr>
+<td>REMAP_DATAFILE</td>
+<td>将源数据文件转变为目标数据文件，在不同平台之间搬移表空间可能需要该选项：REMAP_DATAFIEL=source_datafie:target_datafile</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ol>
+<hr>
+<h3 id="参考">参考：</h3>
+<p><a href="https://my.oschina.net/u/2396477/blog/651205">https://my.oschina.net/u/2396477/blog/651205</a></p>
+<p><a href="https://blog.csdn.net/ptsx0607/article/details/80134541">https://blog.csdn.net/ptsx0607/article/details/80134541</a></p>
+
+
+  <footer>
+  
+<nav class="post-nav">
+  <span class="nav-prev">&larr; <a href="/cn/2020-06-20-java%E6%95%B0%E6%8D%AE%E5%BA%93-1/">java数据库（1）基本概念和try-with-resources</a></span>
+  <span class="nav-next"><a href="/cn/2020-06-22-oracle%E6%8E%92%E6%9F%A5%E8%B4%A6%E6%88%B7%E9%94%81%E5%AE%9A/">Oracle排查账户锁定</a> &rarr;</span>
+</nav>
+<script type="text/javascript">
+document.addEventListener('keyup', function(e) {
+  if (e.target.nodeName.toUpperCase() != 'BODY') return;
+  var url = false;
+  if (e.which == 37) {  
+    
+    url = '\/cn\/2020-06-20-java%E6%95%B0%E6%8D%AE%E5%BA%93-1\/';
+    
+  } else if (e.which == 39) {  
+    
+    url = '\/cn\/2020-06-22-oracle%E6%8E%92%E6%9F%A5%E8%B4%A6%E6%88%B7%E9%94%81%E5%AE%9A\/';
+    
+  }
+  if (url) window.location = url;
+});
+</script>
+
+
+
+
+
+
+<script async src="/js/fix-toc.js"></script>
+
+<script async src="/js/center-img.js"></script>
+
+<script async src="/js/right-quote.js"></script>
+
+<script async src="/js/no-highlight.js"></script>
+
+<script async src="/js/fix-footnote.js"></script>
+
+<script async src="/js/math-code.js"></script>
+
+<script async src="/js/external-link.js"></script>
+
+<script async src="/js/alt-title.js"></script>
+
+<script async src="/js/header-link.js"></script>
+
+
+
+<script async src="//mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+  
+
+
+
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/java.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/sql.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/css.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/python.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/html.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/bash.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/.properties.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/json.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/shell.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+  
+  <hr>
+  <div class="copyright">© <a href="/">Luo Hao</a> 2016 - 2019</div>
+  
+  </footer>
+  </article>
+  
+  </body>
+</html>
+

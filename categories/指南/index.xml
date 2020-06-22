@@ -82,25 +82,14 @@ b = [x*x for x in range(1,11)] print(b) c = [x*x for x in range(1,11) if x%2 ==0
     </item>
     
     <item>
-      <title>Git实际问题</title>
-      <link>/cn/2019-10-11-git%E5%AE%9E%E9%99%85%E9%97%AE%E9%A2%98/</link>
-      <pubDate>Fri, 11 Oct 2019 00:00:00 +0000</pubDate>
+      <title>A Plain Markdown Post</title>
+      <link>/cn/2016-02-14-hello-markdown/</link>
+      <pubDate>Sun, 14 Feb 2016 00:00:00 +0000</pubDate>
       
-      <guid>/cn/2019-10-11-git%E5%AE%9E%E9%99%85%E9%97%AE%E9%A2%98/</guid>
-      <description>查看和修改当前project的用户名、密码
-git config user.name &amp;amp; user.email
-  本地已创建分支dev，要推送到远程分支
-在远程分支中创建一个dev，利用 git push origin dev:dev 推送到远程，这样有一个坏处，如果未设置:one:中的user，则会以本地计算机或global中的信息推送过去。
-故可以考虑commit之后直接push，git会提醒你push没有上游，采用git branch -u origin/dev来设置本地dev的上游为远程的origin/dev。
-  合并分支到master上
-https://blog.csdn.net/boysky0015/article/details/78185879
-  关于记住密码、多项目不同用户
-git config credential.helper store TODO: 多项目不同用户
-  Changing the Git history of your repository using a script
-  打开Git bash
-  创建存储库的全新裸克隆
-git clone --bare https://github.com/user/repo.git cd repo.git   复制粘贴脚本，替换变量
- OLD_EMAIL CORRECT_NAME CORRECT_EMAIL  #!/bin/sh  git filter-branch --env-filter &amp;#39; OLD_EMAIL=&amp;#34;your-old-email@example.</description>
+      <guid>/cn/2016-02-14-hello-markdown/</guid>
+      <description>This sample post is mainly for blogdown users. If you do not use blogdown, you can skip the first section.
+1. Markdown or R Markdown This is a post written in plain Markdown (*.md) instead of R Markdown (*.Rmd). The major differences are:
+ You cannot run any R code in a plain Markdown document, whereas in an R Markdown document, you can embed R code chunks (```{r}); A plain Markdown post is rendered through Blackfriday, and an R Markdown document is compiled by rmarkdown and Pandoc.</description>
     </item>
     
   </channel>
