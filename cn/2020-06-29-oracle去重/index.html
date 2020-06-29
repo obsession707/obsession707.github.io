@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>Oracle数据库中去除重复数据 - Rehoni | 罗皓</title>
+    <meta property="og:title" content="Oracle数据库中去除重复数据 - Rehoni | 罗皓">
+    
+    <meta name="twitter:card" content="summary">
+
+    
+      
+    
+
+    
+      
+      <meta property="description" content="全表重复
+[&amp;hellip;] create table maindevicetemp as ( select distinct * from ELECTRANS.GEA_DM_RP_MAIN_DEVICE ); truncate table ELECTRANS.GEA_DM_RP_MAIN_DEVICE; insert into ELECTRANS.GEA_DM_RP_MAIN_DEVICE &amp;hellip;">
+      <meta property="og:description" content="全表重复
+[&amp;hellip;] create table maindevicetemp as ( select distinct * from ELECTRANS.GEA_DM_RP_MAIN_DEVICE ); truncate table ELECTRANS.GEA_DM_RP_MAIN_DEVICE; insert into ELECTRANS.GEA_DM_RP_MAIN_DEVICE &amp;hellip;">
+      
+    
+
+    
+    
+    
+    <meta name="twitter:image" content="/images/logo.png">
+    
+    
+
+    
+
+    
+    
+
+
+<link href='//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/styles/monokai-sublime.min.css' rel='stylesheet' type='text/css' />
+
+
+
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+<script async src="/js/load-typekit.js"></script>
+
+
+<link rel="stylesheet" href="/css/custom.css" />
+
+  </head>
+
+  
+  <body class="cn">
+    <header class="masthead">
+      
+
+<h1><a href="/"><img src="/images/logo.png" alt="Luo Hao" /></a></h1>
+
+
+
+      <nav class="menu">
+  <ul>
+  
+  
+  <li><a href="/">首页</a></li>
+  
+  <li><a href="/cn/about/">关于</a></li>
+  
+  <li><a href="/cn/">日志</a></li>
+  
+  <li><a href="/categories/">分类</a></li>
+  
+  <li><a href="/tags/">标签</a></li>
+  
+  <li><a href="/cn/vitae/">简历</a></li>
+  
+  <li><a href="/en/">English</a></li>
+  
+  
+
+<li class="menu-extra"></li>
+
+
+
+<li><a href="https://github.com/rehonicn%5c2020-06-29-oracle%e5%8e%bb%e9%87%8d.md" target="_blank">编辑</a></li>
+
+
+<li><a href="/cn/index.xml" type="application/rss+xml" title="RSS feed">订阅</a></li>
+
+<li><a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="Attribution-NonCommercial-ShareAlike 4.0 International">版权</a></li>
+
+
+  </ul>
+</nav>
+
+    </header>
+
+    <article class="main">
+      <header class="title">
+      
+<h1>Oracle数据库中去除重复数据</h1>
+
+
+<h3>Rehoni / 
+2020-06-29</h3>
+
+<hr>
+
+
+      </header>
+
+
+
+<p>全表重复</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">create</span> <span style="color:#66d9ef">table</span> maindevicetemp <span style="color:#66d9ef">as</span> (
+    <span style="color:#66d9ef">select</span> <span style="color:#66d9ef">distinct</span> <span style="color:#f92672">*</span>
+    <span style="color:#66d9ef">from</span> ELECTRANS.GEA_DM_RP_MAIN_DEVICE
+);
+
+<span style="color:#66d9ef">truncate</span> <span style="color:#66d9ef">table</span> ELECTRANS.GEA_DM_RP_MAIN_DEVICE;
+
+<span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> ELECTRANS.GEA_DM_RP_MAIN_DEVICE
+<span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> maindevicetemp;
+
+<span style="color:#66d9ef">drop</span> <span style="color:#66d9ef">table</span> maindevicetemp;
+</code></pre></div><p>部分重复：直接删除查出来的代码，1. 可以通过把查出来的表放入临时表的操作来提高效率；2. 可以通过选择隐藏字段rowid，取最大的rowid（而不用group by &hellip; having count(*) &gt;1 的操作）为最新的记录。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">create</span> <span style="color:#66d9ef">table</span> geamaindevice <span style="color:#66d9ef">as</span>
+<span style="color:#66d9ef">select</span> a.OBJECT_ID, <span style="color:#66d9ef">max</span>(a.ROWID) dataid
+<span style="color:#66d9ef">from</span> ELECTRANS.GEA_DM_RP_MAIN_DEVICE a
+<span style="color:#66d9ef">group</span> <span style="color:#66d9ef">by</span> a.OBJECT_ID;
+
+<span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> geamaindevice;
+
+<span style="color:#66d9ef">delete</span> <span style="color:#66d9ef">from</span> ELECTRANS.GEA_DM_RP_MAIN_DEVICE a
+<span style="color:#66d9ef">where</span> a.ROWID <span style="color:#f92672">&lt;&gt;</span> (
+    <span style="color:#66d9ef">select</span> b.dataid <span style="color:#66d9ef">from</span> geamaindevice b
+    <span style="color:#66d9ef">where</span> a.OBJECT_ID <span style="color:#f92672">=</span> b.OBJECT_ID
+    );
+</code></pre></div><p>提取更新时间最近的一条记录</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span>
+(<span style="color:#66d9ef">select</span> t.EMPLOYEE_ID,
+       EMPLOYEE_NAME,
+       a.ORG_ID,
+       b.ORG_NAME,
+       t.SHORT_SPELL,
+       t.FULL_SPELL,JOBSTATUS,EMPLOYEE_STATUS,NATIONALITY,SEX,EDUCATION,MOBILE_PHONE,FIX_PHONE,EMAIL,t.UPDATE_TIME,
+       row_number() over (partition <span style="color:#66d9ef">by</span> EMPLOYEE_NAME <span style="color:#66d9ef">order</span> <span style="color:#66d9ef">by</span> t.UPDATE_TIME) rn
+<span style="color:#66d9ef">from</span> SJHL_ZH.NZWOT_TOP_EMPLOYEE t
+    <span style="color:#66d9ef">left</span> <span style="color:#66d9ef">join</span> NZWOT_TOP_USER a <span style="color:#66d9ef">on</span> a.EMPLOYEE_ID <span style="color:#f92672">=</span> t.EMPLOYEE_ID
+    <span style="color:#66d9ef">inner</span> <span style="color:#66d9ef">join</span> (<span style="color:#66d9ef">select</span> org_id, org_name, parent_org_id, org_type, name_full_path, update_time <span style="color:#66d9ef">from</span> sjhl_zh.nzwot_top_organization
+         <span style="color:#66d9ef">where</span> <span style="color:#66d9ef">state</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span> <span style="color:#66d9ef">and</span> regexp_like(name_full_path, <span style="color:#e6db74">&#39;(变电管理所|输电管理所|试验研究所)&#39;</span>)
+         <span style="color:#66d9ef">start</span> <span style="color:#66d9ef">with</span> parent_org_id <span style="color:#f92672">=</span> ( <span style="color:#66d9ef">select</span> org_id <span style="color:#66d9ef">from</span> sjhl_zh.nzwot_top_organization
+         <span style="color:#66d9ef">where</span> name_full_path <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;中国南方电网有限责任公司/广东电网有限责任公司/珠海供电局&#39;</span>
+         <span style="color:#66d9ef">and</span> <span style="color:#66d9ef">state</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span> <span style="color:#66d9ef">and</span> org_level <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span> ) <span style="color:#66d9ef">connect</span> <span style="color:#66d9ef">by</span> <span style="color:#66d9ef">prior</span> org_id <span style="color:#f92672">=</span> parent_org_id
+         <span style="color:#66d9ef">union</span>
+         <span style="color:#66d9ef">select</span> org_id, org_name, <span style="color:#66d9ef">null</span>, org_type, name_full_path, update_time <span style="color:#66d9ef">from</span> sjhl_zh.nzwot_top_organization
+         <span style="color:#66d9ef">where</span> name_full_path <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;中国南方电网有限责任公司/广东电网有限责任公司/珠海供电局&#39;</span> <span style="color:#66d9ef">and</span> <span style="color:#66d9ef">state</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span> <span style="color:#66d9ef">and</span> org_level <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>) b <span style="color:#66d9ef">on</span> b.ORG_ID <span style="color:#f92672">=</span> a.ORG_ID) tb
+         <span style="color:#66d9ef">where</span> tb.rn <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+</code></pre></div>
+
+  <footer>
+  
+<nav class="post-nav">
+  <span class="nav-prev">&larr; <a href="/cn/2020-06-29-windows-%E6%9D%80%E6%AD%BB%E8%BF%9B%E7%A8%8B/">windows下杀死进程</a></span>
+  <span class="nav-next"><a href="/cn/2020-06-29-linux-%E6%89%B9%E9%87%8F%E6%9D%80%E6%AD%BBjava%E8%BF%9B%E7%A8%8B/">linux下批量杀死java进程</a> &rarr;</span>
+</nav>
+<script type="text/javascript">
+document.addEventListener('keyup', function(e) {
+  if (e.target.nodeName.toUpperCase() != 'BODY') return;
+  var url = false;
+  if (e.which == 37) {  
+    
+    url = '\/cn\/2020-06-29-windows-%E6%9D%80%E6%AD%BB%E8%BF%9B%E7%A8%8B\/';
+    
+  } else if (e.which == 39) {  
+    
+    url = '\/cn\/2020-06-29-linux-%E6%89%B9%E9%87%8F%E6%9D%80%E6%AD%BBjava%E8%BF%9B%E7%A8%8B\/';
+    
+  }
+  if (url) window.location = url;
+});
+</script>
+
+
+
+
+
+
+<script async src="/js/fix-toc.js"></script>
+
+<script async src="/js/center-img.js"></script>
+
+<script async src="/js/right-quote.js"></script>
+
+<script async src="/js/no-highlight.js"></script>
+
+<script async src="/js/fix-footnote.js"></script>
+
+<script async src="/js/math-code.js"></script>
+
+<script async src="/js/external-link.js"></script>
+
+<script async src="/js/alt-title.js"></script>
+
+<script async src="/js/header-link.js"></script>
+
+
+
+
+  
+
+
+
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/java.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/sql.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/css.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/python.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/html.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/bash.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/.properties.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/json.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/shell.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+  
+  <hr>
+  <div class="copyright">© <a href="/">Luo Hao</a> 2016 - 2019</div>
+  
+  </footer>
+  </article>
+  
+  </body>
+</html>
+

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>linux on Rehoni | 罗皓</title>
+    <link>/tags/linux/</link>
+    <description>Recent content in linux on Rehoni | 罗皓</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 29 Jun 2020 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>linux下批量杀死java进程</title>
+      <link>/cn/2020-06-29-linux-%E6%89%B9%E9%87%8F%E6%9D%80%E6%AD%BBjava%E8%BF%9B%E7%A8%8B/</link>
+      <pubDate>Mon, 29 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2020-06-29-linux-%E6%89%B9%E9%87%8F%E6%9D%80%E6%AD%BBjava%E8%BF%9B%E7%A8%8B/</guid>
+      <description>批量杀死java进程，需要运用ps, grep, cut 和 kill 一起操作。
+ps -ef|grep LOCAL=NO|grep -v grep|cut -c 9-15|xargs kill -9 关键字为LOCAL=NO
+管道符”|”用来隔开两个命令，管道符左边命令的输出会作为管道符右边命令的输入。
+“ps -ef” 是linux里查看所有进程的命令。这时检索出的进程将作为下一条命令”grep LOCAL=NO”的输入。
+“grep LOCAL=NO” 的输出结果是，所有含有关键字”LOCAL=NO”的进程。
+“grep -v grep” 是在列出的进程中去除含有关键字”grep”的进程。
+“cut -c 9-15” 是截取输入行的第9个字符到第15个字符，而这正好是进程号PID。
+“xargs kill -9” 中的 xargs 命令是用来把前面命令的输出结果（PID）作为”kill -9”命令的参数，并执行该命令。”kill -9”会强行杀掉指定进程。
+另一种方法可以使用awk
+ps x|grep LOCAL=NO|grep -v grep |awk &amp;#39;{print $1}&amp;#39;|xargs kill -9 参考 linux下如何批量杀JAVA进程或某个进程方法</description>
+    </item>
+    
+  </channel>
+</rss>

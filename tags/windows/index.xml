@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>windows on Rehoni | 罗皓</title>
+    <link>/tags/windows/</link>
+    <description>Recent content in windows on Rehoni | 罗皓</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 29 Jun 2020 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/windows/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>windows下杀死进程</title>
+      <link>/cn/2020-06-29-windows-%E6%9D%80%E6%AD%BB%E8%BF%9B%E7%A8%8B/</link>
+      <pubDate>Mon, 29 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2020-06-29-windows-%E6%9D%80%E6%AD%BB%E8%BF%9B%E7%A8%8B/</guid>
+      <description>taskkill命令 # taskkill /pid[进程码] -t(结束该进程) -f（强制结束该进程以及所有子进程） taskkill /im 进程名称 示例：用taskkill /im tomcat7.exe命令关闭tomcat。
+注：有两种方法查进程的PID码：
+ 在命令行下用tasklist命令查出进程的PID码 在任务管理器中的查看选项中勾选PID那一项  例如：taskkill /pid 2345 -f -t；
+wmic process wmic process where name=&amp;#34;进程名称&amp;#34; call terminate 这个不需要知道进程的PID码
+ntsd ntsd -c q -p [PID进程码] 参考 如何在windows命令行后台运行某个命令？</description>
+    </item>
+    
+    <item>
+      <title>windows后台执行bat脚本</title>
+      <link>/cn/2020-06-29-windows-%E5%90%8E%E5%8F%B0%E6%89%A7%E8%A1%8C%E8%BF%9B%E7%A8%8B/</link>
+      <pubDate>Mon, 29 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2020-06-29-windows-%E5%90%8E%E5%8F%B0%E6%89%A7%E8%A1%8C%E8%BF%9B%E7%A8%8B/</guid>
+      <description>Windows后台执行bat脚本 通过vb脚本来隐藏dos窗口，后台执行 @echo off if &amp;#34;%1&amp;#34; == &amp;#34;h&amp;#34; goto begin mshta vbscript:createobject(&amp;#34;wscript.shell&amp;#34;).run(&amp;#34;%~nx0 h&amp;#34;,0)(window.close)&amp;amp;&amp;amp;exit :begin :: redis-server.exe 建立脚本流程  调用运行bat，放入后台执行：main.vbs  Set ws = CreateObject(&amp;quot;Wscript.Shell&amp;quot;)ws.run &amp;quot;cmd /c A.bat&amp;quot;,0ws.run &amp;quot;cmd /c B.bat&amp;quot;,0ws.run &amp;quot;cmd /c C.bat&amp;quot;,0建立主脚本，循环执行：main.bat  @echo off&amp;lt;nul 3&amp;gt;nul :one echo %date:~0,10% %time:~0,-3% 守护进程正在监控系统... start main.vbs ping 127.0.0.1 -n 10&amp;gt;nul goto one 通过ping命令来实现sleep 10秒的操作，每10秒执行main.vbs里边执行的3个脚本。
+start命令 通过在bat脚本中，使用start命令来后台执行需要执行的脚本或者程序
+start /b a.bat    参数 描述     /min | /max 指定最小化（/min）或最大化（/max）新的命令提示符窗口。   /elevate 以管理员身份运行应用程序。   /wait 启动应用程序并等待其结束。   /b 启动应用程序而不打开新的命令提示符窗口。 除非应用程序启用了 CTRL + C 处理，否则将忽略 CTRL + C 处理。 使用 CTRL + BREAK 中断应用程序。   /?</description>
+    </item>
+    
+  </channel>
+</rss>

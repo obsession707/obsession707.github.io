@@ -6,10 +6,21 @@
     <description>Recent content in 数据库 on Rehoni | 罗皓</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 22 Jun 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 29 Jun 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Oracle数据库中去除重复数据</title>
+      <link>/cn/2020-06-29-oracle%E5%8E%BB%E9%87%8D/</link>
+      <pubDate>Mon, 29 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2020-06-29-oracle%E5%8E%BB%E9%87%8D/</guid>
+      <description>全表重复
+create table maindevicetemp as ( select distinct * from ELECTRANS.GEA_DM_RP_MAIN_DEVICE ); truncate table ELECTRANS.GEA_DM_RP_MAIN_DEVICE; insert into ELECTRANS.GEA_DM_RP_MAIN_DEVICE select * from maindevicetemp; drop table maindevicetemp; 部分重复：直接删除查出来的代码，1. 可以通过把查出来的表放入临时表的操作来提高效率；2. 可以通过选择隐藏字段rowid，取最大的rowid（而不用group by &amp;hellip; having count(*) &amp;gt;1 的操作）为最新的记录。
+create table geamaindevice as select a.OBJECT_ID, max(a.ROWID) dataid from ELECTRANS.GEA_DM_RP_MAIN_DEVICE a group by a.OBJECT_ID; select * from geamaindevice; delete from ELECTRANS.GEA_DM_RP_MAIN_DEVICE a where a.ROWID &amp;lt;&amp;gt; ( select b.dataid from geamaindevice b where a.OBJECT_ID = b.OBJECT_ID ); 提取更新时间最近的一条记录</description>
+    </item>
     
     <item>
       <title>Oracle排查账户锁定</title>

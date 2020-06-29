@@ -15,16 +15,12 @@
 
     
       
-      <meta property="description" content="查看和修改当前project的用户名、密码
-git config user.name &amp;amp; user.email
-[&amp;hellip;] 本地已创建分支dev，要推送到远程分支
-在远程分支中创建一个dev，利用 git push origin dev:dev 推送到远程，这样有一个坏处，如果未设置:one:中的user，则会以本地计算机或global中的信息推送过去。
-故可以考虑commit之 &amp;hellip;">
-      <meta property="og:description" content="查看和修改当前project的用户名、密码
-git config user.name &amp;amp; user.email
-[&amp;hellip;] 本地已创建分支dev，要推送到远程分支
-在远程分支中创建一个dev，利用 git push origin dev:dev 推送到远程，这样有一个坏处，如果未设置:one:中的user，则会以本地计算机或global中的信息推送过去。
-故可以考虑commit之 &amp;hellip;">
+      <meta property="description" content="git config user.name &amp;amp; user.email
+[&amp;hellip;] 在远程分支中创建一个dev，利用 git push origin dev:dev 推送到远程，这样有一个坏处，如果未设置:one:中的user，则会以本地计算机或global中的信息推送过去。
+故可以考虑commit之后直接push，git会提醒你push没有上游，采用git branch -u &amp;hellip;">
+      <meta property="og:description" content="git config user.name &amp;amp; user.email
+[&amp;hellip;] 在远程分支中创建一个dev，利用 git push origin dev:dev 推送到远程，这样有一个坏处，如果未设置:one:中的user，则会以本地计算机或global中的信息推送过去。
+故可以考虑commit之后直接push，git会提醒你push没有上游，采用git branch -u &amp;hellip;">
       
     
 
@@ -117,27 +113,17 @@ git config user.name &amp;amp; user.email
 
 
 
-<ol>
-<li>
-<p>查看和修改当前project的用户名、密码</p>
+<h3 id="查看和修改当前project的用户名密码">查看和修改当前project的用户名、密码</h3>
 <p><code>git config user.name &amp; user.email</code></p>
-</li>
-<li>
-<p>本地已创建分支dev，要推送到远程分支</p>
+<h3 id="本地已创建分支dev要推送到远程分支">本地已创建分支dev，要推送到远程分支</h3>
 <p>在远程分支中创建一个dev，利用 <code>git push origin dev:dev</code> 推送到远程，这样有一个坏处，如果未设置:one:中的user，则会以本地计算机或global中的信息推送过去。</p>
 <p>故可以考虑commit之后直接push，git会提醒你push没有上游，采用<code>git branch -u origin/dev</code>来设置本地dev的上游为远程的origin/dev。</p>
-</li>
-<li>
-<p>合并分支到master上</p>
+<h3 id="合并分支到master上">合并分支到master上</h3>
 <p><a href="https://blog.csdn.net/boysky0015/article/details/78185879">https://blog.csdn.net/boysky0015/article/details/78185879</a></p>
-</li>
-<li>
-<p>关于记住密码、多项目不同用户</p>
+<h3 id="关于记住密码多项目不同用户">关于记住密码、多项目不同用户</h3>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">git config credential.helper store
 </code></pre></div><p>TODO: 多项目不同用户</p>
-</li>
-<li>
-<p><a href="https://help.github.com/en/articles/changing-author-info#changing-the-git-history-of-your-repository-using-a-script">Changing the Git history of your repository using a script</a></p>
+<h3 id="changing-the-git-history-of-your-repository-using-a-scripthttpshelpgithubcomenarticleschanging-author-infochanging-the-git-history-of-your-repository-using-a-script"><a href="https://help.github.com/en/articles/changing-author-info#changing-the-git-history-of-your-repository-using-a-script">Changing the Git history of your repository using a script</a></h3>
 <ol>
 <li>
 <p>打开Git bash</p>
@@ -155,13 +141,13 @@ cd repo.git
 <li>CORRECT_EMAIL</li>
 </ol>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e">#!/bin/sh
-</span><span style="color:#75715e"></span>
+</span><span style="color:#75715e"></span>   
 git filter-branch --env-filter <span style="color:#e6db74">&#39;
-</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">   
 </span><span style="color:#e6db74">OLD_EMAIL=&#34;your-old-email@example.com&#34;
 </span><span style="color:#e6db74">CORRECT_NAME=&#34;Your Correct Name&#34;
 </span><span style="color:#e6db74">CORRECT_EMAIL=&#34;your-correct-email@example.com&#34;
-</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">   
 </span><span style="color:#e6db74">if [ &#34;$GIT_COMMITTER_EMAIL&#34; = &#34;$OLD_EMAIL&#34; ]
 </span><span style="color:#e6db74">then
 </span><span style="color:#e6db74">    export GIT_COMMITTER_NAME=&#34;$CORRECT_NAME&#34;
@@ -190,32 +176,47 @@ git filter-branch --env-filter <span style="color:#e6db74">&#39;
 rm -rf repo.git
 </code></pre></div></li>
 </ol>
-</li>
-<li>
-<p>拉取远程分支代码</p>
+<h3 id="拉取远程分支代码">拉取远程分支代码</h3>
 <p><code>git clone</code>了<code>master</code>分支的代码下来，但是需要拉取其他远程分支的代码，采用<code>git branch -r</code>查看远程分支列表，如想要拉取，则可以通过<code>git branch -t origin/dev</code>或者<code>git checkout -b dev origin/dev</code>拉取同远程分支名同名的分支到本地。</p>
-</li>
-<li>
-<p>合并仓库并且保留commit log message记录</p>
+<h3 id="合并仓库并且保留commit-log-message记录">合并仓库并且保留commit log message记录</h3>
 <ol>
 <li>将repo1作为远程仓库，添加到repo2中，设置别名为other</li>
 <li>从repo1仓库中抓取数据到本仓库</li>
 <li>将repo1仓库中抓取的master分支作为新分支checkout到本地，新分支命名为repo1</li>
 <li>切换为repo2的master分支</li>
-<li>将repo1合并入master分支
-注意：产生的文件冲突需要解决提交后才能merge，merge时需要添加参数<code>--allow-unrelated-histories</code></li>
+<li>将repo1合并入master分支</li>
 </ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cmd" data-lang="cmd">git remote add other ../repo1/
-git fetch other
-git checkout -b repo1 other/master
-git checkout master
-git merge repo1 --allow-unrelated-histories
-</code></pre></div></li>
-<li>
-<p>变基操作<code>rebase</code></p>
-</li>
-</ol>
-
+<p>注意：产生的文件冲突需要解决提交后才能merge，merge时需要添加参数<code>--allow-unrelated-histories</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">  git remote add other ../repo1/
+  git fetch other
+  git checkout -b repo1 other/master
+  git checkout master
+  git merge repo1 --allow-unrelated-histories
+</code></pre></div><h3 id="递归子模块">递归子模块</h3>
+<p><a href="https://www.cnblogs.com/hexiaobao/p/8134829.html">https://www.cnblogs.com/hexiaobao/p/8134829.html</a></p>
+<p><a href="https://www.dokyme.cn/index.php/2017/09/04/git/">https://www.dokyme.cn/index.php/2017/09/04/git/</a></p>
+<h3 id="分支的创建和合并-十分详细">分支的创建和合并 (十分详细）</h3>
+<p><a href="https://git-scm.com/book/zh/v1/Git-%E5%88%86%E6%94%AF-%E5%88%86%E6%94%AF%E7%9A%84%E6%96%B0%E5%BB%BA%E4%B8%8E%E5%90%88%E5%B9%B6">https://git-scm.com/book/zh/v1/Git-%E5%88%86%E6%94%AF-%E5%88%86%E6%94%AF%E7%9A%84%E6%96%B0%E5%BB%BA%E4%B8%8E%E5%90%88%E5%B9%B6</a></p>
+<p><a href="https://www.dokyme.cn/index.php/2017/09/07/git-2/">https://www.dokyme.cn/index.php/2017/09/07/git-2/</a></p>
+<h3 id="取消一个目录的git化">取消一个目录的git化</h3>
+<p><code>rm -rf .git</code></p>
+<p>将git分支branch合并到主干master上https://blog.csdn.net/sinat_39150454/article/details/77816179</p>
+<p>修改git的config配置http://daemon369.github.io/git/2015/03/11/setting-email-in-git</p>
+<p>Git bash配置代理</p>
+<h3 id="同一个-github-账号之多台电脑间协同开发">同一个 Github 账号之多台电脑间协同开发</h3>
+<p><a href="https://blog.csdn.net/u013477973/article/details/80820882">https://blog.csdn.net/u013477973/article/details/80820882</a></p>
+<h3 id="git-bash快捷键">Git bash快捷键</h3>
+<p><a href="https://blog.csdn.net/xianghongai/article/details/79029357">https://blog.csdn.net/xianghongai/article/details/79029357</a></p>
+<h3 id="git变基操作">Git变基操作</h3>
+<p><a href="https://git-scm.com/book/zh/v2/Git-%E5%88%86%E6%94%AF-%E5%8F%98%E5%9F%BA">https://git-scm.com/book/zh/v2/Git-%E5%88%86%E6%94%AF-%E5%8F%98%E5%9F%BA</a></p>
+<h3 id="统计git提交次数区域时间内提交次数提交行数">统计git提交次数+区域时间内提交次数+提交行数</h3>
+<p>统计git提交次数: 所有人的所有提交次数，会展示所有的提交人 提交次数详情。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">git log | grep <span style="color:#e6db74">&#34;^Author: &#34;</span> | awk <span style="color:#e6db74">&#39;{print $2}&#39;</span> | sort | uniq -c | sort -k1,1nr
+</code></pre></div><p>统计时间内提交次数。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">git log --author<span style="color:#f92672">=</span>yourname --since<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;2017-08-01&#34;</span> --no-merges | grep -e <span style="color:#e6db74">&#39;commit [a-zA-Z0-9]*&#39;</span> | wc -l
+</code></pre></div><p>统计提交行数：根据1展示出详情，可以填入username。将展示该用户增加行数，删减行数，剩余行数。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">git log --author<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;username&#34;</span> --pretty<span style="color:#f92672">=</span>tformat: --numstat | awk <span style="color:#e6db74">&#39;{ add += $1; subs += $2; loc += $1 - $2 } END { printf &#34;added lines: %s, removed lines: %s, total lines: %s\n&#34;, add, subs, loc }&#39;</span> -
+</code></pre></div>
 
   <footer>
   
