@@ -6,13 +6,46 @@
     <description>Recent content in 编程语言 on Rehoni | 罗皓</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 29 Jun 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 24 Nov 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>java实体类和map的转换</title>
+      <title>Java线程定时得到结果退出示例</title>
+      <link>/cn/2020-11-24-%E7%BA%BF%E7%A8%8B%E5%AE%9A%E6%97%B6%E5%BE%97%E5%88%B0%E7%BB%93%E6%9E%9C%E9%80%80%E5%87%BA%E7%A4%BA%E4%BE%8B/</link>
+      <pubDate>Tue, 24 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2020-11-24-%E7%BA%BF%E7%A8%8B%E5%AE%9A%E6%97%B6%E5%BE%97%E5%88%B0%E7%BB%93%E6%9E%9C%E9%80%80%E5%87%BA%E7%A4%BA%E4%BE%8B/</guid>
+      <description>大致需求  定时每几秒调用一次rest接口，如果接口响应成功则退出线程，如果接口响应失败，则继续调用直至成功。
+ 做了一个简单的线程任务。简单来说是一个异步的调用方式。目前采用的方式是设置一个flag，作为判断rest接口是否调用成功的结果标志位，接口调用不成功则线程死循环；接口调用成功则线程不进入while，退出。
+public static void main(String[] args) { // 线程沉睡时间，每3秒试图调用一次接口插入到告警表  final long timeInterval = 3000; AtomicBoolean flag = new AtomicBoolean(false); Thread thread = new Thread(() -&amp;gt; { while (!flag.get()) { flag.set(testFlag()); try { Thread.sleep(timeInterval); } catch (InterruptedException e) { log.info(&amp;#34;thread sleep interrupted&amp;#34;); } } }); thread.start(); } private static boolean testFlag() { int code = 500; boolean fl = false; try { if (code == 500) { throw new NullPointerException(); } else if (code == 200) { log.</description>
+    </item>
+    
+    <item>
+      <title>Java各时间类的转换</title>
+      <link>/cn/2020-10-13-%E5%90%84%E6%97%B6%E9%97%B4%E7%B1%BB%E7%9A%84%E8%BD%AC%E6%8D%A2/</link>
+      <pubDate>Tue, 13 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2020-10-13-%E5%90%84%E6%97%B6%E9%97%B4%E7%B1%BB%E7%9A%84%E8%BD%AC%E6%8D%A2/</guid>
+      <description>LocalDateTime和String的转换 // LocalDateTime转为String String string = LocalDateTime.now().format(new DateTimeFormatter.ofPattern(&amp;#34;yyyy-MM-dd HH:mm:ss.SSSSSS&amp;#34;)); // String转为LocalDateTime String time = &amp;#34;2020-07-08 14:41:50.238473&amp;#34;; LocalDateTime parse = LocalDateTime.parse(time, new DateTimeFormatter.ofPattern(&amp;#34;yyyy-MM-dd HH:mm:ss.SSSSSS&amp;#34;)); java.util.Date和String的转换 SimpleDateFormat格式化进行转换
+// java.util.Date转换String  DateFormat dateFormat = new SimpleDateFormat(&amp;#34;dd-MM-yy:HH:mm:ss&amp;#34;); Date date = new Date(); String dateStr = dateFormat.format(date); // String转换java.util.Date  try { DateFormat dateFormat = new SimpleDateFormat(&amp;#34;dd/MM/yyy&amp;#34;); Date date = dateFormat.parse(dateStr); } catch (ParseException e) { e.printStack(); } java.sql.Timestamp和String的转换 与java.util.Date和String的转换类似，都是通过SimpleDateFormat格式化进行转换，不展开代码细讲。
+java.util.Date和java.sql.Timestamp的转换 //Date转换Timestamp  Timestamp timestamp = new Timestamp((new Date()).</description>
+    </item>
+    
+    <item>
+      <title>Java创建不可变并且static静态的Map</title>
+      <link>/cn/2020-08-15-%E5%88%9B%E5%BB%BA%E4%B8%8D%E5%8F%AF%E5%8F%98%E5%B9%B6%E4%B8%94static%E9%9D%99%E6%80%81%E9%9B%86%E5%90%88/</link>
+      <pubDate>Sat, 15 Aug 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2020-08-15-%E5%88%9B%E5%BB%BA%E4%B8%8D%E5%8F%AF%E5%8F%98%E5%B9%B6%E4%B8%94static%E9%9D%99%E6%80%81%E9%9B%86%E5%90%88/</guid>
+      <description>findbugs错误提示 MS_MUTABLE_COLLECTION_PKGPROTECT, Priority: Normal
+XX.XX.XXX.XX is a mutable collection which should be package protected
+ A mutable collection instance is assigned to a final static field, thus can be changed by malicious code or by accident from another package. The field could be made package protected to avoid this vulnerability. Alternatively you may wrap this field into Collections.unmodifiableSet/List/Map/etc. to avoid this vulnerability.很容易写的一个错误案例如下： public class TestMap { private static final Map&amp;lt;Integer,String&amp;gt; map = new LinkedHashMap&amp;lt;Integer, String&amp;gt;(); static { map = new HashMap(); map.</description>
+    </item>
+    
+    <item>
+      <title>Java实体类和map的转换</title>
       <link>/cn/2020-06-29-java-%E5%AE%9E%E4%BD%93%E7%B1%BB%E5%92%8Cmap%E7%9A%84%E8%BD%AC%E6%8D%A2/</link>
       <pubDate>Mon, 29 Jun 2020 00:00:00 +0000</pubDate>
       
@@ -21,7 +54,7 @@
     </item>
     
     <item>
-      <title>java的DOM4J解析XML文件</title>
+      <title>Java的DOM4J解析XML文件</title>
       <link>/cn/2020-06-29-java-dom4j/</link>
       <pubDate>Mon, 29 Jun 2020 00:00:00 +0000</pubDate>
       

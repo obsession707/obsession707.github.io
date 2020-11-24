@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>MySQL on Rehoni | 罗皓</title>
+    <link>/tags/mysql/</link>
+    <description>Recent content in MySQL on Rehoni | 罗皓</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 13 Jul 2020 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/mysql/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>MySQL通过Explain计划优化sql</title>
+      <link>/cn/2020-07-13-explain%E8%AE%A1%E5%88%92/</link>
+      <pubDate>Mon, 13 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2020-07-13-explain%E8%AE%A1%E5%88%92/</guid>
+      <description>Explain计划 MySQL执行中，遇到一个执行起来很慢的SQL语句
+SELECT t.ORG_NAME AS OBJECT_NAME, t.ORG_ID, f.DEFECT_LEVEL FROM GEA_ORGANIZATION_INFO t INNER JOIN MAPPER_EMS_STATION s ON s.VINDICATE_OID = t.ORG_ID INNER JOIN MAPPER_EMS_DEVICE d ON d.SITE_ID = s.FUNCTION_ID INNER JOIN SORT_DICT tt ON d.sort_id = tt.sort_id LEFT JOIN ( SELECT * FROM GEA_SP_PD_DEFECT WHERE STATE IN ( 3, 4 ) AND REPORT_TIME BETWEEN str_to_date( &amp;#39;2020-07-01 00:00:00&amp;#39;, &amp;#39;%Y-%m-%d %H:%i:%s&amp;#39; ) AND str_to_date( &amp;#39;2020-07-11 15:15:11&amp;#39;, &amp;#39;%Y-%m-%d %H:%i:%s&amp;#39; )) f ON f.SITE_ID = s.FUNCTION_ID AND f.</description>
+    </item>
+    
+  </channel>
+</rss>

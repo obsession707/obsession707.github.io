@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>Java各时间类的转换 - Rehoni | 罗皓</title>
+    <meta property="og:title" content="Java各时间类的转换 - Rehoni | 罗皓">
+    
+    <meta name="twitter:card" content="summary">
+
+    
+      
+    
+
+    
+      
+      <meta property="description" content="// LocalDateTime转为String String string = LocalDateTime.now().format(new DateTimeFormatter.ofPattern(&amp;#34;yyyy-MM-dd HH:mm:ss.SSSSSS&amp;#34;)); // String转为LocalDateTime String time = &amp;#34;2020-07-08 &amp;hellip;">
+      <meta property="og:description" content="// LocalDateTime转为String String string = LocalDateTime.now().format(new DateTimeFormatter.ofPattern(&amp;#34;yyyy-MM-dd HH:mm:ss.SSSSSS&amp;#34;)); // String转为LocalDateTime String time = &amp;#34;2020-07-08 &amp;hellip;">
+      
+    
+
+    
+    
+    
+    <meta name="twitter:image" content="/images/logo.png">
+    
+    
+
+    
+
+    
+    
+
+
+<link href='//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/styles/monokai-sublime.min.css' rel='stylesheet' type='text/css' />
+
+
+
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+<script async src="/js/load-typekit.js"></script>
+
+
+<link rel="stylesheet" href="/css/custom.css" />
+
+  </head>
+
+  
+  <body class="cn">
+    <header class="masthead">
+      
+
+<h1><a href="/"><img src="/images/logo.png" alt="Luo Hao" /></a></h1>
+
+
+
+      <nav class="menu">
+  <ul>
+  
+  
+  <li><a href="/">首页</a></li>
+  
+  <li><a href="/cn/about/">关于</a></li>
+  
+  <li><a href="/cn/">日志</a></li>
+  
+  <li><a href="/categories/">分类</a></li>
+  
+  <li><a href="/tags/">标签</a></li>
+  
+  <li><a href="/cn/vitae/">简历</a></li>
+  
+  <li><a href="/en/">English</a></li>
+  
+  
+
+<li class="menu-extra"></li>
+
+
+
+<li><a href="https://github.com/rehonicn%5c2020-10-13-%e5%90%84%e6%97%b6%e9%97%b4%e7%b1%bb%e7%9a%84%e8%bd%ac%e6%8d%a2.md" target="_blank">编辑</a></li>
+
+
+<li><a href="/cn/index.xml" type="application/rss+xml" title="RSS feed">订阅</a></li>
+
+<li><a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="Attribution-NonCommercial-ShareAlike 4.0 International">版权</a></li>
+
+
+  </ul>
+</nav>
+
+    </header>
+
+    <article class="main">
+      <header class="title">
+      
+<h1>Java各时间类的转换</h1>
+
+
+<h3>rehoni / 
+2020-10-13</h3>
+
+<hr>
+
+
+      </header>
+
+
+
+<h3 id="localdatetime和string的转换">LocalDateTime和String的转换</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">// LocalDateTime转为String
+</span><span style="color:#75715e"></span>String string <span style="color:#f92672">=</span> LocalDateTime<span style="color:#f92672">.</span><span style="color:#a6e22e">now</span><span style="color:#f92672">().</span><span style="color:#a6e22e">format</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> DateTimeFormatter<span style="color:#f92672">.</span><span style="color:#a6e22e">ofPattern</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;yyyy-MM-dd HH:mm:ss.SSSSSS&#34;</span><span style="color:#f92672">));</span>
+<span style="color:#75715e">// String转为LocalDateTime
+</span><span style="color:#75715e"></span>String time <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;2020-07-08 14:41:50.238473&#34;</span><span style="color:#f92672">;</span>
+LocalDateTime parse <span style="color:#f92672">=</span> LocalDateTime<span style="color:#f92672">.</span><span style="color:#a6e22e">parse</span><span style="color:#f92672">(</span>time<span style="color:#f92672">,</span> <span style="color:#66d9ef">new</span> DateTimeFormatter<span style="color:#f92672">.</span><span style="color:#a6e22e">ofPattern</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;yyyy-MM-dd HH:mm:ss.SSSSSS&#34;</span><span style="color:#f92672">));</span>
+</code></pre></div><h3 id="javautildate和string的转换">java.util.Date和String的转换</h3>
+<p>SimpleDateFormat格式化进行转换</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"> <span style="color:#75715e">// java.util.Date转换String
+</span><span style="color:#75715e"></span> DateFormat dateFormat <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> SimpleDateFormat<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;dd-MM-yy:HH:mm:ss&#34;</span><span style="color:#f92672">);</span>
+ Date date <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Date<span style="color:#f92672">();</span>
+ String dateStr <span style="color:#f92672">=</span> dateFormat<span style="color:#f92672">.</span><span style="color:#a6e22e">format</span><span style="color:#f92672">(</span>date<span style="color:#f92672">);</span>
+ <span style="color:#75715e">// String转换java.util.Date
+</span><span style="color:#75715e"></span> <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+     DateFormat dateFormat <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> SimpleDateFormat<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;dd/MM/yyy&#34;</span><span style="color:#f92672">);</span>
+     Date date <span style="color:#f92672">=</span> dateFormat<span style="color:#f92672">.</span><span style="color:#a6e22e">parse</span><span style="color:#f92672">(</span>dateStr<span style="color:#f92672">);</span>
+ <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>ParseException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+     e<span style="color:#f92672">.</span><span style="color:#a6e22e">printStack</span><span style="color:#f92672">();</span>
+ <span style="color:#f92672">}</span>
+</code></pre></div><h3 id="javasqltimestamp和string的转换">java.sql.Timestamp和String的转换</h3>
+<p>与java.util.Date和String的转换类似，都是通过SimpleDateFormat格式化进行转换，不展开代码细讲。</p>
+<h3 id="javautildate和javasqltimestamp的转换">java.util.Date和java.sql.Timestamp的转换</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"> <span style="color:#75715e">//Date转换Timestamp
+</span><span style="color:#75715e"></span> Timestamp timestamp <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Timestamp<span style="color:#f92672">((</span><span style="color:#66d9ef">new</span> Date<span style="color:#f92672">()).</span><span style="color:#a6e22e">getTime</span><span style="color:#f92672">());</span>
+ <span style="color:#75715e">//Timestamp转换Date，二者是父子关系，可以直接赋值，自动转换
+</span><span style="color:#75715e"></span> Timestamp timestamp1 <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Timestamp<span style="color:#f92672">(</span>System<span style="color:#f92672">.</span><span style="color:#a6e22e">currentTimeMillis</span><span style="color:#f92672">());</span>
+ Date date <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Date<span style="color:#f92672">(</span>timestamp1<span style="color:#f92672">.</span><span style="color:#a6e22e">getTime</span><span style="color:#f92672">());</span>
+</code></pre></div><h3 id="timestamp的比较">timestamp的比较</h3>
+<p><code>before</code>和<code>after</code>函数，可以参考源码内的实现，<code>compareTo</code>接口。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"> Timestamp a <span style="color:#f92672">=</span> Timestamp<span style="color:#f92672">.</span><span style="color:#a6e22e">valueOf</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;2018-05-18 09:32:32&#34;</span><span style="color:#f92672">);</span>
+ Timestamp b <span style="color:#f92672">=</span> Timestamp<span style="color:#f92672">.</span><span style="color:#a6e22e">valueOf</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;2018-05-11 09:32:32&#34;</span><span style="color:#f92672">);</span>
+ <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>b<span style="color:#f92672">.</span><span style="color:#a6e22e">before</span><span style="color:#f92672">(</span>a<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+     System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;b时间比a时间早&#34;</span><span style="color:#f92672">);</span>
+ <span style="color:#f92672">}</span>
+</code></pre></div><p>before函数中封装了compareTo函数，在<code>compareTo(Timestamp t)</code>中对传入的Timestamp做比较。通过<code>long thisTime = this.getTime();</code>获取的时间戳进行比较，<code>compareTo(Date u)</code>也可以传入java.util.Date，不过也是对其做Timestamp的转换后调用<code>compareTo(Timestamp t)</code>做的处理。</p>
+<h3 id="参考">参考</h3>
+<p><a href="https://blog.csdn.net/u010102390/java/article/details/80359847">JAVA比较2个Timestamp类型的时间大小-由此引发的思考</a></p>
+
+
+  <footer>
+  
+<nav class="post-nav">
+  <span class="nav-prev">&larr; <a href="/cn/2020-08-15-%E5%88%9B%E5%BB%BA%E4%B8%8D%E5%8F%AF%E5%8F%98%E5%B9%B6%E4%B8%94static%E9%9D%99%E6%80%81%E9%9B%86%E5%90%88/">Java创建不可变并且static静态的Map</a></span>
+  <span class="nav-next"><a href="/cn/2020-11-24-%E7%BA%BF%E7%A8%8B%E5%AE%9A%E6%97%B6%E5%BE%97%E5%88%B0%E7%BB%93%E6%9E%9C%E9%80%80%E5%87%BA%E7%A4%BA%E4%BE%8B/">Java线程定时得到结果退出示例</a> &rarr;</span>
+</nav>
+<script type="text/javascript">
+document.addEventListener('keyup', function(e) {
+  if (e.target.nodeName.toUpperCase() != 'BODY') return;
+  var url = false;
+  if (e.which == 37) {  
+    
+    url = '\/cn\/2020-08-15-%E5%88%9B%E5%BB%BA%E4%B8%8D%E5%8F%AF%E5%8F%98%E5%B9%B6%E4%B8%94static%E9%9D%99%E6%80%81%E9%9B%86%E5%90%88\/';
+    
+  } else if (e.which == 39) {  
+    
+    url = '\/cn\/2020-11-24-%E7%BA%BF%E7%A8%8B%E5%AE%9A%E6%97%B6%E5%BE%97%E5%88%B0%E7%BB%93%E6%9E%9C%E9%80%80%E5%87%BA%E7%A4%BA%E4%BE%8B\/';
+    
+  }
+  if (url) window.location = url;
+});
+</script>
+
+
+
+
+
+
+<script async src="/js/fix-toc.js"></script>
+
+<script async src="/js/center-img.js"></script>
+
+<script async src="/js/right-quote.js"></script>
+
+<script async src="/js/no-highlight.js"></script>
+
+<script async src="/js/fix-footnote.js"></script>
+
+<script async src="/js/math-code.js"></script>
+
+<script async src="/js/external-link.js"></script>
+
+<script async src="/js/alt-title.js"></script>
+
+<script async src="/js/header-link.js"></script>
+
+
+
+
+  
+
+
+
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/java.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/sql.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/css.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/python.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/html.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/bash.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/.properties.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/json.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/shell.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+  
+  <hr>
+  <div class="copyright">© <a href="/">Luo Hao</a> 2016 - 2019</div>
+  
+  </footer>
+  </article>
+  
+  </body>
+</html>
+

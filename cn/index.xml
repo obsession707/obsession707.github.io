@@ -12,7 +12,50 @@
     
     
     <item>
-      <title>java实体类和map的转换</title>
+      <title>Java线程定时得到结果退出示例</title>
+      <link>/cn/2020-11-24-%E7%BA%BF%E7%A8%8B%E5%AE%9A%E6%97%B6%E5%BE%97%E5%88%B0%E7%BB%93%E6%9E%9C%E9%80%80%E5%87%BA%E7%A4%BA%E4%BE%8B/</link>
+      <pubDate>Tue, 24 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2020-11-24-%E7%BA%BF%E7%A8%8B%E5%AE%9A%E6%97%B6%E5%BE%97%E5%88%B0%E7%BB%93%E6%9E%9C%E9%80%80%E5%87%BA%E7%A4%BA%E4%BE%8B/</guid>
+      <description>大致需求  定时每几秒调用一次rest接口，如果接口响应成功则退出线程，如果接口响应失败，则继续调用直至成功。
+ 做了一个简单的线程任务。简单来说是一个异步的调用方式。目前采用的方式是设置一个flag，作为判断rest接口是否调用成功的结果标志位，接口调用不成功则线程死循环；接口调用成功则线程不进入while，退出。
+public static void main(String[] args) { // 线程沉睡时间，每3秒试图调用一次接口插入到告警表  final long timeInterval = 3000; AtomicBoolean flag = new AtomicBoolean(false); Thread thread = new Thread(() -&amp;gt; { while (!flag.get()) { flag.set(testFlag()); try { Thread.sleep(timeInterval); } catch (InterruptedException e) { log.info(&amp;#34;thread sleep interrupted&amp;#34;); } } }); thread.start(); } private static boolean testFlag() { int code = 500; boolean fl = false; try { if (code == 500) { throw new NullPointerException(); } else if (code == 200) { log.</description>
+    </item>
+    
+    <item>
+      <title>Java各时间类的转换</title>
+      <link>/cn/2020-10-13-%E5%90%84%E6%97%B6%E9%97%B4%E7%B1%BB%E7%9A%84%E8%BD%AC%E6%8D%A2/</link>
+      <pubDate>Tue, 13 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2020-10-13-%E5%90%84%E6%97%B6%E9%97%B4%E7%B1%BB%E7%9A%84%E8%BD%AC%E6%8D%A2/</guid>
+      <description>LocalDateTime和String的转换 // LocalDateTime转为String String string = LocalDateTime.now().format(new DateTimeFormatter.ofPattern(&amp;#34;yyyy-MM-dd HH:mm:ss.SSSSSS&amp;#34;)); // String转为LocalDateTime String time = &amp;#34;2020-07-08 14:41:50.238473&amp;#34;; LocalDateTime parse = LocalDateTime.parse(time, new DateTimeFormatter.ofPattern(&amp;#34;yyyy-MM-dd HH:mm:ss.SSSSSS&amp;#34;)); java.util.Date和String的转换 SimpleDateFormat格式化进行转换
+// java.util.Date转换String  DateFormat dateFormat = new SimpleDateFormat(&amp;#34;dd-MM-yy:HH:mm:ss&amp;#34;); Date date = new Date(); String dateStr = dateFormat.format(date); // String转换java.util.Date  try { DateFormat dateFormat = new SimpleDateFormat(&amp;#34;dd/MM/yyy&amp;#34;); Date date = dateFormat.parse(dateStr); } catch (ParseException e) { e.printStack(); } java.sql.Timestamp和String的转换 与java.util.Date和String的转换类似，都是通过SimpleDateFormat格式化进行转换，不展开代码细讲。
+java.util.Date和java.sql.Timestamp的转换 //Date转换Timestamp  Timestamp timestamp = new Timestamp((new Date()).</description>
+    </item>
+    
+    <item>
+      <title>Java创建不可变并且static静态的Map</title>
+      <link>/cn/2020-08-15-%E5%88%9B%E5%BB%BA%E4%B8%8D%E5%8F%AF%E5%8F%98%E5%B9%B6%E4%B8%94static%E9%9D%99%E6%80%81%E9%9B%86%E5%90%88/</link>
+      <pubDate>Sat, 15 Aug 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2020-08-15-%E5%88%9B%E5%BB%BA%E4%B8%8D%E5%8F%AF%E5%8F%98%E5%B9%B6%E4%B8%94static%E9%9D%99%E6%80%81%E9%9B%86%E5%90%88/</guid>
+      <description>findbugs错误提示 MS_MUTABLE_COLLECTION_PKGPROTECT, Priority: Normal
+XX.XX.XXX.XX is a mutable collection which should be package protected
+ A mutable collection instance is assigned to a final static field, thus can be changed by malicious code or by accident from another package. The field could be made package protected to avoid this vulnerability. Alternatively you may wrap this field into Collections.unmodifiableSet/List/Map/etc. to avoid this vulnerability.很容易写的一个错误案例如下： public class TestMap { private static final Map&amp;lt;Integer,String&amp;gt; map = new LinkedHashMap&amp;lt;Integer, String&amp;gt;(); static { map = new HashMap(); map.</description>
+    </item>
+    
+    <item>
+      <title>MySQL通过Explain计划优化sql</title>
+      <link>/cn/2020-07-13-explain%E8%AE%A1%E5%88%92/</link>
+      <pubDate>Mon, 13 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2020-07-13-explain%E8%AE%A1%E5%88%92/</guid>
+      <description>Explain计划 MySQL执行中，遇到一个执行起来很慢的SQL语句
+SELECT t.ORG_NAME AS OBJECT_NAME, t.ORG_ID, f.DEFECT_LEVEL FROM GEA_ORGANIZATION_INFO t INNER JOIN MAPPER_EMS_STATION s ON s.VINDICATE_OID = t.ORG_ID INNER JOIN MAPPER_EMS_DEVICE d ON d.SITE_ID = s.FUNCTION_ID INNER JOIN SORT_DICT tt ON d.sort_id = tt.sort_id LEFT JOIN ( SELECT * FROM GEA_SP_PD_DEFECT WHERE STATE IN ( 3, 4 ) AND REPORT_TIME BETWEEN str_to_date( &amp;#39;2020-07-01 00:00:00&amp;#39;, &amp;#39;%Y-%m-%d %H:%i:%s&amp;#39; ) AND str_to_date( &amp;#39;2020-07-11 15:15:11&amp;#39;, &amp;#39;%Y-%m-%d %H:%i:%s&amp;#39; )) f ON f.SITE_ID = s.FUNCTION_ID AND f.</description>
+    </item>
+    
+    <item>
+      <title>Java实体类和map的转换</title>
       <link>/cn/2020-06-29-java-%E5%AE%9E%E4%BD%93%E7%B1%BB%E5%92%8Cmap%E7%9A%84%E8%BD%AC%E6%8D%A2/</link>
       <pubDate>Mon, 29 Jun 2020 00:00:00 +0000</pubDate>
       
@@ -21,7 +64,7 @@
     </item>
     
     <item>
-      <title>java的DOM4J解析XML文件</title>
+      <title>Java的DOM4J解析XML文件</title>
       <link>/cn/2020-06-29-java-dom4j/</link>
       <pubDate>Mon, 29 Jun 2020 00:00:00 +0000</pubDate>
       
@@ -141,10 +184,10 @@ try (Connection c = DriverManager.getConnection(&amp;#34;jdbc:mysql://127.0.0.1:
     
     <item>
       <title>写给自己的说明书</title>
-      <link>/cn/2920-06-20-manual/</link>
+      <link>/cn/2020-06-20-manual/</link>
       <pubDate>Sat, 20 Jun 2020 00:00:00 +0000</pubDate>
       
-      <guid>/cn/2920-06-20-manual/</guid>
+      <guid>/cn/2020-06-20-manual/</guid>
       <description>私人仓库 用于推送博客。采用hugo。
 1. 构建流程  在typora中写好文章 添加YAML front matter 放入此仓库的content文件夹中 图片放入static\images中，并且在博文中将路径修改为/images/xxx.jpg 使用hugo命令生成 使用脚本备份和部署  2. hugo使用 建议阅读 hugo 中文文档
 以及ivy作者说明书

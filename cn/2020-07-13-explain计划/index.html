@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>MySQL通过Explain计划优化sql - Rehoni | 罗皓</title>
+    <meta property="og:title" content="MySQL通过Explain计划优化sql - Rehoni | 罗皓">
+    
+    <meta name="twitter:card" content="summary">
+
+    
+      
+    
+
+    
+      
+      <meta property="description" content="MySQL执行中，遇到一个执行起来很慢的SQL语句
+[&amp;hellip;] SELECT t.ORG_NAME AS OBJECT_NAME, t.ORG_ID, f.DEFECT_LEVEL FROM GEA_ORGANIZATION_INFO t INNER JOIN MAPPER_EMS_STATION s ON s.VINDICATE_OID = t.ORG_ID INNER JOIN &amp;hellip;">
+      <meta property="og:description" content="MySQL执行中，遇到一个执行起来很慢的SQL语句
+[&amp;hellip;] SELECT t.ORG_NAME AS OBJECT_NAME, t.ORG_ID, f.DEFECT_LEVEL FROM GEA_ORGANIZATION_INFO t INNER JOIN MAPPER_EMS_STATION s ON s.VINDICATE_OID = t.ORG_ID INNER JOIN &amp;hellip;">
+      
+    
+
+    
+    
+    
+    <meta name="twitter:image" content="/images/logo.png">
+    
+    
+
+    
+
+    
+    
+
+
+<link href='//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/styles/monokai-sublime.min.css' rel='stylesheet' type='text/css' />
+
+
+
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+<script async src="/js/load-typekit.js"></script>
+
+
+<link rel="stylesheet" href="/css/custom.css" />
+
+  </head>
+
+  
+  <body class="cn">
+    <header class="masthead">
+      
+
+<h1><a href="/"><img src="/images/logo.png" alt="Luo Hao" /></a></h1>
+
+
+
+      <nav class="menu">
+  <ul>
+  
+  
+  <li><a href="/">首页</a></li>
+  
+  <li><a href="/cn/about/">关于</a></li>
+  
+  <li><a href="/cn/">日志</a></li>
+  
+  <li><a href="/categories/">分类</a></li>
+  
+  <li><a href="/tags/">标签</a></li>
+  
+  <li><a href="/cn/vitae/">简历</a></li>
+  
+  <li><a href="/en/">English</a></li>
+  
+  
+
+<li class="menu-extra"></li>
+
+
+
+<li><a href="https://github.com/rehonicn%5c2020-07-13-explain%e8%ae%a1%e5%88%92.md" target="_blank">编辑</a></li>
+
+
+<li><a href="/cn/index.xml" type="application/rss+xml" title="RSS feed">订阅</a></li>
+
+<li><a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="Attribution-NonCommercial-ShareAlike 4.0 International">版权</a></li>
+
+
+  </ul>
+</nav>
+
+    </header>
+
+    <article class="main">
+      <header class="title">
+      
+<h1>MySQL通过Explain计划优化sql</h1>
+
+
+<h3>Rehoni / 
+2020-07-13</h3>
+
+<hr>
+
+
+      </header>
+
+
+
+<h3 id="explain计划">Explain计划</h3>
+<p>MySQL执行中，遇到一个执行起来很慢的SQL语句</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql"> <span style="color:#66d9ef">SELECT</span>
+     t.ORG_NAME <span style="color:#66d9ef">AS</span> OBJECT_NAME,
+     t.ORG_ID,
+     f.DEFECT_LEVEL
+ <span style="color:#66d9ef">FROM</span>
+     GEA_ORGANIZATION_INFO t
+     <span style="color:#66d9ef">INNER</span> <span style="color:#66d9ef">JOIN</span> MAPPER_EMS_STATION s <span style="color:#66d9ef">ON</span> s.VINDICATE_OID <span style="color:#f92672">=</span> t.ORG_ID
+     <span style="color:#66d9ef">INNER</span> <span style="color:#66d9ef">JOIN</span> MAPPER_EMS_DEVICE d <span style="color:#66d9ef">ON</span> d.SITE_ID <span style="color:#f92672">=</span> s.FUNCTION_ID
+     <span style="color:#66d9ef">INNER</span> <span style="color:#66d9ef">JOIN</span> SORT_DICT tt <span style="color:#66d9ef">ON</span> d.sort_id <span style="color:#f92672">=</span> tt.sort_id
+     <span style="color:#66d9ef">LEFT</span> <span style="color:#66d9ef">JOIN</span> (
+     <span style="color:#66d9ef">SELECT</span>
+         <span style="color:#f92672">*</span>
+     <span style="color:#66d9ef">FROM</span>
+         GEA_SP_PD_DEFECT
+     <span style="color:#66d9ef">WHERE</span>
+         STATE <span style="color:#66d9ef">IN</span> ( <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span> )
+         <span style="color:#66d9ef">AND</span> REPORT_TIME <span style="color:#66d9ef">BETWEEN</span> <span style="color:#a6e22e">str_to_date</span>( <span style="color:#e6db74">&#39;2020-07-01 00:00:00&#39;</span>, <span style="color:#e6db74">&#39;%Y-%m-%d %H:%i:%s&#39;</span> )
+     <span style="color:#66d9ef">AND</span> <span style="color:#a6e22e">str_to_date</span>( <span style="color:#e6db74">&#39;2020-07-11 15:15:11&#39;</span>, <span style="color:#e6db74">&#39;%Y-%m-%d %H:%i:%s&#39;</span> )) f <span style="color:#66d9ef">ON</span> f.SITE_ID <span style="color:#f92672">=</span> s.FUNCTION_ID <span style="color:#66d9ef">AND</span> f.FUNCTION_LOCATION_ID <span style="color:#f92672">=</span> d.FUNCTION_ID
+ <span style="color:#66d9ef">WHERE</span>
+     (
+     s.RUNNING_STATE <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>)
+</code></pre></div><p>查看执行计划，在SELECT之前添加EXPLAIN即可（Data Grip中可以选中右键，EXPLAIN）得到结果如下：</p>
+<p>发现计划中，type为ALL的两行都是，全表扫描没有走任何索引，此时效率为34144 * 22446。</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>select_type</th>
+<th>table</th>
+<th>partitions</th>
+<th>type</th>
+<th>possible_keys</th>
+<th>key</th>
+<th>key_len</th>
+<th>ref</th>
+<th>rows</th>
+<th>filtered</th>
+<th>Extra</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>SIMPLE</td>
+<td>1-Dec-20</td>
+<td>NULL</td>
+<td>ALL</td>
+<td>NULL</td>
+<td>NULL</td>
+<td>NULL</td>
+<td>NULL</td>
+<td>34144</td>
+<td>100</td>
+<td>Using where</td>
+</tr>
+<tr>
+<td>1</td>
+<td>SIMPLE</td>
+<td></td>
+<td>NULL</td>
+<td>eq_ref</td>
+<td>SORT_DICT_TEMP_SORT_ID_UINDEX</td>
+<td>SORT_DICT_TEMP_SORT_ID_UINDEX</td>
+<td>4</td>
+<td>standard_bak.d.SORT_ID</td>
+<td>1</td>
+<td>100</td>
+<td>Using index</td>
+</tr>
+<tr>
+<td>1</td>
+<td>SIMPLE</td>
+<td>########</td>
+<td>NULL</td>
+<td>eq_ref</td>
+<td>PRIMARY</td>
+<td>PRIMARY</td>
+<td>194</td>
+<td>standard_bak.d.SITE_ID</td>
+<td>1</td>
+<td>10</td>
+<td>Using where</td>
+</tr>
+<tr>
+<td>1</td>
+<td>SIMPLE</td>
+<td>########</td>
+<td>NULL</td>
+<td>eq_ref</td>
+<td>PRIMARY</td>
+<td>PRIMARY</td>
+<td>194</td>
+<td>standard_bak.s.VINDICATE_OID</td>
+<td>1</td>
+<td>100</td>
+<td>NULL</td>
+</tr>
+<tr>
+<td>1</td>
+<td>SIMPLE</td>
+<td></td>
+<td>NULL</td>
+<td>ALL</td>
+<td>NULL</td>
+<td>NULL</td>
+<td>NULL</td>
+<td>NULL</td>
+<td>22446</td>
+<td>100</td>
+<td>Using where; Using join buffer (Block Nested Loop)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="优化">优化</h3>
+<p>在GEA_SP_PD_DEFECT表中，添加SITE_ID和FUNCTION_LOCATION_ID（两者是SQL中有被使用的字段）的索引（添加一个、两个都可，产生的效果相同），此时的优化结果如下，可以看到GEA_SP_PD_DEFECT表的type变成了ref（索引），使用的索引为FUNCTION_LOCATION_ID，row从原来的22446变为1了，此时效率为34144。</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>select_type</th>
+<th>table</th>
+<th>partitions</th>
+<th>type</th>
+<th>possible_keys</th>
+<th>key</th>
+<th>key_len</th>
+<th>ref</th>
+<th>rows</th>
+<th>filtered</th>
+<th>Extra</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>SIMPLE</td>
+<td>1-Dec-20</td>
+<td>NULL</td>
+<td>ALL</td>
+<td>NULL</td>
+<td>NULL</td>
+<td>NULL</td>
+<td>NULL</td>
+<td>34144</td>
+<td>100</td>
+<td>Using where</td>
+</tr>
+<tr>
+<td>1</td>
+<td>SIMPLE</td>
+<td></td>
+<td>NULL</td>
+<td>eq_ref</td>
+<td>SORT_DICT_TEMP_SORT_ID_UINDEX</td>
+<td>SORT_DICT_TEMP_SORT_ID_UINDEX</td>
+<td>4</td>
+<td>standard_bak.d.SORT_ID</td>
+<td>1</td>
+<td>100</td>
+<td>Using index</td>
+</tr>
+<tr>
+<td>1</td>
+<td>SIMPLE</td>
+<td>16-Aug-20</td>
+<td>NULL</td>
+<td>eq_ref</td>
+<td>PRIMARY</td>
+<td>PRIMARY</td>
+<td>194</td>
+<td>standard_bak.d.SITE_ID</td>
+<td>1</td>
+<td>10</td>
+<td>Using where</td>
+</tr>
+<tr>
+<td>1</td>
+<td>SIMPLE</td>
+<td>10-Aug-20</td>
+<td>NULL</td>
+<td>eq_ref</td>
+<td>PRIMARY</td>
+<td>PRIMARY</td>
+<td>194</td>
+<td>standard_bak.s.VINDICATE_OID</td>
+<td>1</td>
+<td>100</td>
+<td>NULL</td>
+</tr>
+<tr>
+<td>1</td>
+<td>SIMPLE</td>
+<td></td>
+<td>NULL</td>
+<td>ref</td>
+<td>gea_sp_pd_defect_FUNCTION_LOCATION_ID_index</td>
+<td>gea_sp_pd_defect_FUNCTION_LOCATION_ID_index</td>
+<td>195</td>
+<td>standard_bak.d.FUNCTION_ID</td>
+<td>1</td>
+<td>100</td>
+<td>Using where</td>
+</tr>
+</tbody>
+</table>
+<p>再对table d进行优化，在对d表只添加SITE_ID索引，此时的优化结果如下，此时效率为176x80=14,080；如果对d表只添加SORT_ID索引，此时的优化结果如下，此时效率仍为34144（计划执行结果从下表变成了上表）；对d表添加SITE_ID和SORT_ID两个字段的索引，可以发现效率为176*80=14,080，和对添加SITE_ID索引的情况没有变化。</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>select_type</th>
+<th>table</th>
+<th>partitions</th>
+<th>type</th>
+<th>possible_keys</th>
+<th>key</th>
+<th>key_len</th>
+<th>ref</th>
+<th>rows</th>
+<th>filtered</th>
+<th>Extra</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>SIMPLE</td>
+<td>16-Aug-20</td>
+<td>NULL</td>
+<td>ALL</td>
+<td>PRIMARY</td>
+<td>NULL</td>
+<td>NULL</td>
+<td>NULL</td>
+<td>80</td>
+<td>10</td>
+<td>Using where</td>
+</tr>
+<tr>
+<td>1</td>
+<td>SIMPLE</td>
+<td>10-Aug-20</td>
+<td>NULL</td>
+<td>eq_ref</td>
+<td>PRIMARY</td>
+<td>PRIMARY</td>
+<td>194</td>
+<td>standard_bak.s.VINDICATE_OID</td>
+<td>1</td>
+<td>100</td>
+<td>NULL</td>
+</tr>
+<tr>
+<td>1</td>
+<td>SIMPLE</td>
+<td>1-Dec-20</td>
+<td>NULL</td>
+<td>ref</td>
+<td>mapper_ems_device_SITE_ID_index</td>
+<td>mapper_ems_device_SITE_ID_index</td>
+<td>195</td>
+<td>standard_bak.s.FUNCTION_ID</td>
+<td>176</td>
+<td>100</td>
+<td>Using where</td>
+</tr>
+<tr>
+<td>1</td>
+<td>SIMPLE</td>
+<td></td>
+<td>NULL</td>
+<td>eq_ref</td>
+<td>SORT_DICT_TEMP_SORT_ID_UINDEX</td>
+<td>SORT_DICT_TEMP_SORT_ID_UINDEX</td>
+<td>4</td>
+<td>standard_bak.d.SORT_ID</td>
+<td>1</td>
+<td>100</td>
+<td>Using index</td>
+</tr>
+<tr>
+<td>1</td>
+<td>SIMPLE</td>
+<td></td>
+<td>NULL</td>
+<td>ref</td>
+<td>gea_sp_pd_defect_FUNCTION_LOCATION_ID_index</td>
+<td>gea_sp_pd_defect_FUNCTION_LOCATION_ID_index</td>
+<td>195</td>
+<td>standard_bak.d.FUNCTION_ID</td>
+<td>1</td>
+<td>100</td>
+<td>Using where</td>
+</tr>
+</tbody>
+</table>
+<p>查看挂起的进程，并且杀掉</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql"> <span style="color:#75715e">-- 当前用户下
+</span><span style="color:#75715e"></span> <span style="color:#66d9ef">show</span> processlist;
+ <span style="color:#66d9ef">kill</span> <span style="color:#ae81ff">184239</span>;
+</code></pre></div><h3 id="参考">参考</h3>
+<p><a href="https://thoughtbot.com/blog/reading-an-explain-analyze-query-plan">Reading a Postgres EXPLAIN ANALYZE Query Plan</a></p>
+<p><a href="https://www.postgresql.org/docs/9.2/using-explain.html">Using <code>EXPLAIN</code></a></p>
+<p><a href="https://docs.gitlab.com/ee/development/understanding_explain_plans.html">Understanding EXPLAIN plans</a></p>
+<p><a href="https://dev.mysql.com/doc/refman/8.0/en/explain.html">EXPLAIN Statement</a></p>
+<p><a href="https://www.sitepoint.com/using-explain-to-write-better-mysql-queries/">Using EXPLAIN to Write Better MySQL Queries</a></p>
+
+
+  <footer>
+  
+<nav class="post-nav">
+  <span class="nav-prev">&larr; <a href="/cn/2020-06-29-java-%E5%AE%9E%E4%BD%93%E7%B1%BB%E5%92%8Cmap%E7%9A%84%E8%BD%AC%E6%8D%A2/">Java实体类和map的转换</a></span>
+  <span class="nav-next"><a href="/cn/2020-08-15-%E5%88%9B%E5%BB%BA%E4%B8%8D%E5%8F%AF%E5%8F%98%E5%B9%B6%E4%B8%94static%E9%9D%99%E6%80%81%E9%9B%86%E5%90%88/">Java创建不可变并且static静态的Map</a> &rarr;</span>
+</nav>
+<script type="text/javascript">
+document.addEventListener('keyup', function(e) {
+  if (e.target.nodeName.toUpperCase() != 'BODY') return;
+  var url = false;
+  if (e.which == 37) {  
+    
+    url = '\/cn\/2020-06-29-java-%E5%AE%9E%E4%BD%93%E7%B1%BB%E5%92%8Cmap%E7%9A%84%E8%BD%AC%E6%8D%A2\/';
+    
+  } else if (e.which == 39) {  
+    
+    url = '\/cn\/2020-08-15-%E5%88%9B%E5%BB%BA%E4%B8%8D%E5%8F%AF%E5%8F%98%E5%B9%B6%E4%B8%94static%E9%9D%99%E6%80%81%E9%9B%86%E5%90%88\/';
+    
+  }
+  if (url) window.location = url;
+});
+</script>
+
+
+
+
+
+
+<script async src="/js/fix-toc.js"></script>
+
+<script async src="/js/center-img.js"></script>
+
+<script async src="/js/right-quote.js"></script>
+
+<script async src="/js/no-highlight.js"></script>
+
+<script async src="/js/fix-footnote.js"></script>
+
+<script async src="/js/math-code.js"></script>
+
+<script async src="/js/external-link.js"></script>
+
+<script async src="/js/alt-title.js"></script>
+
+<script async src="/js/header-link.js"></script>
+
+
+
+
+  
+
+
+
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/highlight.min.js"></script>
+
+
+
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/java.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/sql.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/css.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/python.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/html.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/bash.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/.properties.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/json.min.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/highlight.js/10.1.0/languages/shell.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+  
+  <hr>
+  <div class="copyright">© <a href="/">Luo Hao</a> 2016 - 2019</div>
+  
+  </footer>
+  </article>
+  
+  </body>
+</html>
+

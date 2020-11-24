@@ -13,10 +13,10 @@
     
     <item>
       <title>写给自己的说明书</title>
-      <link>/cn/2920-06-20-manual/</link>
+      <link>/cn/2020-06-20-manual/</link>
       <pubDate>Sat, 20 Jun 2020 00:00:00 +0000</pubDate>
       
-      <guid>/cn/2920-06-20-manual/</guid>
+      <guid>/cn/2020-06-20-manual/</guid>
       <description>私人仓库 用于推送博客。采用hugo。
 1. 构建流程  在typora中写好文章 添加YAML front matter 放入此仓库的content文件夹中 图片放入static\images中，并且在博文中将路径修改为/images/xxx.jpg 使用hugo命令生成 使用脚本备份和部署  2. hugo使用 建议阅读 hugo 中文文档
 以及ivy作者说明书
