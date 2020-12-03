@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>技术漫谈 on Rehoni | 罗皓</title>
+    <link>/categories/%E6%8A%80%E6%9C%AF%E6%BC%AB%E8%B0%88/</link>
+    <description>Recent content in 技术漫谈 on Rehoni | 罗皓</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 20 Jun 2020 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/categories/%E6%8A%80%E6%9C%AF%E6%BC%AB%E8%B0%88/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>写给自己的说明书</title>
+      <link>/cn/2020-06-20-manual/</link>
+      <pubDate>Sat, 20 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2020-06-20-manual/</guid>
+      <description>私人仓库 用于推送博客。采用hugo。
+1. 构建流程  在typora中写好文章 添加YAML front matter 放入此仓库的content文件夹中 图片放入static\images中，并且在博文中将路径修改为/images/xxx.jpg 使用hugo命令生成 使用脚本备份和部署  2. hugo使用 建议阅读 hugo 中文文档
+以及ivy作者说明书
+hugo --theme=ivy # hugo server (--theme=hyde --buildDrafts) hugo server # 部署方法不是采用的下边的方式 hugo --theme=hyde --baseUrl=&amp;#34;http://coderzh.github.io/&amp;#34; cd public git init git remote add origin https://github.com/coderzh/coderzh.github.io.git git add -A git commit -m &amp;#34;first commit&amp;#34; git push -u origin master 3. 图片路径问题   config.toml中设置baseurl，设置成‘/’即可。
+  在.md的图片路径中，以static为根目录写全路径。
+  假设测试baseurl为http://localhost:1313/，图片位置：/static/img/hugo/123.png，那么在Markdown中写作![图片说明](/img/hugo/123.png)。这时，在浏览器就可以看到图片了 。
+  typora软件设置，这样在每个大类文件夹中都有一个img文件夹，生产新的博文之后把对应的图片拷贝到项目的static/img中去就行。</description>
+    </item>
+    
+    <item>
+      <title>基本开发守则</title>
+      <link>/cn/2020-06-20-%E5%9F%BA%E6%9C%AC%E5%BC%80%E5%8F%91%E5%AE%88%E5%88%99/</link>
+      <pubDate>Sat, 20 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2020-06-20-%E5%9F%BA%E6%9C%AC%E5%BC%80%E5%8F%91%E5%AE%88%E5%88%99/</guid>
+      <description>命名规范 目录 由于 Windows 和 OSX下对文件大小写不敏感，因此我们采用kebab-case命名法。
+基础用法 例如：项目文件夹 my-project-name
+复数 项目内的子文件夹按照作用，采用常规单词命名。不使用缩写，除非已经约定俗成的惯用法。
+例如：脚本文件 scripts、模块modules、 组件components
+文件 和目录一致，采用kebab-case
+变量 采用camelCase，且使用英文名词
+✔️ 正确示例：userCount 、listItems
+❌ 错误用法：setCount set 是动词
+常量 采用UPPER_CASE，即全部使用大写字母，多音节用 _ 分割例如：MAX_COUNT、URI
+函数 采用camelCase，前缀为动词
+   动词 含义 返回值     can 判断是否可执行某个动作(权限) 函数返回一个布尔值。true:可执行;false:不可执行   has 判断是否含有某个值 函数返回一个布尔值。true:含有此值;false:不含有此值   is 判断是否为某个值 函数返回一个布尔值。true:为某个值;false:不为某个值   get 获取某个值 函数返回一个非布尔值   set 设置某个值 无返回值、返回是否设置成功或者返回链式对象   load 加载某些数据 无返回值或者返回是否加载完成的结果    例如：getName 建议的动词约定</description>
+    </item>
+    
+    <item>
+      <title>数据库命名规则</title>
+      <link>/cn/2020-06-20-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%A7%84%E8%8C%83/</link>
+      <pubDate>Sat, 20 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2020-06-20-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%A7%84%E8%8C%83/</guid>
+      <description>基本原则  表名与字段的命名统一采用大写英文全称或简称，严禁用拼音或缩写； 数据库的所有表名、视图名、字段名、存储过程一律采用大写； 名称中间词的间隔采用下划线“_”拼接。  表名命名规定  表名命名统一采用大写英文全称或简称，严禁用拼音或缩写； 数据库的所有表明、视图名、字段名、存储过程一律采用大写； 名词中间词的间隔采用下划线“_”拼接； 表名不可以太长，最好不要超过3个英文单词长度（30个字母）； 在表创建完成前，应该为表添加表的注释。  表设计规范  所有字段在设计时，除以下数据类型timestamp、image、datetime、smalldatetime、uniqueidentifier、binary、sql_variant、binary、varbinary外，最好有默认值； 字符型的默认值为一个空字符值串‘’； 数值型的默认值为数值0； 逻辑型的默认值为数值0（其中：系统中所有逻辑型中数值0表示为“假”，数值1表示为“真”）； datetime、smalldatetime类型的字段没有默认值，必须为NULL； 当字段定义为字符串型时，建议使用varchar2（varchar和varchar2的区别）而不是用nvarchar； 字段的描述：  字段必须填写描述信息（注释） 尽量遵守第三范式的标准（3NF）  表内的每一个值都只能被表达一次（列名不重复） 表内的每一行都应当被唯一的标示（标识唯一性，如自动增长主键） 表内不应该存储依赖于其他键的非键信息      字段名命名约定  数据库字段应该是有意义且易于理解的，最好是能够表达字段含义的英文字母； 系统中所有属于内码，即仅用于标识唯一性和程序内部用到的标识性字段，字段名称建议取为ID，采用类型为整型或长整型，也可以使用字符类型； 系统中属于是业务内的编号字段，代表一定业务信息，建议字段命名为CODE，如线路编号LINE_CODE； 不要在数据库表字段（列名）中包含数据类型，如：datetime； 不要在数据库表字段（列名）命名时重复表名，可以使用表名首字母（不包含数据库表名前缀）。  注意：
+​	在数据库表字段（列名）命名时不建议使用数据库关键字，如：name，time，datetime，password等。
+存储过程命名规定 存储过程的命名请遵循以下命名规范：PRO_+系统模块（与表前缀类似）+_+功能标识英文单词或英文单词缩写。
+如果一个存储过程只对一个表进行操作，建议存储过程的名称就用存储过程的表的表名（不带前缀）。这样有利于根据表名找到相应的存储过程。例如，用于清洗缺陷信息的过程PRO_DEFECT_CLEANING。
+存储过程设计规范  在存储过程中必须说明一下内容：  目的：说明此存储过程的作用。 作者：首次创建此存储过程的人的姓名。在此请使用中文全名，不允许使用英文简称。 创建日期：创建存储过程的日期。 修改记录：修改记录需包含修改顺序号、修改者、修改日期、修改原因，修改时不能直接在原来的代码上修改，也不能删除原来的代码，只能先将原来的代码注释掉，再重新增加正确的代码。修改顺序号的形式为：log1，log2，log3。。。根据修改次数顺序增加，同时在注释掉的原来的代码块和新增的正确代码块前后注明修改顺序号。   对存储过程各参数及变量加中文注解。 建议在数据库中创建一个文本文件保存创建脚本。  触发器命名规范 Insert触发器加&#39;_i&amp;rsquo;，Delete触发器加&#39;_d&#39;，Update触发器加&#39;_u&amp;rsquo;。
+触发器设计规范 在触发器中必须说明以下内容：
+ 目的：说明此触发器的作用。 创建者：首次创建此触发器的人的姓名。在此请使用中文全名，不允许使用英文简称。 修改者、修改日期、修改原因：如果有人对此触发器进行了修改，则必须在此触发器的前面加注修改者姓名、修改日期及修改原因。 对触发器各参数及变量加中文注解。 建议在数据库中创建一个文本文件保存创建脚本。  </description>
+    </item>
+    
+    <item>
+      <title>简单python轮廓</title>
+      <link>/cn/2020-06-20-%E7%AE%80%E5%8D%95python%E8%BD%AE%E5%BB%93/</link>
+      <pubDate>Sat, 20 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2020-06-20-%E7%AE%80%E5%8D%95python%E8%BD%AE%E5%BB%93/</guid>
+      <description>一些特性 解释型语言： 制表符和四个空格，代码末尾解释器自动加分号
+i = &amp;#39;hello&amp;#39; print(type(i)) print(isinstance(i,str)) print(id(i)) # 查看内存地址 dir(i) # 查看支持的操作 list与tuple： ​	区别就是tuple是不可变的，除非tuple里边存放了list
+​	list支持的操作：dir(list)，append，insert，pop
+input()接收输入字符
+elif为else if，为关键字
+字典： Set集合： 唯一性，set可以用于文件去重
+定义函数： def func() 可以return或者不return、函数可递归
+切片slice： list[0:3] ，list[-2:]，支持步径操作，arr[::5]，arr[::10:2]
+enumerate()取到下标和值 列表生成器： 数字、字符串以及字典均可生成列表
+b = [x*x for x in range(1,11)] print(b) c = [x*x for x in range(1,11) if x%2 ==0] print(c) 生成器、异常捕获 模块化 pip install requestpython中的类 继承object类，私有函数名的声明，类的继承，空成员函数放入pass
+错误与异常类 try，exception
+调试 常用调试pdb，详细用法https://zhuanlan.zhihu.com/p/37294138
+文件读写 建议使用with open as f，（w写入，r读出）的方式，flush()，close()</description>
+    </item>
+    
+    <item>
+      <title>word转sql表结构</title>
+      <link>/cn/2020-04-15-word%E8%A1%A8%E7%BB%93%E6%9E%84%E8%BD%ACsql/</link>
+      <pubDate>Wed, 15 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2020-04-15-word%E8%A1%A8%E7%BB%93%E6%9E%84%E8%BD%ACsql/</guid>
+      <description>word转sql表结构： 工作流如下：
+  已经在office word编辑好的数据库说明文档
+  通过按照特定的表结构，录入到excel中，前两行为中文表名和英文表名，下边为字段，下方的sheet名也为中文表名，并且注意”名称“列，是不可以有重名的，否则执行脚本的时候会报错，并且一直占用该excel导致此excel只读，无法编辑（如果修改完excel没有退出则继续修改就行）只能创建excel副本。
+  打开power designer-&amp;gt;create model-&amp;gt;physical data，创建物理模型，DBMS选择对应的数据库，版本低一点没有关系，商用库为12a，选择最高的Oracle version 11g，创建之后按ctrl+shift+x打开脚本执行界面，执行以下VB脚本，生成表的物理模型。可以根据数据库文档中每一列的含义，在脚本中进行调整。执行完之后可以保存到power designer的脚本库中，方便之后重用。
+&#39;&#39; @Author: 罗皓&#39; @Date: 2020-03-25 14:41:57&#39; @LastEditTime: 2020-03-26 10:11:31&#39; @Description:&#39; @LastEditors: 罗皓&#39;Option ExplicitDim mdl &#39; the current modelSet mdl = ActiveModelIf (mdl Is Nothing) ThenMsgBox &amp;quot;There is no Active Model&amp;quot;End IfDim HaveExcelDim RQRQ = vbYes &#39;MsgBox(&amp;quot;Is Excel Installed on your machine ?</description>
+    </item>
+    
+    <item>
+      <title>QA：如何学习技术夯实基础</title>
+      <link>/cn/2020-03-16-%E5%A4%A7%E4%BD%ACqa/</link>
+      <pubDate>Mon, 16 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2020-03-16-%E5%A4%A7%E4%BD%ACqa/</guid>
+      <description>QA：记录最近和大佬交流 以下ME为我的发言，XY为大佬昵称缩写。
+ ME：您好，我是一名刚开始工作的软件开发者，我看您在看技术书籍的时候有在做笔记，想请教一下您做笔记的思路是怎样的？有些什么心得体会吗？我现在阅读技术书籍做笔记时有点纠结：是系统性的都记录下来（感觉像跟抄书无异），还是有针对性的只记录自己未掌握或者认为重要的部分（未学习过的技术又不太清楚重点）。
+XY：暂且不谈别的，你先告诉我，你从小到大上学读书，做笔记的意义是什么，或者说你做了笔记目的是什么？
+ME：形成肌肉记忆以及记录一些疑难杂症吧。
+XY：1.想靠做笔记形成肌肉记忆不可能的，肌肉记忆的前提是大量重复训练； 2.记录疑难杂症的目的呢？记录始终只是手段而已。看书做笔记是一个复习，归纳，总结，提炼的过程。先说复习，我一般不会一边看书一边做笔记，但是会一边看书一边勾画我觉得的重点，一般看一个礼拜，周末两天再做前5天看书章节的笔记，这样可以有效的抗击记忆曲线，你可以查查艾宾斯浩记忆曲线。
+ME：我一直是边看边做笔记，就感觉啃书啃得非常艰难，效果也很糟糕
+XY：第二，归纳，总结。这个不仅仅是做笔记的能力，实际上是一种学习能力了，需要长期大量学习锻炼中获得的能力，但是一般受过高等教育的学生我认为应该都有此能力。那么为什么你会认为你在抄书呢？这就涉及到第四点，提炼。因为你现在基础知识比较薄弱，很多东西对你来说都是陌生的，你无法达到快速理解，更不用说触类旁通融会贯通，所以你看哪儿哪儿都是知识点，你没办法提炼，所以你会认为到处都是重点，到处都想抄下来，所以你会认为你在抄书。
+XY：当然，我不知道你实际基础有多少，有多牢，但是我认为你可能需要调整一下你看的书，你需要考虑一个问题，是不是你看的书不适合你，是不是你需要一些再基础一点的书。学习也是个循序渐进的过程，也不用好高骛远，你那么年轻，有的是时间，千万不要拔苗助长。
+ME：我现在是在做spring boot相关的业务，之前有接触一些spring boot方面的知识，但是都很黑盒地在写代码，所以近期拿了本spring boot的书在看，看的有些艰难效果也没有很好，所以有些着急。心态有些浮躁，本来想说疫情期间是十分适合充实自己的一段时间，《spring boot+Vue全栈开发实战》主要是看spring boot的部分。
+XY：（灵魂三问）vue你会吗？ES6熟练吗？JS怎么样？还有java，jvm, jdk底层，原理实现，特性都有好好学习过吗？还有HTTP(S)协议， 包括TCP/IP协议(包括UDP)内容，底层实现这些都学习过吗？
+ME：vue之前有做过一些学习，ES6也有，但是都不是系统的学习过，赶业务的时候做过一些开发；jdk底层没有了解；http，tcpip没有&amp;hellip;
+XY：所以你看我随便问你几个很基础的东西，你基本都是用过，有过一些学习，做过一些开发，但是都没有系统学习过，这就是问题所在；不要好高骛远，饭要一口一口吃，先花时间把基础打牢，再去研究框架性质的东西和实战技巧啊，至少你要先把java，jvm,jdk先深入系统的学习一边吧。
+XY：我建议，你这样来，首先分 后端，前端，数据库，和基础。
+XY：后端学习内容主要就是java了，你那两本书可以，但是我还推荐一本Java Web高级编程，这个xxx高级编程系列是神作，后面你学其他东西也用的到，比如javascript web编程
+XY：前端主要是JavaScript，ES6或更高，Jquery，Html/CSS，React和Vue框架。
+XY：数据库先学关系型，MySql或者Sqlserver什么你常用的，至少学习两种流行关系型数据库，然后学习两种NoSql，建议Redis和MongoDB。
+XY：基础的话就HTTP(s)，TCP/IP，算法就去leetcode刷题吧，至少常用的，例如二分法，各种遍历二叉树，单调栈，贪心，动态规划要熟练。
+ME：想请问一下https，tcp/ip什么时候看比较合适，有什么适合的书吗？我最近在刷leetcode的每日一题，打算之后按照数据结构来刷题，是否是按算法刷题会好些？
+XY：http权威指南 和 TCP/IP详解，tcp/ip详解有三卷，你先只用看卷一卷2就行了。刷题前期你可以按照数据结构来刷，后面熟练了按算法来刷。有些书很厚，但是不要怕，一页一页看，很快会学习完，再就是如果看到什么东西实在不能理解，可以Google一下，有些blog会有一些作者自己的体会和心得，可以帮助你理解。别浮躁，别好高骛远，先打好基础。
+ 大佬也是只玩真实，非常耐心也非常真实的一个人，做笔记的方式确实是给我很大启发，感觉自己蹦蹦跳跳玩耍的这几年，把自己的学习方法都丢光了，坐享其成是不行的，荒废下去整个人将会毫无建树，系统性的学习任何时候都是非常重要的。
+受益匪浅。虽然看起来就是好好打好基础的那一套被说烂了的说辞，但是仔细想来何尝又不是这个道理呢？无非是自己心烦气躁罢了，浅尝辄止之后便开始深入学习其他的东西，遇到瓶颈是意料之中的事情，好高骛远了，还是要沉下心来踏踏实实的一个个技术的坑踩过去，事情要一件件做，在工作之余需要多抽空补好自己的基础薄弱之处。</description>
+    </item>
+    
+    <item>
+      <title>个人搭建NexT博客的一点小问题和解决方案</title>
+      <link>/cn/2018-04-05-jekyll-2/</link>
+      <pubDate>Thu, 05 Apr 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2018-04-05-jekyll-2/</guid>
+      <description>初步步骤参照指南，此次搭建建立于上次搭建安装失败的基础上。
+安装ruby包 安装包应该都可以下载到,我这里用的是rubyinstaller-2.5.0-2-x64版本，完成后会询问你是否安装msys2和mingw开发工具包等,我这里默认安装，具体也不太清楚这两者的具体用途,但是之前搭建失败貌似就是这方面的原因,因此考虑全部安装。
+安装bundler 因为考虑到安装包bundler的位置问题,我打算放在F:\GitHub下,安装好包,然后再考虑clone这个next主题。关于cmd(我用的Cmder)无法进入其他盘的办法,直接输入盘符F:就好了。
+下载next主题 安装依赖 报错如下:
+$ bundle install Bundler could not find compatible versions for gem &amp;#34;mini_portile2&amp;#34;: In snapshot (Gemfile.lock): mini_portile2 (= 2.2.0) In Gemfile: github-pages was resolved to 155, which depends on jekyll-mentions (= 1.2.0) was resolved to 1.2.0, which depends on html-pipeline (~&amp;gt; 2.3) was resolved to 2.7.0, which depends on nokogiri (&amp;gt;= 1.4) was resolved to 1.8.1, which depends on mini_portile2 (~&amp;gt; 2.3.0) x64-mingw32 github-pages was resolved to 155, which depends on jekyll-mentions (= 1.</description>
+    </item>
+    
+    <item>
+      <title>Github Pages</title>
+      <link>/cn/2017-11-21-jekyll-1/</link>
+      <pubDate>Tue, 21 Nov 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2017-11-21-jekyll-1/</guid>
+      <description>关于某天晚上又是深夜一两点在修改自己博客的故事
+关于这个主题 basically 发生了一些这样的故事
+![image-center]({{ site.url }}{{ site.baseurl }}/assets/images/chrome_2017-11-21_01-40-43.png){: .align-center}
+这个确实是意想不到的事情，总被github说这个主题不合适，但明明就是他自己商店里的主题。
+第二个地方是首页的图片 确实是一个个html找了好久，这个结构比较乱，当然也可能是我脑子转不动了。
+第三点 当我把 index.md 改好之后发生了一个这样的事情
+paginate: true alt_title: &amp;#34;Res0liya&amp;#34; sub_title: &amp;#34;To be or not to be&amp;#34; image: /assets/images/amine-ounnas-180287.jpg Posts都丢了，真是奇怪，但其实关键就在于这一行。
+paginate: false 是否翻页，这个让我有些无奈&amp;hellip;还需要自己仔细看看</description>
+    </item>
+    
+    <item>
+      <title>A Plain Markdown Post</title>
+      <link>/cn/2016-02-14-hello-markdown/</link>
+      <pubDate>Sun, 14 Feb 2016 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2016-02-14-hello-markdown/</guid>
+      <description>This sample post is mainly for blogdown users. If you do not use blogdown, you can skip the first section.
+1. Markdown or R Markdown This is a post written in plain Markdown (*.md) instead of R Markdown (*.Rmd). The major differences are:
+ You cannot run any R code in a plain Markdown document, whereas in an R Markdown document, you can embed R code chunks (```{r}); A plain Markdown post is rendered through Blackfriday, and an R Markdown document is compiled by rmarkdown and Pandoc.</description>
+    </item>
+    
+  </channel>
+</rss>

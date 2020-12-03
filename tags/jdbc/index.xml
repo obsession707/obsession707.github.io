@@ -12,7 +12,7 @@
     
     
     <item>
-      <title>java数据库（1）基本概念和try-with-resources</title>
+      <title>Java数据库（1）基本概念和try-with-resources</title>
       <link>/cn/2020-06-20-java%E6%95%B0%E6%8D%AE%E5%BA%93-1/</link>
       <pubDate>Sat, 20 Jun 2020 00:00:00 +0000</pubDate>
       
@@ -24,7 +24,7 @@ try (Connection c = DriverManager.getConnection(&amp;#34;jdbc:mysql://127.0.0.1:
     </item>
     
     <item>
-      <title>java数据库（2）改造jdbc工具类</title>
+      <title>Java数据库（2）改造jdbc工具类</title>
       <link>/cn/2020-06-20-java%E6%95%B0%E6%8D%AE%E5%BA%93-2/</link>
       <pubDate>Sat, 20 Jun 2020 00:00:00 +0000</pubDate>
       

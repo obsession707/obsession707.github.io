@@ -6,17 +6,26 @@
     <description>Recent content in Categories on Rehoni | 罗皓</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 24 Nov 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 03 Dec 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/categories/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>编程语言</title>
-      <link>/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/</link>
+      <title>财务实证</title>
+      <link>/categories/%E8%B4%A2%E5%8A%A1%E5%AE%9E%E8%AF%81/</link>
+      <pubDate>Thu, 03 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/%E8%B4%A2%E5%8A%A1%E5%AE%9E%E8%AF%81/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>编程开发</title>
+      <link>/categories/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91/</link>
       <pubDate>Tue, 24 Nov 2020 00:00:00 +0000</pubDate>
       
-      <guid>/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/</guid>
+      <guid>/categories/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91/</guid>
       <description></description>
     </item>
     
@@ -39,65 +48,29 @@
     </item>
     
     <item>
-      <title>Java</title>
-      <link>/categories/java/</link>
+      <title>技术漫谈</title>
+      <link>/categories/%E6%8A%80%E6%9C%AF%E6%BC%AB%E8%B0%88/</link>
       <pubDate>Sat, 20 Jun 2020 00:00:00 +0000</pubDate>
       
-      <guid>/categories/java/</guid>
+      <guid>/categories/%E6%8A%80%E6%9C%AF%E6%BC%AB%E8%B0%88/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>指南</title>
-      <link>/categories/%E6%8C%87%E5%8D%97/</link>
-      <pubDate>Sat, 20 Jun 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/%E6%8C%87%E5%8D%97/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>效率</title>
-      <link>/categories/%E6%95%88%E7%8E%87/</link>
-      <pubDate>Wed, 15 Apr 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/%E6%95%88%E7%8E%87/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>随笔</title>
-      <link>/categories/%E9%9A%8F%E7%AC%94/</link>
-      <pubDate>Mon, 16 Mar 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/%E9%9A%8F%E7%AC%94/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>财务实证</title>
-      <link>/categories/%E8%B4%A2%E5%8A%A1%E5%AE%9E%E8%AF%81/</link>
-      <pubDate>Sat, 29 Feb 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/%E8%B4%A2%E5%8A%A1%E5%AE%9E%E8%AF%81/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>后端</title>
-      <link>/categories/%E5%90%8E%E7%AB%AF/</link>
+      <title>技术框架</title>
+      <link>/categories/%E6%8A%80%E6%9C%AF%E6%A1%86%E6%9E%B6/</link>
       <pubDate>Thu, 19 Dec 2019 00:00:00 +0000</pubDate>
       
-      <guid>/categories/%E5%90%8E%E7%AB%AF/</guid>
+      <guid>/categories/%E6%8A%80%E6%9C%AF%E6%A1%86%E6%9E%B6/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>前端</title>
-      <link>/categories/%E5%89%8D%E7%AB%AF/</link>
-      <pubDate>Fri, 08 Mar 2019 00:00:00 +0000</pubDate>
+      <title>开发工具</title>
+      <link>/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/</link>
+      <pubDate>Fri, 11 Oct 2019 00:00:00 +0000</pubDate>
       
-      <guid>/categories/%E5%89%8D%E7%AB%AF/</guid>
+      <guid>/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/</guid>
       <description></description>
     </item>
     
@@ -107,6 +80,15 @@
       <pubDate>Sat, 21 Apr 2018 00:00:00 +0000</pubDate>
       
       <guid>/categories/%E8%AF%BE%E7%A8%8B/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>随笔</title>
+      <link>/categories/%E9%9A%8F%E7%AC%94/</link>
+      <pubDate>Sat, 27 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/%E9%9A%8F%E7%AC%94/</guid>
       <description></description>
     </item>
     

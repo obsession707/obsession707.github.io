@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>技术框架 on Rehoni | 罗皓</title>
+    <link>/categories/%E6%8A%80%E6%9C%AF%E6%A1%86%E6%9E%B6/</link>
+    <description>Recent content in 技术框架 on Rehoni | 罗皓</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 19 Dec 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/categories/%E6%8A%80%E6%9C%AF%E6%A1%86%E6%9E%B6/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>idea spring boot热部署</title>
+      <link>/cn/2019-12-19-springboot%E7%83%AD%E9%83%A8%E7%BD%B2/</link>
+      <pubDate>Thu, 19 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2019-12-19-springboot%E7%83%AD%E9%83%A8%E7%BD%B2/</guid>
+      <description>idea spring boot热部署 1. 引入spring boot devtools，添加maven依赖 &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-boot-devtools&amp;lt;/artifactId&amp;gt; &amp;lt;scope&amp;gt;runtime&amp;lt;/scope&amp;gt; &amp;lt;optional&amp;gt;true&amp;lt;/optional&amp;gt; &amp;lt;/dependency&amp;gt; 2. 在maven中添加插件 &amp;lt;plugin&amp;gt; &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-boot-maven-plugin&amp;lt;/artifactId&amp;gt; &amp;lt;configuration&amp;gt; &amp;lt;!--fork : 如果没有该项配置devtools不会起作用，即应用不会restart --&amp;gt; &amp;lt;fork&amp;gt;true&amp;lt;/fork&amp;gt; &amp;lt;addResources&amp;gt;true&amp;lt;/addResources&amp;gt;&amp;lt;!--支持静态文件热部署--&amp;gt; &amp;lt;/configuration&amp;gt; &amp;lt;/plugin&amp;gt; 3. 勾选File &amp;gt; Settings &amp;gt; Compiler-Build Project automatically 4. 一些其他的方式 非常详细的热部署说明 http://tengj.top/2017/06/01/springboot10/</description>
+    </item>
+    
+    <item>
+      <title>Vue.js实战读书笔记（2）</title>
+      <link>/cn/2019-03-08-vue-2/</link>
+      <pubDate>Fri, 08 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2019-03-08-vue-2/</guid>
+      <description>学习链接：  Vue官方教程 https://cn.vuejs.org/ https://www.w3cplus.com/blog/vue  v-model: 绑定动态数据可以用v-bind来实现。   修饰符：lazy（change事件中同步），number（限定数字），trim（自动过滤首位的输入空格），
+  template的DOM结构必须被一个元素包含，如果直接写成 “这里是组件 的内容”，不带&amp;lt;div&amp;gt;&amp;lt;/div&amp;gt;是无法渲染的。
+  Vue 组件的模板在某些情况下会受到HTML的限制，比如＜table＞内规定只允许是〈位〉、＜td＞、&amp;lt;th＞等这些表格元素，所以在＜table＞内直接使用组件是无效的。这种情况下，可以使用特殊的is属性来挂载组件。 &amp;lt;tbody is=&amp;quot;my-component&amp;quot;&amp;gt;&amp;lt;/tbody&amp;gt;tbody在渲染时，会被替换为组件的内容。常见的限制元素还有＜ul＞、＜ol＞、＜select&amp;gt;。
+  props: 数组和对象。   props 中声明的数据与组件 data 函数 return 的数据主要区别就是： props 的来自父级，而 data 中的是组件自己的数据，作用域是组件本身，这两种数据都可以在模板 template 及计算属性 computed和方法 methods 中使用。
+  由于 HT岛E 特性不区分大小写，当使用 DOM 模板时，驼峰命名 (camelCase)的 props 名称要转为短横分隔命名 (kebab-case)
+&amp;lt;div id=&amp;#34; app” &amp;gt; &amp;lt;my-component warning-text ＝ ”提示信息 &amp;#34; ＞＜／ my-component&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;script&amp;gt; Vue.component ( &amp;#39; my-component &amp;#39;, { props: [ &amp;#39;warningText&amp;#39;], template:&amp;#39; &amp;lt;div&amp;gt;{{ warningText }} &amp;lt;/div&amp;gt;&amp;#39; }); var app =new Vue({ el:&amp;#39; #app &amp;#39; }) &amp;lt;/script&amp;gt;   有时候，传递的数据并不是直接写死的，而是来自父级的动态数据，这时可以使用指令 v-bind 来动态绑定 props 的值，当父组件的数据变化时，也会传递给子组件。</description>
+    </item>
+    
+    <item>
+      <title>Vue.js实战读书笔记（3）</title>
+      <link>/cn/2019-03-08-vue-3/</link>
+      <pubDate>Fri, 08 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2019-03-08-vue-3/</guid>
+      <description>slot分发内容 props 传递数据、 events 触发事件和 slot 内 容分发就构成了 Vue 组件的 3 个 API 来源，再复杂的组件也是由这 3 部分构成的。
+  作用域：slot分发的内容作用域是在父组件上的。
+  slot用法：
+ 单个slot：父组件中进入子组件child-component，在child-component的模板内定义一个＜slot&amp;gt;元素，并且用一个＜p＞作为默认的内容，在父组件没有使用 slot 时，会渲染这段默认的文本；如果写入了 slot， 那就会替换整个＜slot&amp;gt;。 子组件&amp;lt;slot&amp;gt;内的备用内容，它的作用域是子组件本身。 具名slot：给＜slot&amp;gt;元素指定一个 name 后可以分发多个内容，具名 Slot 可以与单个 Slot 共存。其中在＜div class＝”main与内的＜slot&amp;gt; 没有使用 name 特性，它将作为默认 slot 出现，父组件没有使用 slot 特性的元素与内容都将出现在这里。如果没有指定默认的匿名 slot，父组件内多余的内容片段都将被抛弃。 作用域插槽：在＜slot&amp;gt;元素上有一个类似 props 传递数据给组件的写法 msg＝”xxx”，将数据传到了插槽。父组件中使用了＜template＞元素，而且拥有一个 scope＝”props”的特性，这里的 props只是一个临时变量，就像 v-for=”item in items，里面的 item 一样。 template 内可以通过临时变量 props访问来自子组件插槽的数据 msg 。如果下例还在其他组件内使用，＜Ii＞的内容渲染权是由使用者掌握的，而数据却可以通过临时变量（比如 props ）从子组件内获取。 通过$slots 可以访问某个具名 slot, this .$slots.default 包括了所有没有被包含在具名 slot 中的节点。$slots 在业务中几乎用不到 ， 在用 render 函数（进阶篇中将介绍）创建组件时会比较有用，但主要还是用于独立组件开发中。  &amp;lt;div id=&amp;#34;app&amp;#34;&amp;gt; &amp;lt;my-list :books=&amp;#34;books&amp;#34;&amp;gt;&amp;lt;!</description>
+    </item>
+    
+    <item>
+      <title>Vue.js实战读书笔记（1）</title>
+      <link>/cn/2019-03-07-vue-1/</link>
+      <pubDate>Thu, 07 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/cn/2019-03-07-vue-1/</guid>
+      <description>计算属性缓存：method和computed？ 计算属性是基于它的依赖缓存的。一个计算属性所依赖的数据发生变化时，它才会重新取值，所以text只要不改变，计算属性也就不更新。使用计算属性还是methods取决于你是否需要缓存，当遍历大数组和做大量计算时，应当使用计算属性，除非你不希望得到缓存。
+什么是dom？ 知乎回答：https://www.zhihu.com/question/34219998
+v-bind绑定class和style  绑定class：可以跟原class共存，可以绑定多个class。绑定class对象，绑定class数组。可以利用三元表达式进行class的条件切换，同时也可以用computed和method进行更复杂的class条件选择。 绑定style，类似直接添加样式，同样可以绑定对象和数组。使用:style时，Vue.js会自动给特殊的css属性名称增加前缀，比如transform。  指令集合  v-cloak：是一个解决初始化慢导致页面闪动的最佳实践，常常与display:none配合使用。 v-once：定义它的元素或组件只渲染一次，包括元素或组件的所有子节点。首次渲染后，不再随数据的变化重新渲染，将被视为静态内容。 v-if、v-else-if、v-else：条件渲染指令。Vue在渲染元素时，出于效率考虑，会尽可能地复用已有的元素而非重新渲染。使用Vue扣提供的key属性，它可以让你自己决定是否要复用元素，key的值必须是唯一的。 v-show：用法与v-if基本一致，只不过v-show是改变元素的css属性display。当v-show表达式的值为false时，元素会隐藏，查看DOM结构会看到元素上加载了内联样式display:none。v-show不能再template上使用。 v-for：当需要将一个数组遍历或枚举一个对象循环显示时，就会用到列表渲染指令v-for。它的表达式需结合in来使用，类似item in items的形式。遍历数组和对象，关键字key，index。 v-show和v-if：v-if和v-show具有类似的功能，不过v-if才是真正的条件渲染，它会根据表达式适当地销毁或重建元素及绑定的事件或子组件。若表达式初始值为false，则一开始元素／组件并不会渲染，只有当条件第一次变为真时才开始编译。 修饰符: stop,prevent,capture,self,once以及按键修饰符keyCode,还有一些快捷别名：enter,tab,delete,esc,space,up,down,right,left可以配合ctrl,alt,shift,meta使用  &amp;lt;a @click.stop=&amp;#34;handle&amp;#34;&amp;gt;&amp;lt;/a&amp;gt; &amp;lt;form @submit.prevent=&amp;#34;handle&amp;#34;&amp;gt;&amp;lt;/form&amp;gt; &amp;lt;a @click.stop.prevent=&amp;#34;handle&amp;#34;&amp;gt;&amp;lt;/a&amp;gt; &amp;lt;form @submit.prevent&amp;gt;&amp;lt;/form&amp;gt; &amp;lt;div @click . capture=&amp;#34;handle&amp;#34;&amp;gt;...&amp;lt;/div&amp;gt; &amp;lt;div @click.self=&amp;#34;handle&amp;#34; &amp;gt;... &amp;lt;/div&amp;gt; &amp;lt;div @click.once=&amp;#34;handle&amp;#34; &amp;gt;... &amp;lt;/div&amp;gt; 数组更新：  push,pop,shift,unshift,splice,sort,reverse 会改变原有数组 filter,concat,slice 返回新数组 Vue 在检测到数组变化时，并不是直接重新渲染整个列表，而是最大化地复用DOM元素。替换的数组中，含有相同元素的项不会被重新渲染，因此可以大胆地用新数组来替换旧数组，不用担心性能问题。需要注意的是，以下变动的数组中，Vue是不能检测到的，也不会触发视图更新：  通过索引直接设置项，比如app.books[3] = {&amp;hellip;}.  方案一：使用Vue内置的set方法：Vue.set(app.books, 3 ,{&amp;hellip;}）如果是在webpack中使用组件化的方式（进阶篇中将介绍〉，默认是没有导入Vue的，这时可以使用$set，this.$set(app.books, 3 ,{&amp;hellip;}） 方案二：使用splice：app.books.splice(3,1,{&amp;hellip;})   修改数组长度，比如app.books.length = 1.  方案：app.book.splice(1)      </description>
+    </item>
+    
+  </channel>
+</rss>
