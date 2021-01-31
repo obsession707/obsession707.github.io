@@ -6,10 +6,19 @@
     <description>Recent content in Tags on Rehoni | 罗皓</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 29 Jan 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 31 Jan 2021 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>财务实证</title>
+      <link>/tags/%E8%B4%A2%E5%8A%A1%E5%AE%9E%E8%AF%81/</link>
+      <pubDate>Sun, 31 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/%E8%B4%A2%E5%8A%A1%E5%AE%9E%E8%AF%81/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>阅读学习</title>
@@ -26,15 +35,6 @@
       <pubDate>Thu, 21 Jan 2021 00:00:00 +0000</pubDate>
       
       <guid>/tags/%E8%A3%85%E6%9C%BA%E6%B1%87%E6%80%BB/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>财务实证</title>
-      <link>/tags/%E8%B4%A2%E5%8A%A1%E5%AE%9E%E8%AF%81/</link>
-      <pubDate>Fri, 01 Jan 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/%E8%B4%A2%E5%8A%A1%E5%AE%9E%E8%AF%81/</guid>
       <description></description>
     </item>
     
