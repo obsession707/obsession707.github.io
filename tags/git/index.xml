@@ -6,11 +6,7 @@
     <description>Recent content in Git on Rehoni | 罗皓</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 11 Oct 2019 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="/tags/git/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Fri, 11 Oct 2019 00:00:00 +0000</lastBuildDate><atom:link href="/tags/git/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Git实际问题</title>
       <link>/cn/2019-10-11-git%E5%AE%9E%E9%99%85%E9%97%AE%E9%A2%98/</link>

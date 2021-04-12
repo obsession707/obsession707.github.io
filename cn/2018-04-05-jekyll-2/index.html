@@ -160,11 +160,11 @@ the gems in your Gemfile, which may resolve the conflict.
 </code></pre></div><p>大意大概是需要指向我自己的GitHub repository吧</p>
 <p>然后我这里考虑直接把jekyll-theme-next文件夹里的所有的文件直接拷贝到我自己的blog仓库(之前创建了一个空的只有readme的文件的仓库名为luoboyala.github.io)里了</p>
 <p>再次bundle install一遍,发现没有问题,开始bundle exec jekyll server仍然是上边的错误,根据提示开始修改config文件中的url</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yml" data-lang="yml">url:https://luoboyala.github.io
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yml" data-lang="yml"><span style="color:#ae81ff">url:https://luoboyala.github.io</span>
 </code></pre></div><p>报错如下:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">jekyll 3.7.3 | Error:  <span style="color:#f92672">(</span>F:/Github/luoboyala.github.io/_config.yml<span style="color:#f92672">)</span>: could not find expected <span style="color:#e6db74">&#39;:&#39;</span> <span style="color:#66d9ef">while</span> scanning a simple key at line <span style="color:#ae81ff">17</span> column <span style="color:#ae81ff">1</span>
 </code></pre></div><p>很明显是一个空格的原因吧&hellip;</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yml" data-lang="yml"><span style="color:#66d9ef">url</span>: https://luoboyala.github.io
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yml" data-lang="yml"><span style="color:#f92672">url</span>: <span style="color:#ae81ff">https://luoboyala.github.io</span>
 </code></pre></div><p>好的还是报错了,发现问题在于没有初始化git仓库,这个虽然是一个git仓库,但是应该是缺少了git authentication
 解决办法只需要:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ git init
